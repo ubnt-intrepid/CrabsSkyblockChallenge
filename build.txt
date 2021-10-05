@@ -1,0 +1,8 @@
+displayName = One Block Challenge
+author = ubnt-intrepid
+version = 0.0.1
+homepage = https://github.com/ubnt-intrepid/OneBlockChallenge
+hideCode = false
+hideResources = false
+includeSource = true
+includePDB = true
