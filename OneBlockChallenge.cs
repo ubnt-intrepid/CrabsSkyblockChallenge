@@ -115,6 +115,7 @@ namespace OneBlockChallenge
             {
                 case NPCID.Merchant:
                     shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
                     nextSlot++;
 
                     shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
