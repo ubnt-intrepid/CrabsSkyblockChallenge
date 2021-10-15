@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
@@ -83,6 +84,15 @@ namespace OneBlockChallenge
                 return false;
             }
         }
+
+        public static int NextBlock() => Main.rand.Next(5) switch
+        {
+            0 => ItemID.DirtBlock,
+            1 => ItemID.StoneBlock,
+            2 => ItemID.ClayBlock,
+            3 => ItemID.HardenedSand,
+            _ => ItemID.IceBlock,
+        };
     }
 
     public class OBCGlobalNPC : GlobalNPC
@@ -98,16 +108,6 @@ namespace OneBlockChallenge
 
                     shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
                     nextSlot++;
-
-                    shop.item[nextSlot].SetDefaults(ItemID.Cobweb);
-                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(copper: 10);
-                    nextSlot++;
-
-                    if (OBCWorld.defeatPlantera)
-                    {
-                        shop.item[nextSlot].SetDefaults(ItemID.LihzahrdAltar);
-                        nextSlot++;
-                    }
 
                     break;
 
@@ -147,10 +147,6 @@ namespace OneBlockChallenge
 
     public class OBCGlobalItem : GlobalItem
     {
-        static int[] tier1Ores = new int[] { ItemID.CopperOre, ItemID.TinOre, ItemID.IronOre, ItemID.LeadOre, ItemID.CobaltOre, ItemID.PalladiumOre };
-        static int[] tier2Ores = new int[] { ItemID.SilverOre, ItemID.TungstenOre, ItemID.MythrilOre, ItemID.OrichalcumOre };
-        static int[] tier3Ores = new int[] { ItemID.GoldOre, ItemID.PlatinumOre, ItemID.AdamantiteOre, ItemID.TitaniumOre };
-
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ExtractinatorMode[ItemID.StoneBlock] = ItemID.StoneBlock;
@@ -182,25 +178,31 @@ namespace OneBlockChallenge
             }
         }
 
-        // FIXME: tweak extractinator chances
-
         private static void StoneExtractinatorUse(ref int resultType, ref int resultStack)
         {
-            var extracted = new int[] { ItemID.SiltBlock, ItemID.Marble, ItemID.Granite };
-            resultType = Utils.Choice(extracted);
+            resultType = Main.rand.Next(3) switch {
+                0 => ItemID.SiltBlock,
+                1 => ItemID.Marble,
+                _ => ItemID.Granite,
+            };
             resultStack = 1 + Main.rand.Next(3);
         }
 
         private static void SandExtractinatorUse(ref int resultType, ref int resultStack)
         {
-            var extracted = new int[] { ItemID.SandBlock, ItemID.Sandstone, ItemID.DesertFossil };
-            resultType = Utils.Choice(extracted);
+            resultType = Main.rand.Next(3) switch {
+                0 => ItemID.SandBlock,
+                1 => ItemID.Sandstone,
+                _ => ItemID.DesertFossil,
+            };
             resultStack = 1 + Main.rand.Next(3);
         }
 
         private static void IceExtractinatorUse(ref int resultType, ref int resultStack) {
-            var extracted = new int[] { ItemID.SnowBlock, ItemID.SlushBlock };
-            resultType = Utils.Choice(extracted);
+            resultType = Main.rand.Next(2) switch {
+                0 => ItemID.SnowBlock,
+                _ => ItemID.SlushBlock,
+            };
             resultStack = 1 + Main.rand.Next(3);
         }
 
@@ -211,30 +213,39 @@ namespace OneBlockChallenge
                 case ItemID.TinOre:
                 case ItemID.IronOre:
                 case ItemID.LeadOre:
-                    resultType = Utils.Choice(tier1Ores);
+                    resultType = Main.rand.Next(6) switch {
+                        0 => ItemID.CopperOre,
+                        1 => ItemID.TinOre,
+                        2 => ItemID.IronOre,
+                        3 => ItemID.LeadOre,
+                        4 => ItemID.CobaltOre,
+                        _ => ItemID.PalladiumOre,
+                    };
                     break;
 
                 case ItemID.SilverOre:
                 case ItemID.TungstenOre:
-                    resultType = Utils.Choice(tier2Ores);
+                    resultType = Main.rand.Next(4) switch {
+                        0 => ItemID.SilverOre,
+                        1 => ItemID.TungstenOre,
+                        2 => ItemID.MythrilOre,
+                        _ => ItemID.OrichalcumOre,
+                    };
                     break;
 
                 case ItemID.GoldOre:
                 case ItemID.PlatinumOre:
-                    resultType = Utils.Choice(tier3Ores);
+                    resultType = Main.rand.Next(4) switch {
+                        0 => ItemID.GoldOre,
+                        1 => ItemID.PlatinumOre,
+                        2 => ItemID.AdamantiteOre,
+                        _ => ItemID.TitaniumOre,
+                    };
                     break;
 
                 default:
                     break;
             }
-        }
-    }
-
-    public class Utils {
-        public static T Choice<T>(T[] array)
-        {
-            var index = Main.rand.Next(0, array.Length);
-            return array[index];
         }
     }
 }

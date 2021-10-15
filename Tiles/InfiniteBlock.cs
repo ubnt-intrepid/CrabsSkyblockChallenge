@@ -34,7 +34,7 @@ namespace OneBlockChallenge.Tiles
             {
                 fail = true;
 
-                var item = NextBlock();
+                var item = OBCWorld.NextBlock();
 
                 int num = Item.NewItem(i * 16, j * 16, 12, 12, item, 1, noBroadcast: false, -1);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -42,60 +42,6 @@ namespace OneBlockChallenge.Tiles
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
                 }
             }
-        }
-
-        static int NextBlock()
-        {
-            // TODO: optimize
-            var drawnBlocks = new List<int> {
-                ItemID.DirtBlock,
-                ItemID.StoneBlock,
-                ItemID.ClayBlock,
-                ItemID.HardenedSand,
-                ItemID.IceBlock,
-            };
-
-            if (OBCWorld.defeatBoss2)
-            {
-                drawnBlocks.Add(ItemID.Hellstone);
-            }
-
-            if (OBCWorld.defeatSkeletron)
-            {
-                drawnBlocks.AddRange(new int[] {
-                    ItemID.BlueBrick,
-                    ItemID.GreenBrick,
-                    ItemID.PinkBrick,
-                });
-            }
-
-            if (OBCWorld.defeatPlantera)
-            {
-                drawnBlocks.Add(ItemID.LihzahrdBrick);
-            }
-
-            var index = Main.rand.Next(0, drawnBlocks.Count);
-            return drawnBlocks[index];
-        }
-
-        public override bool RightClick(int i, int j)
-        {
-            Main.NewText("Current sources:", Color.Magenta);
-            Main.NewText("  - Basic blocks (Dirt, Stone, Clay, Hardened Sand, Ice)");
-            if (OBCWorld.defeatBoss2)
-            {
-                Main.NewText("  - Hellstone");
-            }
-            if (OBCWorld.defeatSkeletron)
-            {
-                Main.NewText("  - Dungeon bricks");
-            }
-            if (OBCWorld.defeatPlantera)
-            {
-                Main.NewText("  - Lihzahrd brick");
-            }
-
-            return true;
         }
     }
 }
