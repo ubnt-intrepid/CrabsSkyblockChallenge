@@ -11,28 +11,6 @@ namespace OneBlockChallenge
     {
         public override void AddRecipes()
         {
-            CreateRecipe(ItemID.SandBlock)
-                .AddIngredient(ItemID.HardenedSand)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-
-            CreateRecipe(ItemID.SnowBlock)
-                .AddIngredient(ItemID.IceBlock)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-
-            CreateRecipe(ItemID.SiltBlock, amount: 2)
-                .AddIngredient(ItemID.SandBlock)
-                .AddIngredient(ItemID.ClayBlock)
-                .AddTile(TileID.Furnaces)
-                .Register();
-
-            CreateRecipe(ItemID.SlushBlock, amount: 2)
-                .AddIngredient(ItemID.SnowBlock)
-                .AddIngredient(ItemID.MudBlock)
-                .AddTile(TileID.Furnaces)
-                .Register();
-
             CreateRecipe(ItemID.Hive)
                 .AddIngredient(ItemID.Wood, stack: 5) // FIXME: available for any wood
                 .AddCondition(Recipe.Condition.NearHoney)
@@ -173,14 +151,60 @@ namespace OneBlockChallenge
         static int[] tier2Ores = new int[] { ItemID.SilverOre, ItemID.TungstenOre, ItemID.MythrilOre, ItemID.OrichalcumOre };
         static int[] tier3Ores = new int[] { ItemID.GoldOre, ItemID.PlatinumOre, ItemID.AdamantiteOre, ItemID.TitaniumOre };
 
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ExtractinatorMode[ItemID.StoneBlock] = ItemID.StoneBlock;
+            ItemID.Sets.ExtractinatorMode[ItemID.HardenedSand] = ItemID.HardenedSand;
+            ItemID.Sets.ExtractinatorMode[ItemID.IceBlock] = ItemID.IceBlock;
+        }
+
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            if (!OBCWorld.defeatWoF)
+            switch (extractType)
             {
-                // pre hardmode
-                return;
-            }
+                case ItemID.StoneBlock:
+                    StoneExtractinatorUse(ref resultType, ref resultStack);
+                    break;
 
+                case ItemID.HardenedSand:
+                    SandExtractinatorUse(ref resultType, ref resultStack);
+                    break;
+
+                case ItemID.IceBlock:
+                    IceExtractinatorUse(ref resultType, ref resultStack);
+                    break;
+
+                default:
+                    if (OBCWorld.defeatWoF) {
+                        HardmodeExtractinatorUse(ref resultType, ref resultStack);
+                    }
+                    break;
+            }
+        }
+
+        // FIXME: tweak extractinator chances
+
+        private static void StoneExtractinatorUse(ref int resultType, ref int resultStack)
+        {
+            var extracted = new int[] { ItemID.SiltBlock, ItemID.Marble, ItemID.Granite };
+            resultType = Utils.Choice(extracted);
+            resultStack = 1 + Main.rand.Next(3);
+        }
+
+        private static void SandExtractinatorUse(ref int resultType, ref int resultStack)
+        {
+            var extracted = new int[] { ItemID.SandBlock, ItemID.Sandstone, ItemID.DesertFossil };
+            resultType = Utils.Choice(extracted);
+            resultStack = 1 + Main.rand.Next(3);
+        }
+
+        private static void IceExtractinatorUse(ref int resultType, ref int resultStack) {
+            var extracted = new int[] { ItemID.SnowBlock, ItemID.SlushBlock };
+            resultType = Utils.Choice(extracted);
+            resultStack = 1 + Main.rand.Next(3);
+        }
+
+        private void HardmodeExtractinatorUse(ref int resultType, ref int resultStack) {
             switch (resultType)
             {
                 case ItemID.CopperOre:
