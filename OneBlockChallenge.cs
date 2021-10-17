@@ -11,11 +11,6 @@ namespace OneBlockChallenge
     {
         public override void AddRecipes()
         {
-            CreateRecipe(ItemID.Hive)
-                .AddIngredient(ItemID.Wood, stack: 5) // FIXME: available for any wood
-                .AddCondition(Recipe.Condition.NearHoney)
-                .Register();
-
             CreateRecipe(ItemID.Hellforge)
                 .AddIngredient(ItemID.Furnace)
                 .AddIngredient(ItemID.Hellstone, stack: 30)
@@ -83,163 +78,110 @@ namespace OneBlockChallenge
             }
         }
 
-        public static int NextBlock() => Main.rand.Next(10) switch
+        public static int NextBlock()
         {
-            0 or 1 or 2 => ItemID.DirtBlock,
-            3 or 4 or 5 => ItemID.StoneBlock,
-            6 or 7 => ItemID.HardenedSand,
-            _ => ItemID.IceBlock,
-        };
+            var maxValue = 0 switch
+            {
+                _ when defeatPlantera => 600,
+                _ when defeatSkeletron => 550,
+                _ when defeatBoss2 => 500,
+                _ => 450,
+            };
+
+            return Main.rand.Next(maxValue) switch
+            {
+                // w=50
+                (>=   0) and (<  50) => ItemID.DirtBlock,
+                (>=  50) and (< 100) => ItemID.StoneBlock,
+                (>= 100) and (< 150) => ItemID.SandBlock,
+                (>= 150) and (< 200) => ItemID.SnowBlock,
+                (>= 200) and (< 250) => ItemID.IceBlock,
+
+                // w=30
+                (>= 250) and (< 280) => ItemID.ClayBlock,
+                (>= 280) and (< 310) => ItemID.HardenedSand,
+                (>= 310) and (< 340) => ItemID.Sandstone,
+                (>= 340) and (< 370) => ItemID.Cloud,
+
+                // w=20
+                (>= 370) and (< 390) => ItemID.SiltBlock,
+                (>= 390) and (< 410) => ItemID.SlushBlock,
+                (>= 410) and (< 430) => ItemID.DesertFossil,
+
+                // w=15
+                (>= 430) and (< 445) => ItemID.Cobweb,
+
+                // w=5
+                (>= 445) and (< 450) => ItemID.LifeCrystal,
+
+                // Boss2
+                (>= 450) and (< 480) => ItemID.AshBlock,
+                (>= 480) and (< 500) => ItemID.Hellstone,
+
+                // Skeletron
+                (>= 500) and (< 550) => Main.rand.Next(3) switch {
+                    0 => ItemID.BlueBrick,
+                    1 => ItemID.GreenBrick,
+                    2 => ItemID.PinkBrick,
+                    _ => 0,
+                },
+
+                // Plantera
+                (>= 550) and (< 600) => ItemID.LihzahrdBrick,
+
+                _ => 0,
+            };
+        }
     }
 
     public class OBCGlobalItem : GlobalItem
     {
-        public override void SetStaticDefaults()
-        {
-            ItemID.Sets.ExtractinatorMode[ItemID.DirtBlock] = ItemID.DirtBlock;
-            ItemID.Sets.ExtractinatorMode[ItemID.StoneBlock] = ItemID.StoneBlock;
-            ItemID.Sets.ExtractinatorMode[ItemID.HardenedSand] = ItemID.HardenedSand;
-            ItemID.Sets.ExtractinatorMode[ItemID.IceBlock] = ItemID.IceBlock;
-        }
-
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            switch (extractType)
+            if (OBCWorld.defeatWoF)
             {
-                case ItemID.DirtBlock:
-                    DirtExtractinatorUse(ref resultType, ref resultStack);
-                    break;
+                switch (resultType)
+                {
+                    case ItemID.CopperOre:
+                    case ItemID.TinOre:
+                    case ItemID.IronOre:
+                    case ItemID.LeadOre:
+                        resultType = Main.rand.Next(6) switch
+                        {
+                            0 => ItemID.CopperOre,
+                            1 => ItemID.TinOre,
+                            2 => ItemID.IronOre,
+                            3 => ItemID.LeadOre,
+                            4 => ItemID.CobaltOre,
+                            _ => ItemID.PalladiumOre,
+                        };
+                        break;
 
-                case ItemID.StoneBlock:
-                    StoneExtractinatorUse(ref resultType, ref resultStack);
-                    break;
+                    case ItemID.SilverOre:
+                    case ItemID.TungstenOre:
+                        resultType = Main.rand.Next(4) switch
+                        {
+                            0 => ItemID.SilverOre,
+                            1 => ItemID.TungstenOre,
+                            2 => ItemID.MythrilOre,
+                            _ => ItemID.OrichalcumOre,
+                        };
+                        break;
 
-                case ItemID.HardenedSand:
-                    SandExtractinatorUse(ref resultType, ref resultStack);
-                    break;
+                    case ItemID.GoldOre:
+                    case ItemID.PlatinumOre:
+                        resultType = Main.rand.Next(4) switch
+                        {
+                            0 => ItemID.GoldOre,
+                            1 => ItemID.PlatinumOre,
+                            2 => ItemID.AdamantiteOre,
+                            _ => ItemID.TitaniumOre,
+                        };
+                        break;
 
-                case ItemID.IceBlock:
-                    IceExtractinatorUse(ref resultType, ref resultStack);
-                    break;
-
-                default:
-                    if (OBCWorld.defeatWoF)
-                    {
-                        HardmodeExtractinatorUse(ref resultType, ref resultStack);
-                    }
-                    break;
-            }
-        }
-
-        private static void DirtExtractinatorUse(ref int resultType, ref int resultStack)
-        {
-            resultType = Main.rand.Next(7) switch
-            {
-                0 => ItemID.DaybloomSeeds,
-                1 => ItemID.BlinkrootSeeds,
-                2 => ItemID.WaterleafSeeds,
-                3 => ItemID.MoonglowSeeds,
-                4 => ItemID.ShiverthornSeeds,
-                5 => ItemID.DeathweedSeeds,
-                _ => ItemID.FireblossomSeeds,
-            };
-
-            resultStack = 1;
-            resultStack += Main.rand.Next(5) == 0 ? 1 : 0;
-            resultStack += Main.rand.Next(20) == 0 ? 1 : 0;
-        }
-
-        private static void StoneExtractinatorUse(ref int resultType, ref int resultStack)
-        {
-            // FIXME: tweak extraction probabilities
-
-            resultType = Main.rand.Next(250) switch
-            {
-                (>=   0) and (< 100) => ItemID.ClayBlock, // w=100
-                (>= 100) and (< 200) => ItemID.SiltBlock, // w=100
-                (>= 200) and (< 225) => ItemID.Cobweb,    // w=25
-                (>= 225) and (< 230)  => ItemID.Marble,   // w=5
-                (>= 230) and (< 235)  => ItemID.Granite,  // w=5
-
-                235 or 236 => ItemID.DartTrap,            // w=2
-                237        => ItemID.LifeCrystal,         // w=1
-
-                (> 237) and (< 245) => ItemID.AshBlock,   // w=8
-
-                // w=5
-                _ when OBCWorld.defeatBoss2 => ItemID.Hellstone,
-                _ => ItemID.AshBlock,
-            };
-
-            resultStack = 1;
-        }
-
-        private static void SandExtractinatorUse(ref int resultType, ref int resultStack)
-        {
-            resultType = Main.rand.Next(50) switch
-            {
-                (>=  0) and (< 20) => ItemID.SandBlock,
-                (>= 20) and (< 40) => ItemID.Sandstone,
-                _ => ItemID.DesertFossil,
-            };
-
-            resultStack = 1;
-        }
-
-        private static void IceExtractinatorUse(ref int resultType, ref int resultStack)
-        {
-            resultType = Main.rand.Next(2) switch
-            {
-                0 => ItemID.SnowBlock,
-                _ => ItemID.SlushBlock,
-            };
-
-            resultStack = 1;
-        }
-
-        private void HardmodeExtractinatorUse(ref int resultType, ref int resultStack)
-        {
-            switch (resultType)
-            {
-                case ItemID.CopperOre:
-                case ItemID.TinOre:
-                case ItemID.IronOre:
-                case ItemID.LeadOre:
-                    resultType = Main.rand.Next(6) switch
-                    {
-                        0 => ItemID.CopperOre,
-                        1 => ItemID.TinOre,
-                        2 => ItemID.IronOre,
-                        3 => ItemID.LeadOre,
-                        4 => ItemID.CobaltOre,
-                        _ => ItemID.PalladiumOre,
-                    };
-                    break;
-
-                case ItemID.SilverOre:
-                case ItemID.TungstenOre:
-                    resultType = Main.rand.Next(4) switch
-                    {
-                        0 => ItemID.SilverOre,
-                        1 => ItemID.TungstenOre,
-                        2 => ItemID.MythrilOre,
-                        _ => ItemID.OrichalcumOre,
-                    };
-                    break;
-
-                case ItemID.GoldOre:
-                case ItemID.PlatinumOre:
-                    resultType = Main.rand.Next(4) switch
-                    {
-                        0 => ItemID.GoldOre,
-                        1 => ItemID.PlatinumOre,
-                        2 => ItemID.AdamantiteOre,
-                        _ => ItemID.TitaniumOre,
-                    };
-                    break;
-
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -248,23 +190,16 @@ namespace OneBlockChallenge
     {
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
-            switch (type)
+            if (type == NPCID.Merchant)
             {
-                case NPCID.Merchant:
-                    shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
-                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
+                if (Main.LocalPlayer.ZoneJungle)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.HiveWand);
                     nextSlot++;
 
-                    if (Main.LocalPlayer.ZoneJungle)
-                    {
-                        shop.item[nextSlot].SetDefaults(ItemID.HoneyBucket);
-                        nextSlot++;
-                    }
-
-                    break;
-
-                default:
-                    break;
+                    shop.item[nextSlot].SetDefaults(ItemID.Hive);
+                    nextSlot++;
+                }
             }
         }
 
