@@ -100,19 +100,21 @@ namespace OneBlockChallenge
                 // w=30
                 (>= 250) and (< 280) => ItemID.ClayBlock,
                 (>= 280) and (< 310) => ItemID.HardenedSand,
-                (>= 310) and (< 340) => ItemID.Sandstone,
-                (>= 340) and (< 370) => ItemID.Cloud,
+                (>= 310) and (< 340) => ItemID.SiltBlock,
+                (>= 340) and (< 370) => ItemID.SlushBlock,
+                (>= 370) and (< 400) => ItemID.DesertFossil,
 
-                // w=20
-                (>= 370) and (< 390) => ItemID.SiltBlock,
-                (>= 390) and (< 410) => ItemID.SlushBlock,
-                (>= 410) and (< 430) => ItemID.DesertFossil,
+                // w=10
+                (>= 400) and (< 410) => ItemID.Sandstone,
+                (>= 410) and (< 420) => ItemID.Marble,
+                (>= 420) and (< 430) => ItemID.Granite,
+                (>= 430) and (< 440) => ItemID.Cloud,
 
-                // w=15
-                (>= 430) and (< 445) => ItemID.Cobweb,
+                // w=9
+                (>= 440) and (< 449) => ItemID.Cobweb,
 
-                // w=5
-                (>= 445) and (< 450) => ItemID.LifeCrystal,
+                // w=1
+                459 => ItemID.LifeCrystal,
 
                 // Boss2
                 (>= 450) and (< 480) => ItemID.AshBlock,
