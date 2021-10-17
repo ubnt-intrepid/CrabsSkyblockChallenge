@@ -3,7 +3,6 @@ using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 
 namespace OneBlockChallenge
 {
@@ -43,52 +42,9 @@ namespace OneBlockChallenge
 
     public class OBCWorld : ModSystem
     {
-        public static bool defeatBoss2 = false;   // Eater of World / Brain of Cthulhu
-        public static bool defeatSkeletron = false;
-        public static bool defeatWoF = false;
-        public static bool defeatPlantera = false;
-
-        public override void LoadWorldData(TagCompound tags)
-        {
-            TryGetTag(tags, "defeatBoss2", out defeatBoss2);
-            TryGetTag(tags, "defeatSkeletron", out defeatSkeletron);
-            TryGetTag(tags, "defeatWoF", out defeatWoF);
-            TryGetTag(tags, "defeatPlantera", out defeatPlantera);
-        }
-
-        public override void SaveWorldData(TagCompound tags)
-        {
-            tags.Set("defeatBoss2", defeatBoss2);
-            tags.Set("defeatSkeletron", defeatSkeletron);
-            tags.Set("defeatWoF", defeatWoF);
-            tags.Set("defeatPlantera", defeatPlantera);
-        }
-
-        static bool TryGetTag<T>(TagCompound me, string name, out T dest)
-        {
-            if (me.ContainsKey(name))
-            {
-                dest = me.Get<T>(name);
-                return true;
-            }
-            else
-            {
-                dest = default(T);
-                return false;
-            }
-        }
-
         public static int NextBlock()
         {
-            var maxValue = 0 switch
-            {
-                _ when defeatPlantera => 600,
-                _ when defeatSkeletron => 550,
-                _ when defeatBoss2 => 500,
-                _ => 450,
-            };
-
-            return Main.rand.Next(maxValue) switch
+            return Main.rand.Next(420) switch
             {
                 // w=50
                 (>=   0) and (<  50) => ItemID.DirtBlock,
@@ -105,31 +61,8 @@ namespace OneBlockChallenge
                 (>= 370) and (< 400) => ItemID.DesertFossil,
 
                 // w=10
-                (>= 400) and (< 410) => ItemID.Sandstone,
-                (>= 410) and (< 420) => ItemID.Marble,
-                (>= 420) and (< 430) => ItemID.Granite,
-                (>= 430) and (< 440) => ItemID.Cloud,
-
-                // w=9
-                (>= 440) and (< 449) => ItemID.Cobweb,
-
-                // w=1
-                459 => ItemID.LifeCrystal,
-
-                // Boss2
-                (>= 450) and (< 480) => ItemID.AshBlock,
-                (>= 480) and (< 500) => ItemID.Hellstone,
-
-                // Skeletron
-                (>= 500) and (< 550) => Main.rand.Next(3) switch {
-                    0 => ItemID.BlueBrick,
-                    1 => ItemID.GreenBrick,
-                    2 => ItemID.PinkBrick,
-                    _ => 0,
-                },
-
-                // Plantera
-                (>= 550) and (< 600) => ItemID.LihzahrdBrick,
+                (>= 400) and (< 410) => ItemID.Cloud,
+                (>= 410) and (< 420) => ItemID.Cobweb,
 
                 _ => 0,
             };
@@ -140,61 +73,73 @@ namespace OneBlockChallenge
     {
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            if (OBCWorld.defeatWoF)
+            if (!Main.hardMode)
             {
-                switch (resultType)
-                {
-                    case ItemID.CopperOre:
-                    case ItemID.TinOre:
-                    case ItemID.IronOre:
-                    case ItemID.LeadOre:
-                        resultType = Main.rand.Next(6) switch
-                        {
-                            0 => ItemID.CopperOre,
-                            1 => ItemID.TinOre,
-                            2 => ItemID.IronOre,
-                            3 => ItemID.LeadOre,
-                            4 => ItemID.CobaltOre,
-                            _ => ItemID.PalladiumOre,
-                        };
-                        break;
+                return;
+            }
 
-                    case ItemID.SilverOre:
-                    case ItemID.TungstenOre:
-                        resultType = Main.rand.Next(4) switch
-                        {
-                            0 => ItemID.SilverOre,
-                            1 => ItemID.TungstenOre,
-                            2 => ItemID.MythrilOre,
-                            _ => ItemID.OrichalcumOre,
-                        };
-                        break;
+            switch (resultType)
+            {
+                case ItemID.CopperOre:
+                case ItemID.TinOre:
+                case ItemID.IronOre:
+                case ItemID.LeadOre:
+                    resultType = Main.rand.Next(6) switch
+                    {
+                        0 => ItemID.CopperOre,
+                        1 => ItemID.TinOre,
+                        2 => ItemID.IronOre,
+                        3 => ItemID.LeadOre,
+                        4 => ItemID.CobaltOre,
+                        _ => ItemID.PalladiumOre,
+                    };
+                    break;
 
-                    case ItemID.GoldOre:
-                    case ItemID.PlatinumOre:
-                        resultType = Main.rand.Next(4) switch
-                        {
-                            0 => ItemID.GoldOre,
-                            1 => ItemID.PlatinumOre,
-                            2 => ItemID.AdamantiteOre,
-                            _ => ItemID.TitaniumOre,
-                        };
-                        break;
+                case ItemID.SilverOre:
+                case ItemID.TungstenOre:
+                    resultType = Main.rand.Next(4) switch
+                    {
+                        0 => ItemID.SilverOre,
+                        1 => ItemID.TungstenOre,
+                        2 => ItemID.MythrilOre,
+                        _ => ItemID.OrichalcumOre,
+                    };
+                    break;
 
-                    default:
-                        break;
-                }
+                case ItemID.GoldOre:
+                case ItemID.PlatinumOre:
+                    resultType = Main.rand.Next(4) switch
+                    {
+                        0 => ItemID.GoldOre,
+                        1 => ItemID.PlatinumOre,
+                        2 => ItemID.AdamantiteOre,
+                        _ => ItemID.TitaniumOre,
+                    };
+                    break;
+
+                default:
+                    break;
             }
         }
     }
 
     public class OBCGlobalNPC : GlobalNPC
     {
+        // TODO: add enemy NPC drops
+        // * Ash/Hellstone in Underworld
+        // * Lihzahrd Power Cell and Solar Tablet Fragment in post-Plantera underground jungle
+
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
+            var player = Main.LocalPlayer;
+
             if (type == NPCID.Merchant)
             {
-                if (Main.LocalPlayer.ZoneJungle)
+                shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
+                nextSlot++;
+
+                if (player.ZoneJungle)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.HiveWand);
                     nextSlot++;
@@ -203,33 +148,18 @@ namespace OneBlockChallenge
                     nextSlot++;
                 }
             }
-        }
-
-        public override void OnKill(NPC npc)
-        {
-            switch (npc.type)
+            else if (type == NPCID.WitchDoctor)
             {
-                case NPCID.EaterofWorldsHead:
-                case NPCID.EaterofWorldsBody:
-                case NPCID.EaterofWorldsTail:
-                case NPCID.BrainofCthulhu:
-                    NPC.SetEventFlagCleared(ref OBCWorld.defeatBoss2, -1);
-                    break;
-
-                case NPCID.SkeletronHead:
-                    NPC.SetEventFlagCleared(ref OBCWorld.defeatSkeletron, -1);
-                    break;
-
-                case NPCID.WallofFlesh:
-                    NPC.SetEventFlagCleared(ref OBCWorld.defeatWoF, -1);
-                    break;
-
-                case NPCID.Plantera:
-                    NPC.SetEventFlagCleared(ref OBCWorld.defeatPlantera, -1);
-                    break;
-
-                default:
-                    break;
+                if (NPC.downedPlantBoss && player.ZoneJungle)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.LihzahrdAltar);
+                    nextSlot++;
+                }
+            }
+            else if (type == NPCID.SkeletonMerchant)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
+                nextSlot++;
             }
         }
     }
