@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,8 +49,8 @@ namespace OneBlockChallenge
             return Main.rand.Next(420) switch
             {
                 // w=50
-                (>=   0) and (<  50) => ItemID.DirtBlock,
-                (>=  50) and (< 100) => ItemID.StoneBlock,
+                (>= 0) and (< 50) => ItemID.DirtBlock,
+                (>= 50) and (< 100) => ItemID.StoneBlock,
                 (>= 100) and (< 150) => ItemID.SandBlock,
                 (>= 150) and (< 200) => ItemID.SnowBlock,
                 (>= 200) and (< 250) => ItemID.IceBlock,
@@ -125,9 +127,51 @@ namespace OneBlockChallenge
 
     public class OBCGlobalNPC : GlobalNPC
     {
-        // TODO: add enemy NPC drops
-        // * Ash/Hellstone in Underworld
-        // * Lihzahrd Power Cell and Solar Tablet Fragment in post-Plantera underground jungle
+        static readonly int[] HornetNPCs = new int[]
+        {
+            NPCID.Hornet,
+            NPCID.LittleStinger,
+            NPCID.BigStinger,
+            NPCID.HornetFatty,
+            NPCID.LittleHornetFatty,
+            NPCID.BigHornetFatty,
+            NPCID.HornetHoney,
+            NPCID.LittleHornetHoney,
+            NPCID.BigHornetHoney,
+            NPCID.HornetLeafy,
+            NPCID.LittleHornetLeafy,
+            NPCID.BigHornetLeafy,
+            NPCID.HornetSpikey,
+            NPCID.LittleHornetSpikey,
+            NPCID.BigHornetSpikey,
+            NPCID.HornetStingy,
+            NPCID.LittleHornetStingy,
+            NPCID.BigHornetStingy,
+
+            // Moss hornets
+            NPCID.TinyMossHornet,
+            NPCID.LittleMossHornet,
+            NPCID.MossHornet,
+            NPCID.BigMossHornet,
+            NPCID.GiantMossHornet,
+        };
+
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            if (Array.IndexOf(HornetNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
+            }
+        }
+
+        public override void ModifyGlobalLoot(GlobalLoot globalLoot)
+        {
+            globalLoot.Add(new HellStoneDropRule());
+            globalLoot.Add(ItemDropRule.ByCondition(new LihzahrdCellDropCondition(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
+
+            // TODOs:
+            // * Solar Tablet Fragment from Solar Eclipse enemies
+        }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
@@ -142,9 +186,6 @@ namespace OneBlockChallenge
                 if (player.ZoneJungle)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.HiveWand);
-                    nextSlot++;
-
-                    shop.item[nextSlot].SetDefaults(ItemID.Hive);
                     nextSlot++;
                 }
             }
@@ -162,5 +203,63 @@ namespace OneBlockChallenge
                 nextSlot++;
             }
         }
+    }
+
+    class HellStoneDropRule : IItemDropRule
+    {
+        public List<IItemDropRuleChainAttempt> ChainedRules { get; private set; }
+
+        public bool CanDrop(DropAttemptInfo info) => NPC.downedBoss2 && info.player.ZoneUnderworldHeight;
+
+        public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
+        {
+            if (info.player.RollLuck(/* denom */3) < /* num */1)
+            {
+                int item;
+                int amount;
+                if (info.rng.Next(2) == 0)
+                {
+                    item = ItemID.AshBlock;
+                    amount = info.rng.Next(5, 10);
+                }
+                else
+                {
+                    item = ItemID.Hellstone;
+                    amount = info.rng.Next(3, 5);
+                }
+                CommonCode.DropItemFromNPC(info.npc, item, amount);
+
+                return new ItemDropAttemptResult
+                {
+                    State = ItemDropAttemptResultState.Success
+                };
+            }
+            else
+            {
+                return new ItemDropAttemptResult
+                {
+                    State = ItemDropAttemptResultState.FailedRandomRoll
+                };
+            }
+        }
+
+        public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
+        {
+            float num = 1f / 3f;
+            float baseDropRate = num * ratesInfo.parentDroprateChance;
+            drops.Add(new DropRateInfo(ItemID.AshBlock, 5, 10, 0.5f * baseDropRate, ratesInfo.conditions));
+            drops.Add(new DropRateInfo(ItemID.Hellstone, 3, 5, 0.5f * baseDropRate, ratesInfo.conditions));
+
+            Chains.ReportDroprates(ChainedRules, num, drops, ratesInfo);
+        }
+    }
+
+    class LihzahrdCellDropCondition : IItemDropRuleCondition
+    {
+        public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && info.player.ZoneJungle && info.player.ZoneRockLayerHeight;
+
+        public bool CanShowItemDropInUI() => true;
+
+        public string GetConditionDescription() => "Drops in post-Plantera Underground Jungle";
     }
 }
