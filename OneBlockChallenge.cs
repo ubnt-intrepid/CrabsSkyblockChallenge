@@ -166,11 +166,10 @@ namespace OneBlockChallenge
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
-            globalLoot.Add(new HellStoneDropRule());
-            globalLoot.Add(ItemDropRule.ByCondition(new LihzahrdCellDropCondition(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
-
-            // TODOs:
-            // * Solar Tablet Fragment from Solar Eclipse enemies
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstoneAvailable(), ItemID.AshBlock, chanceDenominator: 3, minimumDropped: 5, maximumDropped: 10));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstoneAvailable(), ItemID.Hellstone, chanceDenominator: 3, minimumDropped: 3, maximumDropped: 5));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.LihzahrdCellAvailable(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.SolarEclipse(), ItemID.LunarTabletFragment, chanceDenominator: 100));
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
@@ -205,61 +204,33 @@ namespace OneBlockChallenge
         }
     }
 
-    class HellStoneDropRule : IItemDropRule
+    namespace Conditions
     {
-        public List<IItemDropRuleChainAttempt> ChainedRules { get; private set; }
-
-        public bool CanDrop(DropAttemptInfo info) => NPC.downedBoss2 && info.player.ZoneUnderworldHeight;
-
-        public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
+        public class HellstoneAvailable : IItemDropRuleCondition
         {
-            if (info.player.RollLuck(/* denom */3) < /* num */1)
-            {
-                int item;
-                int amount;
-                if (info.rng.Next(2) == 0)
-                {
-                    item = ItemID.AshBlock;
-                    amount = info.rng.Next(5, 10);
-                }
-                else
-                {
-                    item = ItemID.Hellstone;
-                    amount = info.rng.Next(3, 5);
-                }
-                CommonCode.DropItemFromNPC(info.npc, item, amount);
+            public bool CanDrop(DropAttemptInfo info) => NPC.downedBoss2 && info.player.ZoneUnderworldHeight;
 
-                return new ItemDropAttemptResult
-                {
-                    State = ItemDropAttemptResultState.Success
-                };
-            }
-            else
-            {
-                return new ItemDropAttemptResult
-                {
-                    State = ItemDropAttemptResultState.FailedRandomRoll
-                };
-            }
+            public bool CanShowItemDropInUI() => true;
+
+            public string GetConditionDescription() => "Drops in post-Boss2 Underworld";
         }
 
-        public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
+        public class SolarEclipse : IItemDropRuleCondition
         {
-            float num = 1f / 3f;
-            float baseDropRate = num * ratesInfo.parentDroprateChance;
-            drops.Add(new DropRateInfo(ItemID.AshBlock, 5, 10, 0.5f * baseDropRate, ratesInfo.conditions));
-            drops.Add(new DropRateInfo(ItemID.Hellstone, 3, 5, 0.5f * baseDropRate, ratesInfo.conditions));
+            public bool CanDrop(DropAttemptInfo info) => Main.eclipse;
 
-            Chains.ReportDroprates(ChainedRules, num, drops, ratesInfo);
+            public bool CanShowItemDropInUI() => true;
+
+            public string GetConditionDescription() => "Drops during Solar Eclipse";
         }
-    }
 
-    class LihzahrdCellDropCondition : IItemDropRuleCondition
-    {
-        public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && info.player.ZoneJungle && info.player.ZoneRockLayerHeight;
+        public class LihzahrdCellAvailable : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && info.player.ZoneJungle && info.player.ZoneRockLayerHeight;
 
-        public bool CanShowItemDropInUI() => true;
+            public bool CanShowItemDropInUI() => true;
 
-        public string GetConditionDescription() => "Drops in post-Plantera Underground Jungle";
+            public string GetConditionDescription() => "Drops in post-Plantera Underground Jungle";
+        }
     }
 }
