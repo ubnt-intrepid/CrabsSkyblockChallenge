@@ -166,9 +166,9 @@ namespace OneBlockChallenge
 
         public override void ModifyGlobalLoot(GlobalLoot globalLoot)
         {
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstoneAvailable(), ItemID.AshBlock, chanceDenominator: 3, minimumDropped: 5, maximumDropped: 10));
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstoneAvailable(), ItemID.Hellstone, chanceDenominator: 3, minimumDropped: 3, maximumDropped: 5));
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.LihzahrdCellAvailable(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 2, minimumDropped: 5, maximumDropped: 10));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstonePickable(), ItemID.Hellstone, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
+            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.DefeatPlantera(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
             globalLoot.Add(ItemDropRule.ByCondition(new Conditions.SolarEclipse(), ItemID.LunarTabletFragment, chanceDenominator: 100));
         }
 
@@ -206,13 +206,29 @@ namespace OneBlockChallenge
 
     namespace Conditions
     {
-        public class HellstoneAvailable : IItemDropRuleCondition
+        public class InZoneUnderworld : IItemDropRuleCondition
         {
-            public bool CanDrop(DropAttemptInfo info) => NPC.downedBoss2 && info.player.ZoneUnderworldHeight;
+            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight;
 
             public bool CanShowItemDropInUI() => true;
 
-            public string GetConditionDescription() => "Drops in post-Boss2 Underworld";
+            public string GetConditionDescription() => "Drops in Underworld";
+        }
+
+        public class HellstonePickable : IItemDropRuleCondition
+        {
+            readonly int minPick;
+
+            public HellstonePickable()
+            {
+                minPick = TileLoader.GetTile(TileID.Hellstone).MinPick;
+            }
+
+            public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= minPick && info.player.ZoneUnderworldHeight;
+
+            public bool CanShowItemDropInUI() => true;
+
+            public string GetConditionDescription() => "Drops in Underworld when player has enough pickaxe power";
         }
 
         public class SolarEclipse : IItemDropRuleCondition
@@ -224,7 +240,7 @@ namespace OneBlockChallenge
             public string GetConditionDescription() => "Drops during Solar Eclipse";
         }
 
-        public class LihzahrdCellAvailable : IItemDropRuleCondition
+        public class DefeatPlantera : IItemDropRuleCondition
         {
             public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && info.player.ZoneJungle && info.player.ZoneRockLayerHeight;
 
