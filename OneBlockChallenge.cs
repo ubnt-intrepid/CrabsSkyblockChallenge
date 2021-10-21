@@ -73,50 +73,56 @@ namespace OneBlockChallenge
 
     public class OBCGlobalItem : GlobalItem
     {
+        static int adamantiteMinPick = 0;
+        static int mythrilMinPick = 0;
+        static int cobaltMinPick = 0;
+
+        public override void SetStaticDefaults()
+        {
+            adamantiteMinPick = TileLoader.GetTile(TileID.Adamantite).MinPick;
+            mythrilMinPick = TileLoader.GetTile(TileID.Mythril).MinPick;
+            cobaltMinPick = TileLoader.GetTile(TileID.Cobalt).MinPick;
+        }
+
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            if (!Main.hardMode)
-            {
-                return;
-            }
-
             switch (resultType)
             {
                 case ItemID.CopperOre:
                 case ItemID.TinOre:
                 case ItemID.IronOre:
                 case ItemID.LeadOre:
-                    resultType = Main.rand.Next(6) switch
-                    {
-                        0 => ItemID.CopperOre,
-                        1 => ItemID.TinOre,
-                        2 => ItemID.IronOre,
-                        3 => ItemID.LeadOre,
-                        4 => ItemID.CobaltOre,
-                        _ => ItemID.PalladiumOre,
-                    };
-                    break;
-
                 case ItemID.SilverOre:
                 case ItemID.TungstenOre:
-                    resultType = Main.rand.Next(4) switch
-                    {
-                        0 => ItemID.SilverOre,
-                        1 => ItemID.TungstenOre,
-                        2 => ItemID.MythrilOre,
-                        _ => ItemID.OrichalcumOre,
-                    };
-                    break;
-
                 case ItemID.GoldOre:
                 case ItemID.PlatinumOre:
-                    resultType = Main.rand.Next(4) switch
+                    if (Main.hardMode)
                     {
-                        0 => ItemID.GoldOre,
-                        1 => ItemID.PlatinumOre,
-                        2 => ItemID.AdamantiteOre,
-                        _ => ItemID.TitaniumOre,
-                    };
+                        var maxValue = Main.LocalPlayer.GetBestPickaxe().pick switch
+                        {
+                            var pick when pick >= adamantiteMinPick => 14,
+                            var pick when pick >= mythrilMinPick => 12,
+                            var pick when pick >= cobaltMinPick => 10,
+                            _ => 8,
+                        };
+                        resultType = Main.rand.Next(maxValue) switch
+                        {
+                            0 => ItemID.CopperOre,
+                            1 => ItemID.TinOre,
+                            2 => ItemID.IronOre,
+                            3 => ItemID.LeadOre,
+                            4 => ItemID.SilverOre,
+                            5 => ItemID.TungstenOre,
+                            6 => ItemID.GoldOre,
+                            7 => ItemID.PlatinumOre,
+                            8 => ItemID.CobaltOre,
+                            9 => ItemID.PalladiumOre,
+                            10 => ItemID.MythrilOre,
+                            11 => ItemID.OrichalcumOre,
+                            12 => ItemID.AdamantiteOre,
+                            _ => ItemID.TitaniumOre,
+                        };
+                    }
                     break;
 
                 default:
