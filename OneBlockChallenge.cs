@@ -155,16 +155,16 @@ namespace OneBlockChallenge
         {
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
             }
-        }
 
-        public override void ModifyGlobalLoot(GlobalLoot globalLoot)
-        {
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 2, minimumDropped: 5, maximumDropped: 10));
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstonePickable(), ItemID.Hellstone, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.DefeatPlantera(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
-            globalLoot.Add(ItemDropRule.ByCondition(new Conditions.SolarEclipse(), ItemID.LunarTabletFragment, chanceDenominator: 100));
+            if (!NPCID.Sets.CountsAsCritter[npc.type])
+            {
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.HellstonePickable(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.DefeatPlantera(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
+                npcLoot.Add(ItemDropRule.ByCondition(new Conditions.SolarEclipse(), ItemID.LunarTabletFragment, chanceDenominator: 100));
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
