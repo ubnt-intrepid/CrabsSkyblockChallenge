@@ -73,17 +73,6 @@ namespace OneBlockChallenge
 
     public class OBCGlobalItem : GlobalItem
     {
-        static int adamantiteMinPick = 0;
-        static int mythrilMinPick = 0;
-        static int cobaltMinPick = 0;
-
-        public override void SetStaticDefaults()
-        {
-            adamantiteMinPick = TileLoader.GetTile(TileID.Adamantite).MinPick;
-            mythrilMinPick = TileLoader.GetTile(TileID.Mythril).MinPick;
-            cobaltMinPick = TileLoader.GetTile(TileID.Cobalt).MinPick;
-        }
-
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
             switch (resultType)
@@ -100,10 +89,10 @@ namespace OneBlockChallenge
                     {
                         var maxValue = Main.LocalPlayer.GetBestPickaxe().pick switch
                         {
-                            var pick when pick >= adamantiteMinPick => 14,
-                            var pick when pick >= mythrilMinPick => 12,
-                            var pick when pick >= cobaltMinPick => 10,
-                            _ => 8,
+                            < 100                => 8,  // pre-hardmode ores
+                            (>= 100) and (< 110) => 10, // Cobalt, Palladium
+                            (>= 110) and (< 150) => 12, // Mythril, Orichalcum
+                            _                    => 14, // Adamantite, Titanium
                         };
                         resultType = Main.rand.Next(maxValue) switch
                         {
@@ -223,14 +212,7 @@ namespace OneBlockChallenge
 
         public class HellstonePickable : IItemDropRuleCondition
         {
-            readonly int minPick;
-
-            public HellstonePickable()
-            {
-                minPick = TileLoader.GetTile(TileID.Hellstone).MinPick;
-            }
-
-            public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= minPick && info.player.ZoneUnderworldHeight;
+            public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= 65 && info.player.ZoneUnderworldHeight;
 
             public bool CanShowItemDropInUI() => true;
 
