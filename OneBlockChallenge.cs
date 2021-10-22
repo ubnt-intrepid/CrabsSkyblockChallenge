@@ -35,7 +35,10 @@ namespace OneBlockChallenge
 
             Mod.Logger.Info("Switch to OBC world generation");
 
-            tasks.RemoveRange(1, tasks.Count - 1);
+            var resetTask = tasks.Find(pass => pass.Name.Contains("Reset"));
+
+            tasks.Clear();
+            tasks.Add(resetTask);
             tasks.Add(new OBCWorldGenPass());
         }
 
