@@ -83,7 +83,19 @@ namespace OneBlockChallenge
             Main.spawnTileY = (int)Main.worldSurface - 100;
 
             MakeSpawnIsland();
-            MakeDungeonIsland();
+
+            // Dungeon and Jungle Temple are the only early structures in the world
+            // (except the initial spawn point.)
+            var dungeonDirection = Main.rand.NextBool() ? 1 : -1;
+
+            var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
+            var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + Main.rand.Next(-200, 200);
+            WorldGen.MakeDungeon(dungeonX, dungeonY);
+
+            var templeX = (int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.3));
+            var templeY = Main.rand.Next((int)Main.rockLayer, Main.maxTilesY - 500);
+            WorldGen.makeTemple(templeX, templeY);
+            WorldGen.templePart2();
         }
 
         static void MakeSpawnIsland()
@@ -95,21 +107,6 @@ namespace OneBlockChallenge
             Main.npc[guideID].homeTileX = Main.spawnTileX;
             Main.npc[guideID].homeTileY = Main.spawnTileY;
             Main.npc[guideID].direction = 1;
-        }
-
-        static void MakeDungeonIsland()
-        {
-            var dungeonDirection = Main.rand.NextBool() ? 1 : -1;
-
-            Main.dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
-            Main.dungeonY = Main.spawnTileY;
-
-            WorldGen.PlaceTile(Main.dungeonX, Main.dungeonY, TileID.GreenDungeonBrick);
-
-            int oldManID = NPC.NewNPC(Main.dungeonX * 16, Main.dungeonY * 16, NPCID.OldMan);
-            Main.npc[oldManID].homeless = false;
-            Main.npc[oldManID].homeTileX = Main.dungeonX;
-            Main.npc[oldManID].homeTileY = Main.dungeonY;
         }
     }
 
@@ -223,25 +220,10 @@ namespace OneBlockChallenge
 
         class HellstonePickable : IItemDropRuleCondition
         {
-            public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= 65 && info.player.ZoneUnderworldHeight;
+            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight && info.player.GetBestPickaxe().pick >= 65;
             public bool CanShowItemDropInUI() => true;
             public string GetConditionDescription() => "Drops in Underworld when player has enough pickaxe power";
         }
-
-        class InSolarEclipse : IItemDropRuleCondition
-        {
-            public bool CanDrop(DropAttemptInfo info) => Main.eclipse;
-            public bool CanShowItemDropInUI() => true;
-            public string GetConditionDescription() => "Drops during Solar Eclipse";
-        }
-
-        class DefeatPlantera : IItemDropRuleCondition
-        {
-            public bool CanDrop(DropAttemptInfo info) => NPC.downedPlantBoss && info.player.ZoneJungle && info.player.ZoneRockLayerHeight;
-            public bool CanShowItemDropInUI() => true;
-            public string GetConditionDescription() => "Drops in post-Plantera Underground Jungle";
-        }
-
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -254,8 +236,6 @@ namespace OneBlockChallenge
             {
                 npcLoot.Add(ItemDropRule.ByCondition(new InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
                 npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickable(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
-                npcLoot.Add(ItemDropRule.ByCondition(new DefeatPlantera(), ItemID.LihzahrdPowerCell, chanceDenominator: 100));
-                npcLoot.Add(ItemDropRule.ByCondition(new InSolarEclipse(), ItemID.LunarTabletFragment, chanceDenominator: 100));
             }
         }
 
@@ -272,14 +252,6 @@ namespace OneBlockChallenge
                 if (player.ZoneJungle)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.HiveWand);
-                    nextSlot++;
-                }
-            }
-            else if (type == NPCID.WitchDoctor)
-            {
-                if (NPC.downedPlantBoss && player.ZoneJungle)
-                {
-                    shop.item[nextSlot].SetDefaults(ItemID.LihzahrdAltar);
                     nextSlot++;
                 }
             }
