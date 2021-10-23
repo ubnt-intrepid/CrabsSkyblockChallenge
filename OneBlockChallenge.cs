@@ -233,6 +233,7 @@ namespace OneBlockChallenge
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.Common(ItemID.HiveWand, chanceDenominator: 500));
             }
 
             if (!NPCID.Sets.CountsAsCritter[npc.type])
@@ -250,17 +251,6 @@ namespace OneBlockChallenge
             {
                 shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
-                nextSlot++;
-
-                if (player.ZoneJungle)
-                {
-                    shop.item[nextSlot].SetDefaults(ItemID.HiveWand);
-                    nextSlot++;
-                }
-            }
-            else if (type == NPCID.SkeletonMerchant)
-            {
-                shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
                 nextSlot++;
             }
         }
