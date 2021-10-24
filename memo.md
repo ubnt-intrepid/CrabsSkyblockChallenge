@@ -31,17 +31,18 @@
 
 ## Vanilla Changes
 
-* The following items will be added to the Merchant's shop list:
-  - Extractinator (always)
-  - Hive wand (in Jungle)
+* The Extractinator will be added to the Merchant's shop list.
 
-* Life Crystals will be added to the Skeletron Merchant's shop.
+* Heart Fruits will be grow on the Grass blocks.
+  - These will drop Life Crystals when harvested.
 
-* Hornet will drop some amount of Hive blocks.
+* In Cavern Layer, enemies will drop some of items that would normally be obtainable from the Chests, such as Magic Mirror.
 
-* Enemies in the Underworld will drop the following:
-  - Ash blocks (always)
-  - Hellstones (only when the player's pickaxe has a sufficient pickaxe power)
+* Hornet will drop some Hive blocks and Hive wand randomly.
+  - Honey can be obtained by destroying the placed Hive blocks.
+
+* Enemies in the Underworld will drop Ash blocks and Hellstones.
+  - Hellstones are dropped only when the player's pickaxe has a sufficient pickaxe power.
 
 * In hardmode, Extractinator will now extracted hardmode ores, just like normal ores.
   - The extracted ores are limited to what can be mined with the maximum pixaxe power in the player's inventory.

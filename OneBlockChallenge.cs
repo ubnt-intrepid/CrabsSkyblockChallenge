@@ -228,6 +228,66 @@ namespace OneBlockChallenge
             public string GetConditionDescription() => "Drops in Underworld when player has enough pickaxe power";
         }
 
+        class UndergroundChestLoot : IItemDropRule
+        {
+            public List<IItemDropRuleChainAttempt> ChainedRules { get; private set; }
+
+            public UndergroundChestLoot()
+            {
+                ChainedRules = new();
+            }
+
+            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneRockLayerHeight && !info.player.ZoneDungeon && !info.player.ZoneLihzhardTemple;
+
+            public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
+            {
+                if (info.player.RollLuck(500) != 0)
+                {
+                    return new ItemDropAttemptResult
+                    {
+                        State = ItemDropAttemptResultState.FailedRandomRoll,
+                    };
+                }
+
+                var type = info.rng.Next(6) switch
+                {
+                    0 => ItemID.BandofRegeneration,
+                    1 => ItemID.MagicMirror,
+                    2 => ItemID.CloudinaBottle,
+                    3 => ItemID.HermesBoots,
+                    4 => ItemID.ShoeSpikes,
+                    5 => ItemID.FlareGun,
+                    _ => throw new Exception("unreachable code"),
+                };
+
+                CommonCode.DropItemFromNPC(info.npc, type, stack: 1);
+                if (type == ItemID.FlareGun)
+                {
+                    CommonCode.DropItemFromNPC(info.npc, ItemID.Flare, stack: info.rng.Next(25, 50));
+                }
+
+                return new ItemDropAttemptResult
+                {
+                    State = ItemDropAttemptResultState.Success,
+                };
+            }
+
+            public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
+            {
+                float baseDropRate = 0.002f * ratesInfo.parentDroprateChance;
+
+                drops.Add(new DropRateInfo(ItemID.BandofRegeneration, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.MagicMirror, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.CloudinaBottle, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.HermesBoots, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.ShoeSpikes, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.FlareGun, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
+                drops.Add(new DropRateInfo(ItemID.Flare, 25, 50, baseDropRate / 6f, ratesInfo.conditions));
+
+                Chains.ReportDroprates(ChainedRules, 0.002f, drops, ratesInfo);
+            }
+        }
+
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
@@ -240,13 +300,13 @@ namespace OneBlockChallenge
             {
                 npcLoot.Add(ItemDropRule.ByCondition(new InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
                 npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickable(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+
+                npcLoot.Add(new UndergroundChestLoot());
             }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
-            var player = Main.LocalPlayer;
-
             if (type == NPCID.Merchant)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
