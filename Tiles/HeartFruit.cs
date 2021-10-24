@@ -23,7 +23,7 @@ namespace OneBlockChallenge.Tiles
 
             var name = CreateMapEntryName();
             name.SetDefault("Heart Fruit");
-            AddMapEntry(new Color(240, 120, 120), name);
+            AddMapEntry(new Color(240, 80, 100), name);
 
             DustType = DustID.GrassBlades;
             SoundType = SoundID.Grass;
@@ -43,17 +43,12 @@ namespace OneBlockChallenge.Tiles
     {
         public override void RandomUpdate(int i, int j, int type)
         {
-            var onActiveGrass = type == TileID.Grass
-                && Framing.GetTileSafely(i + 1, j).type == TileID.Grass
+            if (type == TileID.Grass
                 && Framing.GetTileSafely(i, j).IsActive
-                && Framing.GetTileSafely(i + 1, j).IsActive;
-
-            var hasEnoughSpace = !Framing.GetTileSafely(i, j - 1).IsActive
+                && Framing.GetTileSafely(i + 1, j).IsActive
+                && !Framing.GetTileSafely(i, j - 1).IsActive
                 && !Framing.GetTileSafely(i, j - 2).IsActive
-                && !Framing.GetTileSafely(i + 1, j - 1).IsActive
-                && !Framing.GetTileSafely(i + 1, j - 2).IsActive;
-
-            if (onActiveGrass && hasEnoughSpace && Main.rand.Next(5000) == 0)
+                && Main.rand.Next(10000) == 0)
             {
                 WorldGen.PlaceTile(i, j - 1, ModContent.TileType<HeartFruit>(), true, false, -1, 0);
             }
