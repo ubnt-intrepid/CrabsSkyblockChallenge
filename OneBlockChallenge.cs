@@ -241,7 +241,7 @@ namespace OneBlockChallenge
 
             public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
             {
-                if (info.player.RollLuck(500) != 0)
+                if (info.player.RollLuck(100) != 0)
                 {
                     return new ItemDropAttemptResult
                     {
@@ -274,7 +274,7 @@ namespace OneBlockChallenge
 
             public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
             {
-                float baseDropRate = 0.002f * ratesInfo.parentDroprateChance;
+                float baseDropRate = 0.01f * ratesInfo.parentDroprateChance;
 
                 drops.Add(new DropRateInfo(ItemID.BandofRegeneration, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
                 drops.Add(new DropRateInfo(ItemID.MagicMirror, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
@@ -284,7 +284,7 @@ namespace OneBlockChallenge
                 drops.Add(new DropRateInfo(ItemID.FlareGun, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
                 drops.Add(new DropRateInfo(ItemID.Flare, 25, 50, baseDropRate / 6f, ratesInfo.conditions));
 
-                Chains.ReportDroprates(ChainedRules, 0.002f, drops, ratesInfo);
+                Chains.ReportDroprates(ChainedRules, 0.01f, drops, ratesInfo);
             }
         }
 

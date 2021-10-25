@@ -48,7 +48,7 @@ namespace OneBlockChallenge.Tiles
                 && Framing.GetTileSafely(i + 1, j).IsActive
                 && !Framing.GetTileSafely(i, j - 1).IsActive
                 && !Framing.GetTileSafely(i, j - 2).IsActive
-                && Main.rand.Next(10000) == 0)
+                && Main.rand.Next(5000) == 0)
             {
                 WorldGen.PlaceTile(i, j - 1, ModContent.TileType<HeartFruit>(), true, false, -1, 0);
             }
