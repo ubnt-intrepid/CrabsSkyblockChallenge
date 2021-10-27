@@ -136,6 +136,20 @@ namespace OneBlockChallenge
 
     public class OBCGlobalItem : GlobalItem
     {
+        public override void SetDefaults(Item item)
+        {
+            if (item.type == ItemID.Hive)
+            {
+                item.useStyle = ItemUseStyleID.Swing;
+                item.useTurn = true;
+                item.useAnimation = 15;
+                item.useTime = 10;
+                item.autoReuse = true;
+                item.consumable = true;
+                item.createTile = TileID.Hive;
+            }
+        }
+
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
             switch (resultType)
@@ -293,7 +307,6 @@ namespace OneBlockChallenge
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
-                npcLoot.Add(ItemDropRule.Common(ItemID.HiveWand, chanceDenominator: 500));
             }
 
             if (!NPCID.Sets.CountsAsCritter[npc.type])
