@@ -214,18 +214,25 @@ namespace OneBlockChallenge
             NPCID.GiantMossHornet,
         };
 
-        class InZoneUnderworld : IItemDropRuleCondition
+        class UnderworldCondition : IItemDropRuleCondition
         {
             public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight;
             public bool CanShowItemDropInUI() => true;
             public string GetConditionDescription() => "Drops in Underworld";
         }
 
-        class HellstonePickable : IItemDropRuleCondition
+        class HellstonePickableCondition : IItemDropRuleCondition
         {
             public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight && info.player.GetBestPickaxe().pick >= 65;
             public bool CanShowItemDropInUI() => true;
             public string GetConditionDescription() => "Drops in Underworld when player has enough pickaxe power";
+        }
+
+        class UndergroundDesertCondition : IItemDropRuleCondition
+        {
+            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUndergroundDesert && !info.player.ZoneBeach;
+            public bool CanShowItemDropInUI() => true;
+            public string GetConditionDescription() => "Drops in Underground Desert";
         }
 
         class UndergroundChestLoot : IItemDropRule
@@ -237,7 +244,10 @@ namespace OneBlockChallenge
                 ChainedRules = new();
             }
 
-            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneRockLayerHeight && !info.player.ZoneDungeon && !info.player.ZoneLihzhardTemple;
+            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneRockLayerHeight
+                && !info.player.ZoneDungeon
+                && !info.player.ZoneLihzhardTemple
+                && !info.player.ZoneBeach;
 
             public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
             {
@@ -302,8 +312,9 @@ namespace OneBlockChallenge
 
             if (!NPCID.Sets.CountsAsCritter[npc.type])
             {
-                npcLoot.Add(ItemDropRule.ByCondition(new InZoneUnderworld(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
-                npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickable(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.ByCondition(new UnderworldCondition(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickableCondition(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 1, maximumDropped: 3));
 
                 npcLoot.Add(new UndergroundChestLoot());
             }
