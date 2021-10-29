@@ -109,6 +109,7 @@ namespace OneBlockChallenge
                 new Item(ItemID.JungleGrassSeeds, stack: 1),
                 new Item(ItemID.MushroomGrassSeeds, stack: 1),
                 new Item(ItemID.WaterBucket, stack: 1),
+                new Item(ItemID.Cobweb, stack: 10),
                 new Item(ItemID.Torch, stack: 1),
             };
         }
