@@ -26,6 +26,11 @@ namespace OneBlockChallenge
                 .AddIngredient(ItemID.FallenStar, stack: 1)
                 .AddTile(TileID.Furnaces)
                 .Register();
+
+            CreateRecipe(ItemID.Sandstone)
+                .AddIngredient(ItemID.HardenedSand, stack: 2)
+                .AddTile(TileID.Furnaces)
+                .Register();
         }
     }
 
