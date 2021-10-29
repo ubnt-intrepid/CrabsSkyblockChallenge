@@ -41,32 +41,6 @@ namespace OneBlockChallenge
             tasks.Add(resetTask);
             tasks.Add(new OBCWorldGenPass());
         }
-
-        public static int NextBlock()
-        {
-            return Main.rand.Next(420) switch
-            {
-                // w=50
-                (>= 0) and (< 50) => ItemID.DirtBlock,
-                (>= 50) and (< 100) => ItemID.StoneBlock,
-                (>= 100) and (< 150) => ItemID.SandBlock,
-                (>= 150) and (< 200) => ItemID.SnowBlock,
-                (>= 200) and (< 250) => ItemID.IceBlock,
-
-                // w=30
-                (>= 250) and (< 280) => ItemID.ClayBlock,
-                (>= 280) and (< 310) => ItemID.HardenedSand,
-                (>= 310) and (< 340) => ItemID.SiltBlock,
-                (>= 340) and (< 370) => ItemID.SlushBlock,
-                (>= 370) and (< 400) => ItemID.DesertFossil,
-
-                // w=10
-                (>= 400) and (< 410) => ItemID.Cloud,
-                (>= 410) and (< 420) => ItemID.Cobweb,
-
-                _ => 0,
-            };
-        }
     }
 
     class OBCWorldGenPass : GenPass
