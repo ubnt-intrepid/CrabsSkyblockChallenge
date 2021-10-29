@@ -34,7 +34,7 @@ namespace OneBlockChallenge.Tiles
             {
                 fail = true;
 
-                var item = Main.rand.Next(420) switch
+                var item = Main.rand.Next(410) switch
                 {
                     // w=50
                     (>= 0) and (< 50) => ItemID.DirtBlock,
@@ -51,7 +51,6 @@ namespace OneBlockChallenge.Tiles
                     (>= 370) and (< 400) => ItemID.DesertFossil,
 
                     // w=10
-                    (>= 400) and (< 410) => ItemID.Cloud,
                     (>= 410) and (< 420) => ItemID.Cobweb,
 
                     _ => 0,

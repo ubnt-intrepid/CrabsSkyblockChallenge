@@ -20,6 +20,12 @@ namespace OneBlockChallenge
                 .AddIngredient(ItemID.Obsidian, stack: 30)
                 .AddTile(TileID.Anvils)
                 .Register();
+
+            CreateRecipe(ItemID.SunplateBlock, amount: 25)
+                .AddIngredient(ItemID.StoneBlock, stack: 25)
+                .AddIngredient(ItemID.FallenStar, stack: 1)
+                .AddTile(TileID.Furnaces)
+                .Register();
         }
     }
 
@@ -281,6 +287,11 @@ namespace OneBlockChallenge
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+            }
+
+            if (npc.type == NPCID.Harpy)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (!NPCID.Sets.CountsAsCritter[npc.type])
