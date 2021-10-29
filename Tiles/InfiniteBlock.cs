@@ -23,7 +23,9 @@ namespace OneBlockChallenge.Tiles
 
             TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
 
-            AddMapEntry(new Color(255, 255, 200));
+            var name = CreateMapEntryName();
+            name.SetDefault("Infinite Block");
+            AddMapEntry(new Color(255, 255, 200), name);
         }
 
         public override bool CanExplode(int i, int j) => false;
