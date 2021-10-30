@@ -68,10 +68,10 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeSpiderWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.SpiderWall}";
+        public override string Texture => $"Terraria/Images/Item_{ItemID.SpiderEcho}";
 
         public UnsafeSpiderWall()
-            : base("Spider Wall", WallID.SpiderUnsafe, ItemID.SpiderWall, ItemID.Cobweb)
+            : base("Spider Wall", WallID.SpiderUnsafe, ItemID.SpiderEcho, ItemID.Cobweb)
         {
         }
     }
