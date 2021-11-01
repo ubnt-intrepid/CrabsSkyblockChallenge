@@ -70,7 +70,13 @@ namespace OneBlockChallenge
             Main.spawnTileX = (int)(Main.maxTilesX * 0.5);
             Main.spawnTileY = (int)Main.worldSurface - 100;
 
-            MakeSpawnIsland();
+            WorldGen.PlaceTile(Main.spawnTileX, Main.spawnTileY, ModContent.TileType<Tiles.InfiniteBlock>());
+
+            int guideID = NPC.NewNPC(Main.spawnTileX * 16, Main.spawnTileY * 16, NPCID.Guide);
+            Main.npc[guideID].homeless = true;
+            Main.npc[guideID].homeTileX = Main.spawnTileX;
+            Main.npc[guideID].homeTileY = Main.spawnTileY;
+            Main.npc[guideID].direction = 1;
 
             // Dungeon and Jungle Temple are the only early structures in the world
             // (except the initial spawn point.)
@@ -84,39 +90,33 @@ namespace OneBlockChallenge
             var templeY = Main.rand.Next((int)Main.rockLayer, Main.maxTilesY - 500);
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
-        }
 
-        static void MakeSpawnIsland()
-        {
-            WorldGen.PlaceTile(Main.spawnTileX, Main.spawnTileY, ModContent.TileType<Tiles.InfiniteBlock>());
-
-            int guideID = NPC.NewNPC(Main.spawnTileX * 16, Main.spawnTileY * 16, NPCID.Guide);
-            Main.npc[guideID].homeless = true;
-            Main.npc[guideID].homeTileX = Main.spawnTileX;
-            Main.npc[guideID].homeTileY = Main.spawnTileY;
-            Main.npc[guideID].direction = 1;
-        }
-    }
-
-    public class OBCPlayer : ModPlayer
-    {
-        public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
-        {
-            if (mediumCoreDeath)
+            var chestIslandX = Main.spawnTileX + (dungeonDirection == 1 ? 100 : -101);
+            var chestIslandY = Main.spawnTileY;
+            WorldGen.PlaceTile(chestIslandX, chestIslandY, TileID.Stone);
+            WorldGen.PlaceTile(chestIslandX + 1, chestIslandY, TileID.Stone);
+            int chestIndex = WorldGen.PlaceChest(chestIslandX, chestIslandY - 1);
+            if (chestIndex != -1)
             {
-                return Enumerable.Empty<Item>();
+                var chest = Main.chest[chestIndex];
+                int chestItemIndex = 0;
+                AddItemToChest(chest, ref chestItemIndex, ItemID.Acorn, stack: 5);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.GrassSeeds, stack: 1);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.JungleGrassSeeds, stack: 1);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.MushroomGrassSeeds, stack: 1);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.WaterBucket, stack: 1);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.Cobweb, stack: 10);
+                AddItemToChest(chest, ref chestItemIndex, ItemID.Torch, stack: 1);
             }
+        }
 
-            return new[]
+        static void AddItemToChest(Chest chest, ref int chestItemIndex, int type, int stack = 1)
+        {
+            if (chestItemIndex < 40)
             {
-                new Item(ItemID.Acorn, stack: 5),
-                new Item(ItemID.GrassSeeds, stack: 1),
-                new Item(ItemID.JungleGrassSeeds, stack: 1),
-                new Item(ItemID.MushroomGrassSeeds, stack: 1),
-                new Item(ItemID.WaterBucket, stack: 1),
-                new Item(ItemID.Cobweb, stack: 10),
-                new Item(ItemID.Torch, stack: 1),
-            };
+                chest.item[chestItemIndex] = new Item(type, stack);
+                chestItemIndex++;
+            }
         }
     }
 
