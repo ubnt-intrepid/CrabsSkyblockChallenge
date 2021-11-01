@@ -100,6 +100,7 @@ namespace OneBlockChallenge
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
+                chest.item[nextSlot++] = new Item(ItemID.Torch, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.GrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
