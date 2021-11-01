@@ -99,43 +99,21 @@ namespace OneBlockChallenge
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
-                int chestItemIndex = 0;
-                AddItemToChest(chest, ref chestItemIndex, ItemID.Acorn, stack: 5);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.GrassSeeds, stack: 1);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.JungleGrassSeeds, stack: 1);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.MushroomGrassSeeds, stack: 1);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.WaterBucket, stack: 1);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.Cobweb, stack: 10);
-                AddItemToChest(chest, ref chestItemIndex, ItemID.Torch, stack: 1);
-            }
-        }
-
-        static void AddItemToChest(Chest chest, ref int chestItemIndex, int type, int stack = 1)
-        {
-            if (chestItemIndex < 40)
-            {
-                chest.item[chestItemIndex] = new Item(type, stack);
-                chestItemIndex++;
+                int nextSlot = 0;
+                chest.item[nextSlot++] = new Item(ItemID.GrassSeeds);
+                chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
+                chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
+                chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.WaterBucket);
+                chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
+                chest.item[nextSlot++] = new Item(ItemID.Extractinator);
+                chest.item[nextSlot++] = new Item(ItemID.HiveWand);
             }
         }
     }
 
     public class OBCGlobalItem : GlobalItem
     {
-        public override void SetDefaults(Item item)
-        {
-            if (item.type == ItemID.Hive)
-            {
-                item.useStyle = ItemUseStyleID.Swing;
-                item.useTurn = true;
-                item.useAnimation = 15;
-                item.useTime = 10;
-                item.autoReuse = true;
-                item.consumable = true;
-                item.createTile = TileID.Hive;
-            }
-        }
-
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
             switch (resultType)
@@ -317,16 +295,6 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 1, maximumDropped: 3));
 
                 npcLoot.Add(new UndergroundChestLoot());
-            }
-        }
-
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
-        {
-            if (type == NPCID.Merchant)
-            {
-                shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
-                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
-                nextSlot++;
             }
         }
     }
