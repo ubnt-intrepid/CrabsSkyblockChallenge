@@ -68,7 +68,7 @@ namespace OneBlockChallenge
             Main.rockLayer = Main.maxTilesY * 0.5;
 
             Main.spawnTileX = (int)(Main.maxTilesX * 0.5);
-            Main.spawnTileY = (int)Main.worldSurface - 100;
+            Main.spawnTileY = (int)Main.worldSurface;
 
             WorldGen.PlaceTile(Main.spawnTileX, Main.spawnTileY, ModContent.TileType<Tiles.InfiniteBlock>());
 
@@ -87,7 +87,7 @@ namespace OneBlockChallenge
             WorldGen.MakeDungeon(dungeonX, dungeonY);
 
             var templeX = (int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.3));
-            var templeY = Main.rand.Next((int)Main.rockLayer, Main.maxTilesY - 500);
+            var templeY = Main.rand.Next((int)Main.rockLayer, Main.UnderworldLayer - 200);
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
 
