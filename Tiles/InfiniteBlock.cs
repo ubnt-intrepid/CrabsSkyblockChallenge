@@ -23,7 +23,7 @@ namespace OneBlockChallenge.Tiles
 
             var name = CreateMapEntryName();
             name.SetDefault("Infinite Block");
-            AddMapEntry(new Color(255, 255, 200), name);
+            AddMapEntry(Color.White, name);
         }
 
         public override bool CanExplode(int i, int j) => false;
