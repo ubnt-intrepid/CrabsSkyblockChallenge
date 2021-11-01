@@ -34,22 +34,16 @@ namespace OneBlockChallenge.Tiles
             {
                 fail = true;
 
-                var item = Main.rand.Next(370) switch
+                var item = Main.rand.Next(8) switch
                 {
-                    // w=50
-                    (>= 0) and (< 50) => ItemID.DirtBlock,
-                    (>= 50) and (< 100) => ItemID.StoneBlock,
-                    (>= 100) and (< 150) => ItemID.SandBlock,
-                    (>= 150) and (< 200) => ItemID.SnowBlock,
-                    (>= 200) and (< 250) => ItemID.IceBlock,
-
-                    // w=30
-                    (>= 250) and (< 280) => ItemID.ClayBlock,
-                    (>= 280) and (< 310) => ItemID.HardenedSand,
-                    (>= 310) and (< 340) => ItemID.SiltBlock,
-                    (>= 340) and (< 370) => ItemID.SlushBlock,
-
-                    _ => 0,
+                    0 => ItemID.DirtBlock,
+                    1 => ItemID.StoneBlock,
+                    2 => ItemID.ClayBlock,
+                    3 => ItemID.HardenedSand,
+                    4 => ItemID.SnowBlock,
+                    5 => ItemID.IceBlock,
+                    6 => ItemID.SiltBlock,
+                    _ => ItemID.SlushBlock,
                 };
 
                 int num = Item.NewItem(i * 16, j * 16, 12, 12, item, 1, noBroadcast: false, -1);
