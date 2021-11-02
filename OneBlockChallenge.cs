@@ -289,7 +289,7 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
             }
 
-            if (!NPCID.Sets.CountsAsCritter[npc.type])
+            if (!NPCID.Sets.CountsAsCritter[npc.type] && !npc.friendly)
             {
                 npcLoot.Add(ItemDropRule.ByCondition(new UnderworldCondition(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
                 npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickableCondition(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
