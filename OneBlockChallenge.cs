@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -14,6 +13,8 @@ namespace OneBlockChallenge
     {
         public override void AddRecipes()
         {
+            AddChestLootRecipies();
+
             CreateRecipe(ItemID.Hellforge)
                 .AddIngredient(ItemID.Furnace)
                 .AddIngredient(ItemID.Hellstone, stack: 30)
@@ -30,6 +31,58 @@ namespace OneBlockChallenge
             CreateRecipe(ItemID.Sandstone)
                 .AddIngredient(ItemID.HardenedSand, stack: 2)
                 .AddTile(TileID.Furnaces)
+                .Register();
+        }
+
+        void AddChestLootRecipies()
+        {
+            CreateRecipe(ItemID.MagicMirror)
+                .AddIngredient(ItemID.IronBar, stack: 10)
+                .AddIngredient(ItemID.Lens)
+                .AddIngredient(ItemID.FallenStar, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.Mace)
+                .AddIngredient(ItemID.IronBar, stack: 20)
+                .AddIngredient(ItemID.Chain, stack: 5)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.FlareGun)
+                .AddIngredient(ItemID.IronBar, stack: 10)
+                .AddIngredient(ItemID.Wood, stack: 2)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.Flare, amount: 25)
+                .AddIngredient(ItemID.IronBar)
+                .AddIngredient(ItemID.Torch, stack: 25)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.HermesBoots)
+                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddIngredient(ItemID.Silk, stack: 10)
+                .AddIngredient(ItemID.SwiftnessPotion, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.CloudinaBottle)
+                .AddIngredient(ItemID.Bottle)
+                .AddIngredient(ItemID.Cloud, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.BandofRegeneration)
+                .AddIngredient(ItemID.Chain, stack: 5)
+                .AddIngredient(ItemID.LifeCrystal)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.ShoeSpikes)
+                .AddIngredient(ItemID.ClimbingClaws)
+                .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }
     }
@@ -215,68 +268,6 @@ namespace OneBlockChallenge
             public string GetConditionDescription() => "Drops in Underground Desert";
         }
 
-        class UndergroundChestLoot : IItemDropRule
-        {
-            public List<IItemDropRuleChainAttempt> ChainedRules { get; private set; }
-
-            public UndergroundChestLoot()
-            {
-                ChainedRules = new();
-            }
-
-            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneRockLayerHeight
-                && !info.player.ZoneDungeon
-                && !info.player.ZoneLihzhardTemple
-                && !info.player.ZoneBeach;
-
-            public ItemDropAttemptResult TryDroppingItem(DropAttemptInfo info)
-            {
-                if (info.player.RollLuck(50) != 0)
-                {
-                    return new ItemDropAttemptResult
-                    {
-                        State = ItemDropAttemptResultState.FailedRandomRoll,
-                    };
-                }
-
-                var type = info.rng.Next(6) switch
-                {
-                    0 => ItemID.BandofRegeneration,
-                    1 => ItemID.MagicMirror,
-                    2 => ItemID.CloudinaBottle,
-                    3 => ItemID.HermesBoots,
-                    4 => ItemID.ShoeSpikes,
-                    5 => ItemID.FlareGun,
-                    _ => throw new Exception("unreachable code"),
-                };
-
-                CommonCode.DropItemFromNPC(info.npc, type, stack: 1);
-                if (type == ItemID.FlareGun)
-                {
-                    CommonCode.DropItemFromNPC(info.npc, ItemID.Flare, stack: info.rng.Next(25, 50));
-                }
-
-                return new ItemDropAttemptResult
-                {
-                    State = ItemDropAttemptResultState.Success,
-                };
-            }
-
-            public void ReportDroprates(List<DropRateInfo> drops, DropRateInfoChainFeed ratesInfo)
-            {
-                float baseDropRate = 0.02f * ratesInfo.parentDroprateChance;
-
-                drops.Add(new DropRateInfo(ItemID.BandofRegeneration, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.MagicMirror, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.CloudinaBottle, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.HermesBoots, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.ShoeSpikes, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.FlareGun, 1, 1, baseDropRate / 6f, ratesInfo.conditions));
-                drops.Add(new DropRateInfo(ItemID.Flare, 25, 50, baseDropRate / 6f, ratesInfo.conditions));
-
-                Chains.ReportDroprates(ChainedRules, 0.02f, drops, ratesInfo);
-            }
-        }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -295,8 +286,6 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.ByCondition(new UnderworldCondition(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
                 npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickableCondition(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
                 npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 1, maximumDropped: 3));
-
-                npcLoot.Add(new UndergroundChestLoot());
             }
         }
     }
