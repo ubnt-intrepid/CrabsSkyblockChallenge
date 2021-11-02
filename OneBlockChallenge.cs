@@ -36,6 +36,12 @@ namespace OneBlockChallenge
 
         void AddChestLootRecipies()
         {
+            CreateRecipe(ItemID.WoodenBoomerang)
+                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddIngredient(ItemID.IronBar)
+                .AddTile(TileID.Anvils)
+                .Register();
+
             CreateRecipe(ItemID.MagicMirror)
                 .AddIngredient(ItemID.IronBar, stack: 10)
                 .AddIngredient(ItemID.Lens)
