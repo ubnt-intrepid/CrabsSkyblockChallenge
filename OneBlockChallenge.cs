@@ -26,6 +26,7 @@ namespace OneBlockChallenge
                 .AddIngredient(ItemID.StoneBlock, stack: 25)
                 .AddIngredient(ItemID.FallenStar, stack: 1)
                 .AddTile(TileID.Furnaces)
+                .AddCondition(Recipe.Condition.InSkyHeight)
                 .Register();
 
             CreateRecipe(ItemID.Sandstone)
