@@ -31,26 +31,10 @@ namespace OneBlockChallenge.Tiles
 
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
-            int num = Item.NewItem(i * 16, j * 16, 12, 12, ItemID.LifeCrystal, 1, noBroadcast: false, -1);
+            int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: ItemID.LifeCrystal, Stack: 1, noBroadcast: false, -1);
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
-            }
-        }
-    }
-
-    public class HeartFragmentGrowing : GlobalTile
-    {
-        public override void RandomUpdate(int i, int j, int type)
-        {
-            if (type == TileID.Grass
-                && Framing.GetTileSafely(i, j).IsActive
-                && Framing.GetTileSafely(i + 1, j).IsActive
-                && !Framing.GetTileSafely(i, j - 1).IsActive
-                && !Framing.GetTileSafely(i, j - 2).IsActive
-                && Main.rand.Next(5000) == 0)
-            {
-                WorldGen.PlaceTile(i, j - 1, ModContent.TileType<HeartFruit>(), true, false, -1, 0);
             }
         }
     }

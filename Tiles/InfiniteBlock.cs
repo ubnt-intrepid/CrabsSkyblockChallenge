@@ -46,7 +46,7 @@ namespace OneBlockChallenge.Tiles
                     _ => ItemID.SlushBlock,
                 };
 
-                int num = Item.NewItem(i * 16, j * 16, 12, 12, item, 1, noBroadcast: false, -1);
+                int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                 {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);

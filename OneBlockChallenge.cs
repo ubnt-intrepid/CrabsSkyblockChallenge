@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -293,6 +294,36 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.ByCondition(new UnderworldCondition(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
                 npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickableCondition(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
                 npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 1, maximumDropped: 3));
+            }
+        }
+    }
+
+    public class OBCGlobalTile : GlobalTile
+    {
+        public override bool Drop(int i, int j, int type)
+        {
+            if (type == TileID.Plants && Main.rand.Next(100) == 0)
+            {
+                var num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ItemID.GrassSeeds);
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
+                }
+            }
+
+            return true;
+        }
+
+        public override void RandomUpdate(int i, int j, int type)
+        {
+            if (type == TileID.Grass
+                && Framing.GetTileSafely(i, j).IsActive
+                && Framing.GetTileSafely(i + 1, j).IsActive
+                && !Framing.GetTileSafely(i, j - 1).IsActive
+                && !Framing.GetTileSafely(i, j - 2).IsActive
+                && Main.rand.Next(5000) == 0)
+            {
+                WorldGen.PlaceTile(i, j - 1, ModContent.TileType<Tiles.HeartFruit>(), true, false, -1, 0);
             }
         }
     }
