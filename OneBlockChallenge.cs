@@ -226,6 +226,15 @@ namespace OneBlockChallenge
 
     public class OBCGlobalNPC : GlobalNPC
     {
+        static readonly int[] AntlionNPCs = new int[]
+        {
+            NPCID.Antlion,
+            NPCID.WalkingAntlion,
+            NPCID.FlyingAntlion,
+            NPCID.GiantFlyingAntlion,
+            NPCID.GiantWalkingAntlion,
+        };
+
         static readonly int[] HornetNPCs = new int[]
         {
             NPCID.Hornet,
@@ -255,18 +264,25 @@ namespace OneBlockChallenge
             NPCID.GiantMossHornet,
         };
 
-        class UnderworldCondition : IItemDropRuleCondition
+        static readonly int[] UnderworldDropNPCs = new int[]
         {
-            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight;
-            public bool CanShowItemDropInUI() => true;
-            public string GetConditionDescription() => "Drops in Underworld";
-        }
+            NPCID.Hellbat,
+            NPCID.LavaSlime,
+            NPCID.Lavabat,
+        };
 
-        class HellstonePickableCondition : IItemDropRuleCondition
+        class PickaxePowerCondition : IItemDropRuleCondition
         {
-            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUnderworldHeight && info.player.GetBestPickaxe().pick >= 65;
+            readonly int minPick;
+
+            public PickaxePowerCondition(int minPick)
+            {
+                this.minPick = minPick;
+            }
+
+            public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= minPick;
             public bool CanShowItemDropInUI() => true;
-            public string GetConditionDescription() => "Drops in Underworld when player has enough pickaxe power";
+            public string GetConditionDescription() => $"Drops when player's pickaxe power is greater or equal to {minPick}%";
         }
 
         class UndergroundDesertCondition : IItemDropRuleCondition
@@ -279,6 +295,11 @@ namespace OneBlockChallenge
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
+            if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
+            }
+
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
@@ -289,11 +310,10 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
             }
 
-            if (!NPCID.Sets.CountsAsCritter[npc.type] && !npc.friendly)
+            if (Array.IndexOf(UnderworldDropNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.ByCondition(new UnderworldCondition(), ItemID.AshBlock, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
-                npcLoot.Add(ItemDropRule.ByCondition(new HellstonePickableCondition(), ItemID.Hellstone, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
-                npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, chanceDenominator: 2, minimumDropped: 5, maximumDropped: 10));
+                npcLoot.Add(ItemDropRule.ByCondition(new PickaxePowerCondition(65), ItemID.Hellstone, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
             }
         }
     }
