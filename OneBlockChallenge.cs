@@ -40,7 +40,7 @@ namespace OneBlockChallenge
         void AddSurfaceChestLootRecipes()
         {
             CreateRecipe(ItemID.Spear)
-                .AddIngredient(ItemID.IronBar)
+                .AddRecipeGroup(RecipeGroupID.IronBar)
                 .AddTile(TileID.Anvils)
                 .Register();
 
@@ -50,13 +50,13 @@ namespace OneBlockChallenge
                 .Register();
 
             CreateRecipe(ItemID.WoodenBoomerang)
-                .AddIngredient(ItemID.Wood, stack: 5)
-                .AddIngredient(ItemID.IronBar)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
+                .AddRecipeGroup(RecipeGroupID.IronBar)
                 .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe(ItemID.WandofSparking)
-                .AddIngredient(ItemID.Wood, stack: 4)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 4)
                 .AddIngredient(ItemID.ManaCrystal)
                 .AddTile(TileID.WorkBenches)
                 .Register();
@@ -64,7 +64,7 @@ namespace OneBlockChallenge
             // Step Stool            
             // FIXME: remove magic number
             CreateRecipe(4341)
-                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }
@@ -72,32 +72,32 @@ namespace OneBlockChallenge
         void AddCavernChestLootRecipies()
         {
             CreateRecipe(ItemID.MagicMirror)
-                .AddIngredient(ItemID.IronBar, stack: 10)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 10)
                 .AddIngredient(ItemID.Glass, stack: 5)
                 .AddIngredient(ItemID.RecallPotion, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe(ItemID.Mace)
-                .AddIngredient(ItemID.IronBar, stack: 20)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 20)
                 .AddIngredient(ItemID.Chain, stack: 5)
                 .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe(ItemID.FlareGun)
-                .AddIngredient(ItemID.IronBar, stack: 10)
-                .AddIngredient(ItemID.Wood, stack: 2)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 10)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 2)
                 .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe(ItemID.Flare, amount: 25)
-                .AddIngredient(ItemID.IronBar)
+                .AddRecipeGroup(RecipeGroupID.IronBar)
                 .AddIngredient(ItemID.Torch, stack: 25)
                 .AddTile(TileID.Anvils)
                 .Register();
 
             CreateRecipe(ItemID.HermesBoots)
-                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
                 .AddIngredient(ItemID.Silk, stack: 10)
                 .AddIngredient(ItemID.SwiftnessPotion, stack: 10)
                 .AddTile(TileID.Anvils)
