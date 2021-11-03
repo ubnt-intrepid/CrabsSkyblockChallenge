@@ -16,13 +16,7 @@ namespace OneBlockChallenge
         {
             AddSurfaceChestLootRecipes();
             AddCavernChestLootRecipies();
-
-            CreateRecipe(ItemID.Hellforge)
-                .AddIngredient(ItemID.Furnace)
-                .AddIngredient(ItemID.Hellstone, stack: 30)
-                .AddIngredient(ItemID.Obsidian, stack: 30)
-                .AddTile(TileID.Anvils)
-                .Register();
+            AddUnderworldRecipes();
 
             CreateRecipe(ItemID.SunplateBlock, amount: 25)
                 .AddIngredient(ItemID.StoneBlock, stack: 25)
@@ -118,6 +112,22 @@ namespace OneBlockChallenge
             CreateRecipe(ItemID.ShoeSpikes)
                 .AddIngredient(ItemID.ClimbingClaws)
                 .AddTile(TileID.TinkerersWorkbench)
+                .Register();
+        }
+
+        void AddUnderworldRecipes()
+        {
+            CreateRecipe(ItemID.Hellforge)
+                .AddIngredient(ItemID.Furnace)
+                .AddIngredient(ItemID.Hellstone, stack: 30)
+                .AddIngredient(ItemID.Obsidian, stack: 30)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.HellMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.HellstoneBar, stack: 10)
+                .AddTile(TileID.Anvils)
                 .Register();
         }
     }
