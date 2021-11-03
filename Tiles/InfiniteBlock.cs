@@ -34,16 +34,14 @@ namespace OneBlockChallenge.Tiles
             {
                 fail = true;
 
-                var item = Main.rand.Next(8) switch
+                var item = Main.rand.Next(6) switch
                 {
                     0 => ItemID.DirtBlock,
                     1 => ItemID.StoneBlock,
                     2 => ItemID.ClayBlock,
                     3 => ItemID.HardenedSand,
                     4 => ItemID.SnowBlock,
-                    5 => ItemID.IceBlock,
-                    6 => ItemID.SiltBlock,
-                    _ => ItemID.SlushBlock,
+                    _ => ItemID.IceBlock,
                 };
 
                 int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);

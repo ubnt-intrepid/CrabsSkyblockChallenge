@@ -332,6 +332,11 @@ namespace OneBlockChallenge
 
     public class OBCGlobalItem : GlobalItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ExtractinatorMode[ItemID.StoneBlock] = ItemID.StoneBlock;
+        }
+
         public override void SetDefaults(Item item)
         {
             if (item.type == ItemID.Hive)
@@ -348,6 +353,18 @@ namespace OneBlockChallenge
 
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
+            if (extractType == ItemID.StoneBlock)
+            {
+                resultType = Main.rand.Next(5) switch
+                {
+                    0 => ItemID.Marble,
+                    1 => ItemID.Granite,
+                    _ => ItemID.SiltBlock,
+                };
+                resultStack = 1 + Main.rand.Next(3);
+                return;
+            }
+
             switch (resultType)
             {
                 case ItemID.CopperOre:

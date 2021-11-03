@@ -155,4 +155,24 @@ namespace OneBlockChallenge.Items
         {
         }
     }
+
+    public class UnsafeMarbleWall : UnsafeWallBase
+    {
+        public override string Texture => $"Terraria/Images/Item_{ItemID.MarbleWall}";
+
+        public UnsafeMarbleWall()
+            : base("Marble Wall", WallID.MarbleUnsafe, ItemID.MarbleWall, ItemID.Marble)
+        {
+        }
+    }
+
+    public class UnsafeGraniteWall : UnsafeWallBase
+    {
+        public override string Texture => $"Terraria/Images/Item_{ItemID.GraniteWall}";
+
+        public UnsafeGraniteWall()
+            : base("Granite Wall", WallID.GraniteUnsafe, ItemID.GraniteWall, ItemID.Granite)
+        {
+        }
+    }
 }
