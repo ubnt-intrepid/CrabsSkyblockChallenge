@@ -326,13 +326,26 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.Extractinator);
-                chest.item[nextSlot++] = new Item(ItemID.HiveWand);
             }
         }
     }
 
     public class OBCGlobalItem : GlobalItem
     {
+        public override void SetDefaults(Item item)
+        {
+            if (item.type == ItemID.Hive)
+            {
+                item.useStyle = ItemUseStyleID.Swing;
+                item.useTurn = true;
+                item.useAnimation = 15;
+                item.useTime = 10;
+                item.autoReuse = true;
+                item.consumable = true;
+                item.createTile = TileID.Hive;
+            }
+        }
+
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
             switch (resultType)
