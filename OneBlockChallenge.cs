@@ -14,7 +14,8 @@ namespace OneBlockChallenge
     {
         public override void AddRecipes()
         {
-            AddChestLootRecipies();
+            AddSurfaceChestLootRecipes();
+            AddCavernChestLootRecipies();
 
             CreateRecipe(ItemID.Hellforge)
                 .AddIngredient(ItemID.Furnace)
@@ -36,14 +37,40 @@ namespace OneBlockChallenge
                 .Register();
         }
 
-        void AddChestLootRecipies()
+        void AddSurfaceChestLootRecipes()
         {
+            CreateRecipe(ItemID.Spear)
+                .AddIngredient(ItemID.IronBar)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.Blowpipe)
+                .AddIngredient(ItemID.BambooBlock, stack: 5)
+                .AddTile(TileID.WorkBenches)
+                .Register();
+
             CreateRecipe(ItemID.WoodenBoomerang)
                 .AddIngredient(ItemID.Wood, stack: 5)
                 .AddIngredient(ItemID.IronBar)
                 .AddTile(TileID.Anvils)
                 .Register();
 
+            CreateRecipe(ItemID.WandofSparking)
+                .AddIngredient(ItemID.Wood, stack: 4)
+                .AddIngredient(ItemID.ManaCrystal)
+                .AddTile(TileID.WorkBenches)
+                .Register();
+
+            // Step Stool            
+            // FIXME: remove magic number
+            CreateRecipe(4341)
+                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddTile(TileID.WorkBenches)
+                .Register();
+        }
+
+        void AddCavernChestLootRecipies()
+        {
             CreateRecipe(ItemID.MagicMirror)
                 .AddIngredient(ItemID.IronBar, stack: 10)
                 .AddIngredient(ItemID.Lens)
