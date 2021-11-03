@@ -14,20 +14,51 @@ namespace OneBlockChallenge
     {
         public override void AddRecipes()
         {
+            AddCraftingStationRecipes();
+
             AddSurfaceChestLootRecipes();
             AddCavernChestLootRecipies();
+            AddLivingWoodRecipes();
+            AddUndergroundDesertRecipes();
+            AddUndergroundJungleRecipes();
+            AddMushroomRecipes();
             AddUnderworldRecipes();
+        }
 
-            CreateRecipe(ItemID.SunplateBlock, amount: 25)
-                .AddIngredient(ItemID.StoneBlock, stack: 25)
-                .AddIngredient(ItemID.FallenStar, stack: 1)
-                .AddTile(TileID.Furnaces)
-                .AddCondition(Recipe.Condition.InSkyHeight)
+        void AddCraftingStationRecipes()
+        {
+            CreateRecipe(ItemID.LivingLoom)
+                .AddIngredient(RecipeGroupID.Wood, stack: 20)
+                .AddTile(TileID.WorkBenches)
                 .Register();
 
-            CreateRecipe(ItemID.Sandstone)
-                .AddIngredient(ItemID.HardenedSand, stack: 2)
-                .AddTile(TileID.Furnaces)
+            CreateRecipe(ItemID.HoneyDispenser)
+                .AddIngredient(ItemID.HoneyBlock, stack: 10)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 3)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.SkyMill)
+                .AddIngredient(ItemID.StoneBlock, stack: 20)
+                .AddIngredient(ItemID.Cloud, stack: 10)
+                .AddIngredient(ItemID.FallenStar)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            // imported from Calamity Mod
+            CreateRecipe(ItemID.IceMachine)
+                .AddIngredient(ItemID.SnowBlock, stack: 25)
+                .AddIngredient(ItemID.IceBlock, stack: 15)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 3)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.Hellforge)
+                .AddIngredient(ItemID.Furnace)
+                .AddIngredient(ItemID.Hellstone, stack: 30)
+                .AddIngredient(ItemID.Obsidian, stack: 30)
+                .AddTile(TileID.Anvils)
                 .Register();
         }
 
@@ -115,18 +146,106 @@ namespace OneBlockChallenge
                 .Register();
         }
 
-        void AddUnderworldRecipes()
+        void AddLivingWoodRecipes()
         {
-            CreateRecipe(ItemID.Hellforge)
-                .AddIngredient(ItemID.Furnace)
-                .AddIngredient(ItemID.Hellstone, stack: 30)
-                .AddIngredient(ItemID.Obsidian, stack: 30)
+            CreateRecipe(ItemID.LivingWoodWand)
+                .AddIngredient(ItemID.Wood, stack: 8)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.LeafWand)
+                .AddIngredient(ItemID.Wood, stack: 5)
+                .AddIngredient(ItemID.GrassSeeds, stack: 10)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.BabyBirdStaff)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
+                .AddIngredient(ItemID.ManaCrystal)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.SunflowerMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.Sunflower)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.LadybugMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.LadyBug)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+        }
+
+        void AddUndergroundJungleRecipes()
+        {
+            CreateRecipe(ItemID.LivingMahoganyLeafWand)
+                .AddIngredient(ItemID.RichMahogany, stack: 5)
+                .AddIngredient(ItemID.JungleGrassSeeds, stack: 10)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.LivingMahoganyWand)
+                .AddIngredient(ItemID.RichMahogany, stack: 5)
+                .AddTile(TileID.LivingLoom)
+                .Register();
+
+            CreateRecipe(ItemID.BeeMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.Hive, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+        }
+
+        void AddUndergroundDesertRecipes()
+        {
+            CreateRecipe(ItemID.Sandstone)
+                .AddIngredient(ItemID.HardenedSand, stack: 2)
+                .AddTile(TileID.Furnaces)
+                .Register();
+
+            CreateRecipe(ItemID.DesertMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.Sandstone, stack: 10)
+                .AddIngredient(ItemID.Amber)
+                .AddTile(TileID.Anvils)
+                .Register();
+        }
+
+        void AddMushroomRecipes()
+        {
+            CreateRecipe(ItemID.ShroomMinecart)
+                .AddIngredient(ItemID.Minecart)
+                .AddIngredient(ItemID.GlowingMushroom, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
 
+            CreateRecipe(ItemID.MushroomHat)
+                .AddIngredient(ItemID.Silk, stack: 15)
+                .AddIngredient(ItemID.MushroomGrassSeeds, stack: 3)
+                .AddTile(TileID.Loom)
+                .Register();
+
+            CreateRecipe(ItemID.MushroomVest)
+                .AddIngredient(ItemID.Silk, stack: 20)
+                .AddIngredient(ItemID.MushroomGrassSeeds, stack: 3)
+                .AddTile(TileID.Loom)
+                .Register();
+
+            CreateRecipe(ItemID.MushroomPants)
+                .AddIngredient(ItemID.Silk, stack: 20)
+                .AddIngredient(ItemID.MushroomGrassSeeds, stack: 3)
+                .AddTile(TileID.Loom)
+                .Register();
+        }
+
+        void AddUnderworldRecipes()
+        {
             CreateRecipe(ItemID.HellMinecart)
                 .AddIngredient(ItemID.Minecart)
-                .AddIngredient(ItemID.HellstoneBar, stack: 10)
+                .AddIngredient(ItemID.HellstoneBar, stack: 5)
+                .AddIngredient(ItemID.ObsidianSkinPotion, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
         }
