@@ -73,8 +73,8 @@ namespace OneBlockChallenge
         {
             CreateRecipe(ItemID.MagicMirror)
                 .AddIngredient(ItemID.IronBar, stack: 10)
-                .AddIngredient(ItemID.Lens)
-                .AddIngredient(ItemID.FallenStar, stack: 10)
+                .AddIngredient(ItemID.Glass, stack: 5)
+                .AddIngredient(ItemID.RecallPotion, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
 
