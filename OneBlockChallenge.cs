@@ -245,7 +245,7 @@ namespace OneBlockChallenge
             CreateRecipe(ItemID.HellMinecart)
                 .AddIngredient(ItemID.Minecart)
                 .AddIngredient(ItemID.HellstoneBar, stack: 5)
-                .AddIngredient(ItemID.ObsidianSkinPotion, stack: 10)
+                .AddIngredient(ItemID.LavaCharm)
                 .AddTile(TileID.Anvils)
                 .Register();
         }
