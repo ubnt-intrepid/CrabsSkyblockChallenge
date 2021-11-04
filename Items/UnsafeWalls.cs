@@ -32,7 +32,7 @@ namespace OneBlockChallenge.Items
             Item.width = 28;
             Item.height = 14;
             Item.useAnimation = 15;
-            Item.useTime = 15;
+            Item.useTime = 7;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = true;
