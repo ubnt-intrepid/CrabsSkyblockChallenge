@@ -471,19 +471,11 @@ namespace OneBlockChallenge
             public string GetConditionDescription() => $"Drops when player's pickaxe power is greater or equal to {minPick}%";
         }
 
-        class UndergroundDesertCondition : IItemDropRuleCondition
-        {
-            public bool CanDrop(DropAttemptInfo info) => info.player.ZoneUndergroundDesert && !info.player.ZoneBeach;
-            public bool CanShowItemDropInUI() => true;
-            public string GetConditionDescription() => "Drops in Underground Desert";
-        }
-
-
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.ByCondition(new UndergroundDesertCondition(), ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
