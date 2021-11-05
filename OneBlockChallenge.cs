@@ -23,6 +23,19 @@ namespace OneBlockChallenge
             AddUndergroundJungleRecipes();
             AddMushroomRecipes();
             AddUnderworldRecipes();
+
+            CreateRecipe(ItemID.SharpeningStation)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 5)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 4)
+                .AddIngredient(ItemID.IronskinPotion, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.AmmoBox)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 5)
+                .AddIngredient(ItemID.AmmoReservationPotion, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 
         void AddCraftingStationRecipes()
