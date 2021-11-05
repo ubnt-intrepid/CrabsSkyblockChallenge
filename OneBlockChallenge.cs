@@ -99,9 +99,7 @@ namespace OneBlockChallenge
                 .AddTile(TileID.WorkBenches)
                 .Register();
 
-            // Step Stool            
-            // FIXME: remove magic number
-            CreateRecipe(4341)
+            CreateRecipe(ItemID.PortableStool)
                 .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
                 .AddTile(TileID.WorkBenches)
                 .Register();
@@ -318,11 +316,10 @@ namespace OneBlockChallenge
         {
             WorldGen.PlaceTile(x, y, ModContent.TileType<Tiles.InfiniteBlock>());
 
-            var guidePosition = new Vector2(x, y).ToWorldCoordinates();
-            int guideIndex = NPC.NewNPC((int)guidePosition.X, (int)guidePosition.Y, NPCID.Guide);
+            int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
             Main.npc[guideIndex].homeless = true;
-            Main.npc[guideIndex].homeTileX = Main.spawnTileX;
-            Main.npc[guideIndex].homeTileY = Main.spawnTileY;
+            Main.npc[guideIndex].homeTileX = x;
+            Main.npc[guideIndex].homeTileY = y;
             Main.npc[guideIndex].direction = 1;
         }
 
@@ -352,7 +349,6 @@ namespace OneBlockChallenge
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.Torch, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.GrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
@@ -361,17 +357,14 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
             }
 
-            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 200);
+            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 150);
+
+            WorldGen.PlaceTile(x + 3, y - 1, TileID.Torches, style: TorchID.Torch);
         }
     }
 
     public class OBCGlobalItem : GlobalItem
     {
-        public override void SetStaticDefaults()
-        {
-            ItemID.Sets.ExtractinatorMode[ItemID.StoneBlock] = ItemID.StoneBlock;
-        }
-
         public override void SetDefaults(Item item)
         {
             if (item.type == ItemID.Hive)
@@ -379,7 +372,7 @@ namespace OneBlockChallenge
                 item.useStyle = ItemUseStyleID.Swing;
                 item.useTurn = true;
                 item.useAnimation = 15;
-                item.useTime = 10;
+                item.useTime = 15;
                 item.autoReuse = true;
                 item.consumable = true;
                 item.createTile = TileID.Hive;
@@ -388,15 +381,8 @@ namespace OneBlockChallenge
 
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            if (extractType == ItemID.StoneBlock)
+            if (!Main.hardMode)
             {
-                resultType = Main.rand.Next(5) switch
-                {
-                    0 => ItemID.Marble,
-                    1 => ItemID.Granite,
-                    _ => ItemID.SiltBlock,
-                };
-                resultStack = 1 + Main.rand.Next(3);
                 return;
             }
 
@@ -410,33 +396,30 @@ namespace OneBlockChallenge
                 case ItemID.TungstenOre:
                 case ItemID.GoldOre:
                 case ItemID.PlatinumOre:
-                    if (Main.hardMode)
+                    var maxValue = Main.LocalPlayer.GetBestPickaxe().pick switch
                     {
-                        var maxValue = Main.LocalPlayer.GetBestPickaxe().pick switch
-                        {
-                            < 100                => 8,  // pre-hardmode ores
-                            (>= 100) and (< 110) => 10, // Cobalt, Palladium
-                            (>= 110) and (< 150) => 12, // Mythril, Orichalcum
-                            _                    => 14, // Adamantite, Titanium
-                        };
-                        resultType = Main.rand.Next(maxValue) switch
-                        {
-                            0 => ItemID.CopperOre,
-                            1 => ItemID.TinOre,
-                            2 => ItemID.IronOre,
-                            3 => ItemID.LeadOre,
-                            4 => ItemID.SilverOre,
-                            5 => ItemID.TungstenOre,
-                            6 => ItemID.GoldOre,
-                            7 => ItemID.PlatinumOre,
-                            8 => ItemID.CobaltOre,
-                            9 => ItemID.PalladiumOre,
-                            10 => ItemID.MythrilOre,
-                            11 => ItemID.OrichalcumOre,
-                            12 => ItemID.AdamantiteOre,
-                            _ => ItemID.TitaniumOre,
-                        };
-                    }
+                        < 100                => 8,  // pre-hardmode ores
+                        (>= 100) and (< 110) => 10, // Cobalt, Palladium
+                        (>= 110) and (< 150) => 12, // Mythril, Orichalcum
+                        _                    => 14, // Adamantite, Titanium
+                    };
+                    resultType = Main.rand.Next(maxValue) switch
+                    {
+                        0 => ItemID.CopperOre,
+                        1 => ItemID.TinOre,
+                        2 => ItemID.IronOre,
+                        3 => ItemID.LeadOre,
+                        4 => ItemID.SilverOre,
+                        5 => ItemID.TungstenOre,
+                        6 => ItemID.GoldOre,
+                        7 => ItemID.PlatinumOre,
+                        8 => ItemID.CobaltOre,
+                        9 => ItemID.PalladiumOre,
+                        10 => ItemID.MythrilOre,
+                        11 => ItemID.OrichalcumOre,
+                        12 => ItemID.AdamantiteOre,
+                        _ => ItemID.TitaniumOre,
+                    };
                     break;
 
                 default:

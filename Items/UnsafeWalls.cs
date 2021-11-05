@@ -32,7 +32,7 @@ namespace OneBlockChallenge.Items
             Item.width = 28;
             Item.height = 14;
             Item.useAnimation = 15;
-            Item.useTime = 7;
+            Item.useTime = 8;
             Item.useTurn = true;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = true;
@@ -152,26 +152,6 @@ namespace OneBlockChallenge.Items
 
         public UnsafePearlsandstoneWall()
             : base("Pearlsandstone Wall", WallID.HallowSandstone, ItemID.HallowSandstoneWall, ItemID.HallowSandstone)
-        {
-        }
-    }
-
-    public class UnsafeMarbleWall : UnsafeWallBase
-    {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.MarbleWall}";
-
-        public UnsafeMarbleWall()
-            : base("Marble Wall", WallID.MarbleUnsafe, ItemID.MarbleWall, ItemID.Marble)
-        {
-        }
-    }
-
-    public class UnsafeGraniteWall : UnsafeWallBase
-    {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.GraniteWall}";
-
-        public UnsafeGraniteWall()
-            : base("Granite Wall", WallID.GraniteUnsafe, ItemID.GraniteWall, ItemID.Granite)
         {
         }
     }
