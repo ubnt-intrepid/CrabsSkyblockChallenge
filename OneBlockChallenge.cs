@@ -286,7 +286,14 @@ namespace OneBlockChallenge
 
     class OBCWorldGenPass : GenPass
     {
-        public OBCWorldGenPass() : base("OBC World Generation", 0f) { }
+        readonly Random rand;
+        readonly int dungeonDirection;
+
+        public OBCWorldGenPass() : base("OBC World Generation", 0f)
+        {
+            rand = new Random();
+            dungeonDirection = rand.Next(2) == 0 ? 1 : -1;
+        }
 
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
@@ -294,26 +301,17 @@ namespace OneBlockChallenge
 
             WorldGen.clearWorld();
 
-            var rand = new Random();
-
             Main.worldSurface = Main.maxTilesY * 0.3;
             Main.rockLayer = Main.maxTilesY * 0.5;
 
             Main.spawnTileX = (int)(Main.maxTilesX * 0.5);
             Main.spawnTileY = (int)Main.worldSurface;
 
-            WorldGen.PlaceTile(Main.spawnTileX, Main.spawnTileY, ModContent.TileType<Tiles.InfiniteBlock>());
-
-            int guideID = NPC.NewNPC(Main.spawnTileX * 16, Main.spawnTileY * 16, NPCID.Guide);
-            Main.npc[guideID].homeless = true;
-            Main.npc[guideID].homeTileX = Main.spawnTileX;
-            Main.npc[guideID].homeTileY = Main.spawnTileY;
-            Main.npc[guideID].direction = 1;
+            PlaceSpawnIsland(Main.spawnTileX, Main.spawnTileY);
+            PlaceChestIsland(Main.spawnTileX - dungeonDirection * 100, Main.spawnTileY);
 
             // Dungeon and Jungle Temple are the only early structures in the world
             // (except the initial spawn point.)
-            var dungeonDirection = rand.Next(2) == 0 ? 1 : -1;
-
             var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
             var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + rand.Next(-200, 200);
             WorldGen.MakeDungeon(dungeonX, dungeonY);
@@ -322,19 +320,42 @@ namespace OneBlockChallenge
             var templeY = rand.Next((int)Main.rockLayer, Main.UnderworldLayer - 200);
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
+        }
 
-            var chestIslandX = Main.spawnTileX - dungeonDirection * 100;
-            var chestIslandY = Main.spawnTileY;
+        static void PlaceSpawnIsland(int x, int y)
+        {
+            WorldGen.PlaceTile(x, y, ModContent.TileType<Tiles.InfiniteBlock>());
 
-            WorldGen.PlaceTile(chestIslandX - 2, chestIslandY, TileID.Stone);
-            WorldGen.PlaceTile(chestIslandX - 1, chestIslandY, TileID.Stone);
-            WorldGen.PlaceTile(chestIslandX, chestIslandY, TileID.Stone);
-            WorldGen.PlaceTile(chestIslandX + 1, chestIslandY, TileID.Stone);
-            WorldGen.PlaceTile(chestIslandX + 2, chestIslandY, TileID.Stone);
+            var guidePosition = new Vector2(x, y).ToWorldCoordinates();
+            int guideIndex = NPC.NewNPC((int)guidePosition.X, (int)guidePosition.Y, NPCID.Guide);
+            Main.npc[guideIndex].homeless = true;
+            Main.npc[guideIndex].homeTileX = Main.spawnTileX;
+            Main.npc[guideIndex].homeTileY = Main.spawnTileY;
+            Main.npc[guideIndex].direction = 1;
+        }
 
-            WorldGen.PlaceTile(chestIslandX - 2, chestIslandY - 1, TileID.Extractinator, mute: true, forced: false, -1, 17);
+        static readonly Tuple<int, int>[] ChestIslandOffsets = new[] {
+            new Tuple<int, int>(-3, 0),
+            new Tuple<int, int>(-2, 0),
+            new Tuple<int, int>(-1, 0),
+            new Tuple<int, int>( 0, 0),
+            new Tuple<int, int>( 1, 0),
+            new Tuple<int, int>( 1, 1),
+            new Tuple<int, int>( 2, 1),
+            new Tuple<int, int>( 3, 1),
+            new Tuple<int, int>( 3, 0),
+        };
 
-            int chestIndex = WorldGen.PlaceChest(chestIslandX + 1, chestIslandY - 1);
+        static void PlaceChestIsland(int x, int y)
+        {
+            foreach (var offset in ChestIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, TileID.Stone);
+            }
+
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
+
+            int chestIndex = WorldGen.PlaceChest(x, y - 1);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -344,10 +365,11 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
-                chest.item[nextSlot++] = new Item(ItemID.WaterBucket);
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
             }
+
+            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 200);
         }
     }
 
