@@ -294,6 +294,8 @@ namespace OneBlockChallenge
 
             WorldGen.clearWorld();
 
+            var rand = new Random();
+
             Main.worldSurface = Main.maxTilesY * 0.3;
             Main.rockLayer = Main.maxTilesY * 0.5;
 
@@ -310,22 +312,29 @@ namespace OneBlockChallenge
 
             // Dungeon and Jungle Temple are the only early structures in the world
             // (except the initial spawn point.)
-            var dungeonDirection = Main.rand.NextBool() ? 1 : -1;
+            var dungeonDirection = rand.Next(2) == 0 ? 1 : -1;
 
             var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
-            var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + Main.rand.Next(-200, 200);
+            var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + rand.Next(-200, 200);
             WorldGen.MakeDungeon(dungeonX, dungeonY);
 
             var templeX = (int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.3));
-            var templeY = Main.rand.Next((int)Main.rockLayer, Main.UnderworldLayer - 200);
+            var templeY = rand.Next((int)Main.rockLayer, Main.UnderworldLayer - 200);
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
 
-            var chestIslandX = Main.spawnTileX + (dungeonDirection == 1 ? 100 : -101);
+            var chestIslandX = Main.spawnTileX - dungeonDirection * 100;
             var chestIslandY = Main.spawnTileY;
+
+            WorldGen.PlaceTile(chestIslandX - 2, chestIslandY, TileID.Stone);
+            WorldGen.PlaceTile(chestIslandX - 1, chestIslandY, TileID.Stone);
             WorldGen.PlaceTile(chestIslandX, chestIslandY, TileID.Stone);
             WorldGen.PlaceTile(chestIslandX + 1, chestIslandY, TileID.Stone);
-            int chestIndex = WorldGen.PlaceChest(chestIslandX, chestIslandY - 1);
+            WorldGen.PlaceTile(chestIslandX + 2, chestIslandY, TileID.Stone);
+
+            WorldGen.PlaceTile(chestIslandX - 2, chestIslandY - 1, TileID.Extractinator, mute: true, forced: false, -1, 17);
+
+            int chestIndex = WorldGen.PlaceChest(chestIslandX + 1, chestIslandY - 1);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -338,7 +347,6 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.WaterBucket);
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
-                chest.item[nextSlot++] = new Item(ItemID.Extractinator);
             }
         }
     }
