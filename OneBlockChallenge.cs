@@ -41,7 +41,7 @@ namespace OneBlockChallenge
         void AddCraftingStationRecipes()
         {
             CreateRecipe(ItemID.LivingLoom)
-                .AddIngredient(RecipeGroupID.Wood, stack: 20)
+                .AddRecipeGroup(RecipeGroupID.Wood, stack: 20)
                 .AddTile(TileID.WorkBenches)
                 .Register();
 
