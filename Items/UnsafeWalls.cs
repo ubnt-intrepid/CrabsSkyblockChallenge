@@ -20,6 +20,8 @@ namespace OneBlockChallenge.Items
             this.ingredientTile = ingredientTile;
         }
 
+        public override string Texture => $"Terraria/Images/Item_{vanillaWall}";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault($"Unsafe {name}");
@@ -55,21 +57,11 @@ namespace OneBlockChallenge.Items
                 .AddTile(TileID.WorkBenches)
                 .AddCondition(Recipe.Condition.InGraveyardBiome)
                 .Register();
-
-            CreateRecipe()
-                .AddIngredient(vanillaWall)
-                .Register();
-
-            Mod.CreateRecipe(vanillaWall)
-                .AddIngredient(Type)
-                .Register();
         }
     }
 
     public class UnsafeSpiderWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.SpiderEcho}";
-
         public UnsafeSpiderWall()
             : base("Spider Wall", WallID.SpiderUnsafe, ItemID.SpiderEcho, ItemID.Cobweb)
         {
@@ -78,8 +70,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeHardenedSandWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.HardenedSandWall}";
-
         public UnsafeHardenedSandWall()
             : base("Hardened Sand Wall", WallID.HardenedSand, ItemID.HardenedSandWall, ItemID.HardenedSand)
         {
@@ -88,8 +78,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeHardenedEbonsandWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CorruptHardenedSandWall}";
-
         public UnsafeHardenedEbonsandWall()
             : base("Hardened Ebonsand Wall", WallID.CorruptHardenedSand, ItemID.CorruptHardenedSandWall, ItemID.CorruptHardenedSand)
         {
@@ -98,8 +86,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeHardenedCrimsandWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CrimsonHardenedSandWall}";
-
         public UnsafeHardenedCrimsandWall()
             : base("Hardened Crimsand Wall", WallID.CrimsonHardenedSand, ItemID.CrimsonHardenedSandWall, ItemID.CrimsonHardenedSand)
         {
@@ -108,8 +94,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeHardenedPearlsandWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.HallowHardenedSandWall}";
-
         public UnsafeHardenedPearlsandWall()
             : base("Hardened Pearlsand Wall", WallID.HallowHardenedSand, ItemID.HallowHardenedSandWall, ItemID.HallowHardenedSand)
         {
@@ -118,8 +102,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeSandstoneWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.SandstoneWall}";
-
         public UnsafeSandstoneWall()
             : base("Sandstone Wall", WallID.Sandstone, ItemID.SandstoneWall, ItemID.Sandstone)
         {
@@ -128,8 +110,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeEbonsandstoneWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CorruptSandstoneWall}";
-
         public UnsafeEbonsandstoneWall()
             : base("Ebonsandstone Wall", WallID.CorruptSandstone, ItemID.CorruptSandstoneWall, ItemID.CorruptSandstone)
         {
@@ -138,8 +118,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafeCrimsandstoneWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.CrimsonSandstoneWall}";
-
         public UnsafeCrimsandstoneWall()
             : base("Crimsandstone Wall", WallID.CrimsonSandstone, ItemID.CrimsonSandstoneWall, ItemID.CrimsonSandstone)
         {
@@ -148,8 +126,6 @@ namespace OneBlockChallenge.Items
 
     public class UnsafePearlsandstoneWall : UnsafeWallBase
     {
-        public override string Texture => $"Terraria/Images/Item_{ItemID.HallowSandstoneWall}";
-
         public UnsafePearlsandstoneWall()
             : base("Pearlsandstone Wall", WallID.HallowSandstone, ItemID.HallowSandstoneWall, ItemID.HallowSandstone)
         {
