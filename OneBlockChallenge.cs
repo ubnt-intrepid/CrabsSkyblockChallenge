@@ -512,35 +512,29 @@ namespace OneBlockChallenge
                 npcLoot.Add(ItemDropRule.ByCondition(new PickaxePowerCondition(65), ItemID.Hellstone, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
             }
         }
+
+        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        {
+            if (type == NPCID.Merchant)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
+                nextSlot++;
+            }
+        }
     }
 
     public class OBCGlobalTile : GlobalTile
     {
         public override bool Drop(int i, int j, int type)
         {
-            if (type == TileID.Plants && Main.rand.Next(100) == 0)
+            if (type == TileID.Plants && Main.netMode != NetmodeID.MultiplayerClient && Main.rand.Next(100) == 0)
             {
-                var num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), ItemID.GrassSeeds);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
-                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
-                }
+                var num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: ItemID.GrassSeeds, Stack: 1, noBroadcast: false, -1);
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
             }
 
             return true;
-        }
-
-        public override void RandomUpdate(int i, int j, int type)
-        {
-            if (type == TileID.Grass
-                && Framing.GetTileSafely(i, j).IsActive
-                && Framing.GetTileSafely(i + 1, j).IsActive
-                && !Framing.GetTileSafely(i, j - 1).IsActive
-                && !Framing.GetTileSafely(i, j - 2).IsActive
-                && Main.rand.Next(5000) == 0)
-            {
-                WorldGen.PlaceTile(i, j - 1, ModContent.TileType<Tiles.HeartFruit>(), true, false, -1, 0);
-            }
         }
     }
 }
