@@ -34,21 +34,21 @@ namespace OneBlockChallenge.Tiles
             {
                 fail = true;
 
-                var item = Main.rand.Next(8) switch
+                if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    0 => ItemID.DirtBlock,
-                    1 => ItemID.ClayBlock,
-                    2 => ItemID.StoneBlock,
-                    3 => ItemID.HardenedSand,
-                    4 => ItemID.SnowBlock,
-                    5 => ItemID.IceBlock,
-                    6 => ItemID.SiltBlock,
-                    _ => ItemID.SlushBlock,
-                };
+                    var item = Main.rand.Next(8) switch
+                    {
+                        0 => ItemID.DirtBlock,
+                        1 => ItemID.ClayBlock,
+                        2 => ItemID.StoneBlock,
+                        3 => ItemID.HardenedSand,
+                        4 => ItemID.SnowBlock,
+                        5 => ItemID.IceBlock,
+                        6 => ItemID.SiltBlock,
+                        _ => ItemID.SlushBlock,
+                    };
 
-                int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);
-                if (Main.netMode == NetmodeID.MultiplayerClient)
-                {
+                    int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
                 }
             }
