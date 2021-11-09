@@ -354,6 +354,8 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
+                chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 20);
+                chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 20);
             }
 
             WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 150);
@@ -474,6 +476,12 @@ namespace OneBlockChallenge
             NPCID.Lavabat,
         };
 
+        static readonly int[] MarbleNPCs = new int[]
+        {
+            NPCID.GreekSkeleton,
+            NPCID.Medusa,
+        };
+
         class PickaxePowerCondition : IItemDropRuleCondition
         {
             readonly int minPick;
@@ -498,6 +506,11 @@ namespace OneBlockChallenge
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+            }
+
+            if (Array.IndexOf(MarbleNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.Marble, minimumDropped: 5, maximumDropped: 10));
             }
 
             if (npc.type == NPCID.Harpy)
