@@ -36,6 +36,18 @@ namespace OneBlockChallenge
                 .AddIngredient(ItemID.AmmoReservationPotion, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
+
+            CreateRecipe(ItemID.DartTrap)
+                .AddIngredient(ItemID.StoneBlock)
+                .AddIngredient(ItemID.PoisonDart, stack: 100)
+                .AddTile(TileID.Anvils)
+                .Register();
+
+            CreateRecipe(ItemID.GeyserTrap)
+                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 2)
+                .AddIngredient(ItemID.LavaBucket)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 
         void AddCraftingStationRecipes()
