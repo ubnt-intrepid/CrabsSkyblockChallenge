@@ -7,7 +7,7 @@ namespace OneBlockChallenge.Tiles
 {
     public class InfiniteBlock : ModTile
     {
-        public override string Texture => $"Terraria/Images/Tiles_{TileID.Cloud}";
+        public override string Texture => $"Terraria/Images/Tiles_{TileID.EchoBlock}";
 
         public override void SetStaticDefaults()
         {
@@ -16,7 +16,7 @@ namespace OneBlockChallenge.Tiles
             Main.tileBlockLight[Type] = false;
             Main.tileNoSunLight[Type] = false;
 
-            DustType = DustID.Cloud;
+            DustType = DustID.MartianHit;
             AdjTiles = new int[] { TileID.DemonAltar };
 
             TileID.Sets.DoesntGetReplacedWithTileReplacement[Type] = true;
