@@ -349,7 +349,6 @@ namespace OneBlockChallenge
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.GrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
@@ -521,20 +520,6 @@ namespace OneBlockChallenge
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
                 nextSlot++;
             }
-        }
-    }
-
-    public class OBCGlobalTile : GlobalTile
-    {
-        public override bool Drop(int i, int j, int type)
-        {
-            if (type == TileID.Plants && Main.netMode != NetmodeID.MultiplayerClient && Main.rand.Next(100) == 0)
-            {
-                var num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: ItemID.GrassSeeds, Stack: 1, noBroadcast: false, -1);
-                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, num, 1f);
-            }
-
-            return true;
         }
     }
 }
