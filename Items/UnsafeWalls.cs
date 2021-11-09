@@ -131,27 +131,4 @@ namespace OneBlockChallenge.Items
         {
         }
     }
-
-    public class UnsafeMushroomWall : UnsafeWallBase
-    {
-        public UnsafeMushroomWall()
-            : base("Mushroom Wall", WallID.MushroomUnsafe, ItemID.MushroomWall, ItemID.GlowingMushroom)
-        {
-        }
-
-        public override void AddRecipes()
-        {
-            CreateRecipe(amount: 4)
-                .AddIngredient(ItemID.MushroomGrassSeeds)
-                .AddTile(TileID.WorkBenches)
-                .AddCondition(Recipe.Condition.InGraveyardBiome)
-                .Register();
-
-            Mod.CreateRecipe(ItemID.MushroomGrassSeeds)
-                .AddIngredient(Type, stack: 4)
-                .AddTile(TileID.WorkBenches)
-                .AddCondition(Recipe.Condition.InGraveyardBiome)
-                .Register();
-        }
-    }
 }
