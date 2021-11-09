@@ -349,8 +349,8 @@ namespace OneBlockChallenge
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
-                chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
+                chest.item[nextSlot++] = new Item(ItemID.Jungle2Echo, stack: 4);
+                chest.item[nextSlot++] = new Item(ModContent.ItemType<Items.UnsafeMushroomWall>(), stack: 4);
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
