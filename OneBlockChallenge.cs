@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -355,24 +354,24 @@ namespace OneBlockChallenge
             }
 
             WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
+            WorldGen.PlaceTile(x + 3, y - 1, TileID.Torches, style: TorchID.Torch);
 
             int chestIndex = WorldGen.PlaceChest(x, y - 1);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
+
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
-                chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
+                chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 20);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 20);
             }
 
-            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 150);
-
-            WorldGen.PlaceTile(x + 3, y - 1, TileID.Torches, style: TorchID.Torch);
+            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 180);
         }
     }
 
