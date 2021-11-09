@@ -36,16 +36,13 @@ namespace OneBlockChallenge.Tiles
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    var item = Main.rand.Next(8) switch
+                    var item = Main.rand.Next(5) switch
                     {
                         0 => ItemID.DirtBlock,
                         1 => ItemID.ClayBlock,
-                        2 => ItemID.StoneBlock,
-                        3 => ItemID.HardenedSand,
-                        4 => ItemID.SnowBlock,
-                        5 => ItemID.IceBlock,
-                        6 => ItemID.SiltBlock,
-                        _ => ItemID.SlushBlock,
+                        2 => ItemID.HardenedSand,
+                        3 => ItemID.SnowBlock,
+                        _ => ItemID.SiltBlock,
                     };
 
                     int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);

@@ -482,6 +482,17 @@ namespace OneBlockChallenge
             NPCID.Medusa,
         };
 
+        static readonly int[] IcyNPCs = new int[]
+        {
+            NPCID.IceSlime,
+            NPCID.IceBat,
+            NPCID.SpikedIceSlime,
+
+            // hardmode
+            NPCID.IceElemental,
+            NPCID.IcyMerman,
+        };
+
         class PickaxePowerCondition : IItemDropRuleCondition
         {
             readonly int minPick;
@@ -511,6 +522,11 @@ namespace OneBlockChallenge
             if (Array.IndexOf(MarbleNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Marble, minimumDropped: 5, maximumDropped: 10));
+            }
+
+            if (Array.IndexOf(IcyNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.IceBlock, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (npc.type == NPCID.Harpy)
