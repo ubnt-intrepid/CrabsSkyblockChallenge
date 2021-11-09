@@ -500,12 +500,12 @@ namespace OneBlockChallenge
         {
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, chanceDenominator: 10, minimumDropped: 1, maximumDropped: 3));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, minimumDropped: 5, maximumDropped: 10));
             }
 
             if (Array.IndexOf(MarbleNPCs, npc.type) != -1)
@@ -515,13 +515,13 @@ namespace OneBlockChallenge
 
             if (npc.type == NPCID.Harpy)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, chanceDenominator: 10, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, minimumDropped: 5, maximumDropped: 10));
             }
 
             if (Array.IndexOf(UnderworldDropNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, chanceDenominator: 2, minimumDropped: 5, maximumDropped: 10));
-                npcLoot.Add(ItemDropRule.ByCondition(new PickaxePowerCondition(65), ItemID.Hellstone, chanceDenominator: 2, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, minimumDropped: 5, maximumDropped: 10));
+                npcLoot.Add(ItemDropRule.ByCondition(new PickaxePowerCondition(65), ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
             }
         }
 
