@@ -316,7 +316,6 @@ namespace OneBlockChallenge
             Main.spawnTileY = (int)Main.worldSurface;
 
             PlaceSpawnIsland(Main.spawnTileX, Main.spawnTileY);
-            PlaceChestIsland(Main.spawnTileX - dungeonDirection * 100, Main.spawnTileY);
 
             // Dungeon and Jungle Temple are the only early structures in the world
             // (except the initial spawn point.)
@@ -330,40 +329,42 @@ namespace OneBlockChallenge
             WorldGen.templePart2();
         }
 
+        //      :e: :e: :e:
+        //      :e: :e: :e:     :c: :c:
+        //  -   :e: (e) :e:     (c) :c:     :t:
+        // y=0  [s] [s] [s] (o) [s] [s] :w: [s]
+        //  +   [s] [s] [s] [s] [s] [s] [s] [s]
+        //               -  x=0  +
+        static readonly Tuple<int, int>[] SpawnIslandOffsets = new[] {
+            new Tuple<int, int>(-3, 0),
+            new Tuple<int, int>(-2, 0),
+            new Tuple<int, int>(-1, 0),
+            new Tuple<int, int>( 1, 0),
+            new Tuple<int, int>( 2, 0),
+            new Tuple<int, int>( 4, 0),
+            new Tuple<int, int>(-3, 1),
+            new Tuple<int, int>(-2, 1),
+            new Tuple<int, int>(-1, 1),
+            new Tuple<int, int>( 0, 1),
+            new Tuple<int, int>( 1, 1),
+            new Tuple<int, int>( 2, 1),
+            new Tuple<int, int>( 3, 1),
+            new Tuple<int, int>( 4, 1),
+        };
+
         static void PlaceSpawnIsland(int x, int y)
         {
             WorldGen.PlaceTile(x, y, ModContent.TileType<Tiles.InfiniteBlock>());
 
-            int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
-            Main.npc[guideIndex].homeless = true;
-            Main.npc[guideIndex].homeTileX = x;
-            Main.npc[guideIndex].homeTileY = y;
-            Main.npc[guideIndex].direction = 1;
-        }
-
-        static readonly Tuple<int, int>[] ChestIslandOffsets = new[] {
-            new Tuple<int, int>(-3, 0),
-            new Tuple<int, int>(-2, 0),
-            new Tuple<int, int>(-1, 0),
-            new Tuple<int, int>( 0, 0),
-            new Tuple<int, int>( 1, 0),
-            new Tuple<int, int>( 1, 1),
-            new Tuple<int, int>( 2, 1),
-            new Tuple<int, int>( 3, 1),
-            new Tuple<int, int>( 3, 0),
-        };
-
-        static void PlaceChestIsland(int x, int y)
-        {
-            foreach (var offset in ChestIslandOffsets)
+            foreach (var offset in SpawnIslandOffsets)
             {
                 WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, TileID.Stone);
             }
 
             WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
-            WorldGen.PlaceTile(x + 3, y - 1, TileID.Torches, style: TorchID.Torch);
+            WorldGen.PlaceTile(x + 4, y - 1, TileID.Torches, style: TorchID.Torch);
 
-            int chestIndex = WorldGen.PlaceChest(x, y - 1);
+            int chestIndex = WorldGen.PlaceChest(x + 1, y - 1);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -374,12 +375,18 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.DirtBlock, stack: 25);
-                chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
-                chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 20);
-                chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 20);
+                chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 25);
+                chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
+                chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
             }
 
-            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 180);
+            WorldGen.PlaceLiquid(x + 3, y, LiquidID.Water, amount: 180);
+
+            int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
+            Main.npc[guideIndex].homeless = true;
+            Main.npc[guideIndex].homeTileX = x;
+            Main.npc[guideIndex].homeTileY = y;
+            Main.npc[guideIndex].direction = 1;
         }
     }
 
