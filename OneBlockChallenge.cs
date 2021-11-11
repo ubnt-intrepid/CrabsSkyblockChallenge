@@ -47,6 +47,12 @@ namespace OneBlockChallenge
                 .AddIngredient(ItemID.LavaBucket)
                 .AddTile(TileID.Anvils)
                 .Register();
+
+            CreateRecipe(ItemID.WebCoveredChest)
+                .AddIngredient(ItemID.Chest)
+                .AddIngredient(ItemID.Cobweb, stack: 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 
         void AddCraftingStationRecipes()
@@ -504,6 +510,12 @@ namespace OneBlockChallenge
             NPCID.IcyMerman,
         };
 
+        static readonly int[] SpiderCaveNPCs = new int[]
+        {
+            NPCID.WallCreeper,
+            NPCID.BlackRecluse,
+        };
+
         class PickaxePowerCondition : IItemDropRuleCondition
         {
             readonly int minPick;
@@ -538,6 +550,11 @@ namespace OneBlockChallenge
             if (Array.IndexOf(IcyNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.IceBlock, minimumDropped: 3, maximumDropped: 5));
+            }
+
+            if (Array.IndexOf(SpiderCaveNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.WebSlinger, chanceDenominator: 100));
             }
 
             if (npc.type == NPCID.Harpy)
