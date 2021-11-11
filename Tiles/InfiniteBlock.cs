@@ -36,12 +36,11 @@ namespace OneBlockChallenge.Tiles
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    var item = Main.rand.Next(5) switch
+                    var item = Main.rand.Next(4) switch
                     {
-                        0 => ItemID.DirtBlock,
-                        1 => ItemID.ClayBlock,
-                        2 => ItemID.HardenedSand,
-                        3 => ItemID.SnowBlock,
+                        0 => ItemID.ClayBlock,
+                        1 => ItemID.HardenedSand,
+                        2 => ItemID.SnowBlock,
                         _ => ItemID.SiltBlock,
                     };
 

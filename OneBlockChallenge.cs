@@ -373,6 +373,7 @@ namespace OneBlockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
+                chest.item[nextSlot++] = new Item(ItemID.DirtBlock, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 20);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 20);
