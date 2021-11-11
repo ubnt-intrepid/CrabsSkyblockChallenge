@@ -68,66 +68,10 @@ namespace OneBlockChallenge.Items
         }
     }
 
-    public class UnsafeHardenedSandWall : UnsafeWallBase
-    {
-        public UnsafeHardenedSandWall()
-            : base("Hardened Sand Wall", WallID.HardenedSand, ItemID.HardenedSandWall, ItemID.HardenedSand)
-        {
-        }
-    }
-
-    public class UnsafeHardenedEbonsandWall : UnsafeWallBase
-    {
-        public UnsafeHardenedEbonsandWall()
-            : base("Hardened Ebonsand Wall", WallID.CorruptHardenedSand, ItemID.CorruptHardenedSandWall, ItemID.CorruptHardenedSand)
-        {
-        }
-    }
-
-    public class UnsafeHardenedCrimsandWall : UnsafeWallBase
-    {
-        public UnsafeHardenedCrimsandWall()
-            : base("Hardened Crimsand Wall", WallID.CrimsonHardenedSand, ItemID.CrimsonHardenedSandWall, ItemID.CrimsonHardenedSand)
-        {
-        }
-    }
-
-    public class UnsafeHardenedPearlsandWall : UnsafeWallBase
-    {
-        public UnsafeHardenedPearlsandWall()
-            : base("Hardened Pearlsand Wall", WallID.HallowHardenedSand, ItemID.HallowHardenedSandWall, ItemID.HallowHardenedSand)
-        {
-        }
-    }
-
     public class UnsafeSandstoneWall : UnsafeWallBase
     {
         public UnsafeSandstoneWall()
             : base("Sandstone Wall", WallID.Sandstone, ItemID.SandstoneWall, ItemID.Sandstone)
-        {
-        }
-    }
-
-    public class UnsafeEbonsandstoneWall : UnsafeWallBase
-    {
-        public UnsafeEbonsandstoneWall()
-            : base("Ebonsandstone Wall", WallID.CorruptSandstone, ItemID.CorruptSandstoneWall, ItemID.CorruptSandstone)
-        {
-        }
-    }
-
-    public class UnsafeCrimsandstoneWall : UnsafeWallBase
-    {
-        public UnsafeCrimsandstoneWall()
-            : base("Crimsandstone Wall", WallID.CrimsonSandstone, ItemID.CrimsonSandstoneWall, ItemID.CrimsonSandstone)
-        {
-        }
-    }
-
-    public class UnsafePearlsandstoneWall : UnsafeWallBase
-    {
-        public UnsafePearlsandstoneWall()
-            : base("Pearlsandstone Wall", WallID.HallowSandstone, ItemID.HallowSandstoneWall, ItemID.HallowSandstone)
         {
         }
     }
