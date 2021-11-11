@@ -112,6 +112,7 @@ namespace OneBlockChallenge
 
             CreateRecipe(ItemID.WandofSparking)
                 .AddRecipeGroup(RecipeGroupID.Wood, stack: 4)
+                .AddIngredient(ItemID.Torch, stack: 5)
                 .AddIngredient(ItemID.ManaCrystal)
                 .AddTile(TileID.WorkBenches)
                 .Register();
