@@ -229,8 +229,8 @@ namespace OneBlockChallenge
 
         void AddUndergroundDesertRecipes()
         {
-            CreateRecipe(ItemID.Sandstone)
-                .AddIngredient(ItemID.HardenedSand, stack: 2)
+            CreateRecipe(ItemID.HardenedSand)
+                .AddIngredient(ItemID.SandBlock, stack: 2)
                 .AddTile(TileID.Furnaces)
                 .Register();
 

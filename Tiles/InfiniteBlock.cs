@@ -39,7 +39,7 @@ namespace OneBlockChallenge.Tiles
                     var item = Main.rand.Next(4) switch
                     {
                         0 => ItemID.ClayBlock,
-                        1 => ItemID.HardenedSand,
+                        1 => ItemID.Sandstone,
                         2 => ItemID.SnowBlock,
                         _ => ItemID.SiltBlock,
                     };
