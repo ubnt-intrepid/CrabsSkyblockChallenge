@@ -6,20 +6,6 @@ using Terraria.ModLoader;
 
 namespace CrabsSkyblockChallenge.NPCs
 {
-    class PickaxePowerCondition : IItemDropRuleCondition
-    {
-        readonly int minPick;
-
-        public PickaxePowerCondition(int minPick)
-        {
-            this.minPick = minPick;
-        }
-
-        public bool CanDrop(DropAttemptInfo info) => info.player.GetBestPickaxe().pick >= minPick;
-        public bool CanShowItemDropInUI() => true;
-        public string GetConditionDescription() => $"Drops when player's pickaxe power is greater or equal to {minPick}%";
-    }
-
     public class SkyblockGlobalNPC : GlobalNPC
     {
         static readonly int[] AntlionNPCs = new int[]
@@ -125,8 +111,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
             if (Array.IndexOf(UnderworldDropNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, minimumDropped: 5, maximumDropped: 10));
-                npcLoot.Add(ItemDropRule.ByCondition(new PickaxePowerCondition(65), ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
             }
         }
 

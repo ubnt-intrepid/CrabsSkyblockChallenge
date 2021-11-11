@@ -41,7 +41,7 @@ namespace CrabsSkyblockChallenge.Tiles
                         0 => ItemID.ClayBlock,
                         1 => ItemID.Sandstone,
                         2 => ItemID.SnowBlock,
-                        _ => ItemID.SiltBlock,
+                        _ => ItemID.AshBlock,
                     };
 
                     int num = Item.NewItem(new Vector2(i, j).ToWorldCoordinates(), Type: item, Stack: 1, noBroadcast: false, -1);
