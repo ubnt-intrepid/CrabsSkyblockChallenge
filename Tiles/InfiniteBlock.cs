@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace OneBlockChallenge.Tiles
+namespace CrabsSkyblockChallenge.Tiles
 {
     public class InfiniteBlock : ModTile
     {

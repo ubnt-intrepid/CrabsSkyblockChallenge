@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 
-namespace OneBlockChallenge.Items
+namespace CrabsSkyblockChallenge.Items
 {
     public abstract class UnsafeWallBase : ModItem
     {
