@@ -106,6 +106,19 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
+
+                if (Main.expertMode || Main.masterMode)
+                {
+                    chest.item[nextSlot++] = new Item(ItemID.SilverBroadsword);
+                    chest.item[nextSlot++] = new Item(ItemID.SilverPickaxe);
+                    chest.item[nextSlot++] = new Item(ItemID.SilverAxe);
+                    chest.item[nextSlot++] = new Item(ItemID.SilverHammer);
+                    chest.item[nextSlot++] = new Item(ItemID.BugNet);
+                    chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
+                    chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
+                    chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
+                    chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
+                }
             }
 
             WorldGen.PlaceLiquid(x + 3, y, LiquidID.Water, amount: 180);
