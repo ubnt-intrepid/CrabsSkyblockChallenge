@@ -79,6 +79,11 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
+            if (npc.type == NPCID.SandSlime)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.SandBlock, minimumDropped: 3, maximumDropped: 5));
+            }
+
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, minimumDropped: 3, maximumDropped: 5));

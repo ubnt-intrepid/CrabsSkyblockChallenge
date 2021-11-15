@@ -103,7 +103,6 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.DirtBlock, stack: 25);
-                chest.item[nextSlot++] = new Item(ItemID.SandBlock, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
 
