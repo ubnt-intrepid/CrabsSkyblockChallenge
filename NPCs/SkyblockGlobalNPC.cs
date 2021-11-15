@@ -128,6 +128,12 @@ namespace CrabsSkyblockChallenge.NPCs
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
                 nextSlot++;
             }
+
+            if (type == NPCID.Dryad)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.HerbBag);
+                nextSlot++;
+            }
         }
     }
 }
