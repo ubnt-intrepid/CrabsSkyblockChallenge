@@ -50,6 +50,12 @@ namespace CrabsSkyblockChallenge
                 .AddIngredient(ItemID.Cobweb, stack: 10)
                 .AddTile(TileID.Anvils)
                 .Register();
+
+            CreateRecipe(ItemID.WebSlinger)
+                .AddRecipeGroup(RecipeGroupID.IronBar)
+                .AddIngredient(ItemID.WebRopeCoil, stack: 8)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
 
         void AddCraftingStationRecipes()

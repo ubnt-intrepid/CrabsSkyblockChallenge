@@ -70,12 +70,6 @@ namespace CrabsSkyblockChallenge.NPCs
             NPCID.IcyMerman,
         };
 
-        static readonly int[] SpiderCaveNPCs = new int[]
-        {
-            NPCID.WallCreeper,
-            NPCID.BlackRecluse,
-        };
-
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -102,11 +96,6 @@ namespace CrabsSkyblockChallenge.NPCs
             if (Array.IndexOf(IcyNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.IceBlock, minimumDropped: 3, maximumDropped: 5));
-            }
-
-            if (Array.IndexOf(SpiderCaveNPCs, npc.type) != -1)
-            {
-                npcLoot.Add(ItemDropRule.Common(ItemID.WebSlinger, chanceDenominator: 100));
             }
 
             if (npc.type == NPCID.Harpy)
