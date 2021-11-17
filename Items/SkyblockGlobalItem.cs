@@ -27,7 +27,7 @@ namespace CrabsSkyblockChallenge.Items
 
         public override void ExtractinatorUse(int extractType, ref int resultType, ref int resultStack)
         {
-            if (extractType == ItemID.AshBlock && Main.hardMode)
+            if (Main.hardMode)
             {
                 switch (resultType)
                 {
@@ -41,10 +41,10 @@ namespace CrabsSkyblockChallenge.Items
                     case ItemID.PlatinumOre:
                         var maxValue = Main.LocalPlayer.GetBestPickaxe().pick switch
                         {
-                            < 100 => 8,  // pre-hardmode ores
+                            < 100                => 8,  // pre-hardmode ores
                             (>= 100) and (< 110) => 10, // Cobalt, Palladium
                             (>= 110) and (< 150) => 12, // Mythril, Orichalcum
-                            _ => 14, // Adamantite, Titanium
+                            _                    => 14, // Adamantite, Titanium
                         };
                         resultType = Main.rand.Next(maxValue) switch
                         {
