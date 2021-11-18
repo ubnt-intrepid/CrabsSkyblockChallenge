@@ -46,19 +46,6 @@ namespace CrabsSkyblockChallenge.NPCs
             NPCID.GiantMossHornet,
         };
 
-        static readonly int[] UnderworldDropNPCs = new int[]
-        {
-            NPCID.Hellbat,
-            NPCID.LavaSlime,
-            NPCID.Lavabat,
-        };
-
-        static readonly int[] MarbleNPCs = new int[]
-        {
-            NPCID.GreekSkeleton,
-            NPCID.Medusa,
-        };
-
         static readonly int[] IcyNPCs = new int[]
         {
             NPCID.IceSlime,
@@ -68,6 +55,19 @@ namespace CrabsSkyblockChallenge.NPCs
             // hardmode
             NPCID.IceElemental,
             NPCID.IcyMerman,
+        };
+
+        static readonly int[] MarbleNPCs = new int[]
+        {
+            NPCID.GreekSkeleton,
+            NPCID.Medusa,
+        };
+
+        static readonly int[] LavaFlavoredNPCs = new int[]
+        {
+            NPCID.Hellbat,
+            NPCID.LavaSlime,
+            NPCID.Lavabat,
         };
 
 
@@ -85,12 +85,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, minimumDropped: 5, maximumDropped: 10));
-            }
-
-            if (Array.IndexOf(MarbleNPCs, npc.type) != -1)
-            {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Marble, minimumDropped: 5, maximumDropped: 10));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Hive, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (Array.IndexOf(IcyNPCs, npc.type) != -1)
@@ -98,14 +93,19 @@ namespace CrabsSkyblockChallenge.NPCs
                 npcLoot.Add(ItemDropRule.Common(ItemID.IceBlock, minimumDropped: 3, maximumDropped: 5));
             }
 
-            if (npc.type == NPCID.Harpy)
+            if (Array.IndexOf(MarbleNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, minimumDropped: 5, maximumDropped: 10));
+                npcLoot.Add(ItemDropRule.Common(ItemID.Marble, minimumDropped: 5, maximumDropped: 10));
             }
 
-            if (Array.IndexOf(UnderworldDropNPCs, npc.type) != -1)
+            if (Array.IndexOf(LavaFlavoredNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
+            }
+
+            if (npc.type == NPCID.Harpy)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, minimumDropped: 3, maximumDropped: 5));
             }
         }
 
