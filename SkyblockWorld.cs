@@ -1,39 +1,39 @@
-﻿using Terraria.ModLoader;
+﻿using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
-using Terraria.WorldBuilding;
-using System.Collections.Generic;
 using Terraria.IO;
-using System;
+using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace CrabsSkyblockChallenge
 {
-    public class OBCWorld : ModSystem
+    public class SkyblockWorld : ModSystem
     {
         public override void ModifyWorldGenTasks(List<GenPass> tasks, ref float totalWeight)
         {
-            Mod.Logger.Info("Switch to OBC world generation");
+            Mod.Logger.Info("Switch to Skyblock world generation");
 
             var resetTask = tasks.Find(pass => pass.Name.Contains("Reset"));
 
             tasks.Clear();
             tasks.Add(resetTask);
-            tasks.Add(new OBCWorldGenPass());
+            tasks.Add(new SkyblockWorldGenPass());
         }
     }
 
-    class OBCWorldGenPass : GenPass
+    class SkyblockWorldGenPass : GenPass
     {
         readonly int dungeonDirection;
 
-        public OBCWorldGenPass() : base("OBC World Generation", 0f)
+        public SkyblockWorldGenPass() : base("Skyblock World Generation", 0f)
         {
             dungeonDirection = Main.rand.NextBool() ? 1 : -1;
         }
 
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
-            progress.Message = "Generate One Block Challenge World";
+            progress.Message = "Generate Skyblock World";
 
             WorldGen.clearWorld();
 
