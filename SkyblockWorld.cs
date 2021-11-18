@@ -114,7 +114,7 @@ namespace CrabsSkyblockChallenge
                 }
             }
 
-            WorldGen.PlaceLiquid(x + 3, y, LiquidID.Water, amount: 180);
+            WorldGen.PlaceLiquid(x + 3, y, LiquidID.Water, amount: 255);
 
             int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
             Main.npc[guideIndex].homeless = true;
