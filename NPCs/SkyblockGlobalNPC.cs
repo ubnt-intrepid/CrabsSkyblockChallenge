@@ -70,6 +70,13 @@ namespace CrabsSkyblockChallenge.NPCs
             NPCID.Lavabat,
         };
 
+        static readonly int[] FrostRegionNPCs = new int[]
+        {
+            NPCID.MisterStabby,
+            NPCID.SnowmanGangsta,
+            NPCID.SnowBalla,
+        };
+
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -106,6 +113,11 @@ namespace CrabsSkyblockChallenge.NPCs
             if (npc.type == NPCID.Harpy)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, minimumDropped: 3, maximumDropped: 5));
+            }
+
+            if (Array.IndexOf(FrostRegionNPCs, npc.type) != -1)
+            {
+                npcLoot.Add(ItemDropRule.Common(ItemID.SnowGlobe, chanceDenominator: 100));
             }
         }
 

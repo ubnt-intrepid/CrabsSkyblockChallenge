@@ -36,11 +36,10 @@ namespace CrabsSkyblockChallenge.Tiles
 
                 if (Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    var item = Main.rand.Next(4) switch
+                    var item = Main.rand.Next(3) switch
                     {
                         0 => ItemID.ClayBlock,
                         1 => ItemID.Sandstone,
-                        2 => ItemID.SnowBlock,
                         _ => ItemID.AshBlock,
                     };
 

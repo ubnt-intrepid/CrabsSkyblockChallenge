@@ -116,6 +116,7 @@ namespace CrabsSkyblockChallenge
                     chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
                     chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
+                    chest.item[nextSlot++] = new Item(ItemID.SnowGlobe, stack: 10);
                 }
             }
 
