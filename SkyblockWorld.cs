@@ -107,15 +107,9 @@ namespace CrabsSkyblockChallenge
 
                 if (Main.expertMode || Main.masterMode)
                 {
-                    chest.item[nextSlot++] = new Item(ItemID.SilverBroadsword);
-                    chest.item[nextSlot++] = new Item(ItemID.SilverPickaxe);
-                    chest.item[nextSlot++] = new Item(ItemID.SilverAxe);
-                    chest.item[nextSlot++] = new Item(ItemID.SilverHammer);
-                    chest.item[nextSlot++] = new Item(ItemID.BugNet);
-                    chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
-                    chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
                     chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
+                    chest.item[nextSlot++] = new Item(ItemID.BloodMoonStarter, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.SnowGlobe, stack: 10);
                 }
             }
