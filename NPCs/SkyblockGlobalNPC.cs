@@ -124,6 +124,12 @@ namespace CrabsSkyblockChallenge.NPCs
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
                 nextSlot++;
             }
+
+            if (type == NPCID.Demolitionist && Main.hardMode)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.DirtBomb);
+                nextSlot++;
+            }
         }
     }
 }
