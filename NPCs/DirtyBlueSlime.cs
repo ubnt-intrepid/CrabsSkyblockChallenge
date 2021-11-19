@@ -17,7 +17,17 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void SetDefaults()
         {
-            NPC.CloneDefaults(NPCID.BlueSlime);
+            NPC.width = 24;
+            NPC.height = 18;
+            NPC.damage = 7;
+            NPC.defense = 2;
+            NPC.lifeMax = 25;
+            NPC.value = 25f;
+            NPC.alpha = 60;
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.aiStyle = NPCAIStyleID.Slime;
+            NPC.buffImmune[BuffID.Poisoned] = true;
 
             AIType = NPCID.BlueSlime;
             AnimationType = NPCID.BlueSlime;
