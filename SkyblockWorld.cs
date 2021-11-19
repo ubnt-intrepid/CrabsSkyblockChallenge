@@ -100,13 +100,13 @@ namespace CrabsSkyblockChallenge
 
                 chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
                 chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
-                chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 5);
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
 
                 if (Main.expertMode || Main.masterMode)
                 {
+                    chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
                     chest.item[nextSlot++] = new Item(ItemID.BloodMoonStarter, stack: 10);
