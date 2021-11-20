@@ -135,6 +135,12 @@ namespace CrabsSkyblockChallenge.NPCs
                 shop.item[nextSlot].SetDefaults(ItemID.HerbBag);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
                 nextSlot++;
+
+                if (Main.CurrentPlayer.ZoneJungle)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.JungleGrassSeeds);
+                    nextSlot++;
+                }
             }
 
             if (type == NPCID.Demolitionist && Main.hardMode)
