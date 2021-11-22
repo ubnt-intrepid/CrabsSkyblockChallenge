@@ -37,7 +37,8 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override float SpawnChance(NPCSpawnInfo spawnInfo)
         {
-            return SpawnCondition.OverworldDaySlime.Chance * 0.2f;
+            float baseChance = spawnInfo.spawnTileType == TileID.Dirt ? 0.5f : 0.3f;
+            return baseChance * SpawnCondition.OverworldDaySlime.Chance;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
