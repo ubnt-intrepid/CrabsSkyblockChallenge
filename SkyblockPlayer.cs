@@ -8,7 +8,7 @@ namespace CrabsSkyblockChallenge
     public class SkyblockPlayer : ModPlayer
     {
         const string ReceiveStarterBagName = "ReceiveStarterBag";
-        bool ReceiveStarterBag = false;
+        public bool ReceiveStarterBag = false;
 
         public override void LoadData(TagCompound tag)
         {
@@ -18,15 +18,6 @@ namespace CrabsSkyblockChallenge
         public override void SaveData(TagCompound tag)
         {
             tag.Set(ReceiveStarterBagName, ReceiveStarterBag);
-        }
-
-        public override void OnEnterWorld(Player player)
-        {
-            if (!ReceiveStarterBag && (Main.expertMode || Main.masterMode))
-            {
-                ReceiveStarterBag = true;
-                player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
-            }
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)

@@ -123,6 +123,20 @@ namespace CrabsSkyblockChallenge.NPCs
             }
         }
 
+        public override void GetChat(NPC npc, ref string chat)
+        {
+            if (npc.type == NPCID.Guide)
+            {
+                var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
+                if (!me.ReceiveStarterBag && (Main.expertMode || Main.masterMode))
+                {
+                    chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
+                    me.ReceiveStarterBag = true;
+                    me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
+                }
+            }
+        }
+
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
             if (type == NPCID.Merchant)
