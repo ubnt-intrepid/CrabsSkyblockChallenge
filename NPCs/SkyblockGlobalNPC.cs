@@ -87,6 +87,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
+                npcLoot.Add(ItemDropRule.Common(ItemID.Sandstone, minimumDropped: 5, maximumDropped: 10));
                 npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, minimumDropped: 3, maximumDropped: 5));
             }
 
@@ -107,6 +108,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
             if (Array.IndexOf(LavaFlavoredNPCs, npc.type) != -1)
             {
+                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, minimumDropped: 5, maximumDropped: 10));
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
             }
 
@@ -127,6 +129,13 @@ namespace CrabsSkyblockChallenge.NPCs
             {
                 shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(copper: 50);
                 nextSlot++;
             }
 

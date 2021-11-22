@@ -57,19 +57,18 @@ namespace CrabsSkyblockChallenge
             WorldGen.templePart2();
         }
 
-        //      :e: :e: :e:
-        //      :e: :e: :e:     :c: :c:
-        //  -   :e: (e) :e:     (c) :c:     :t:
-        // y=0  [s] [s] [s] (o) [s] [s] :w: [s]
-        //  +   [s] [s] [s] [s] [s] [s] [s] [s]
+        //      :c: :c: :a: :a: :a:
+        //  -   (c) :c: :a: (a) :a:     :t:
+        // y=0  [s] [s] [s] (s) [s] :w: [s]
+        //  +   [s] [s] [s] [s] [s] [s] [s]
         //               -  x=0  +
         static readonly Tuple<int, int>[] SpawnIslandOffsets = new[] {
             new Tuple<int, int>(-3, 0),
             new Tuple<int, int>(-2, 0),
             new Tuple<int, int>(-1, 0),
+            new Tuple<int, int>( 0, 0),
             new Tuple<int, int>( 1, 0),
-            new Tuple<int, int>( 2, 0),
-            new Tuple<int, int>( 4, 0),
+            new Tuple<int, int>( 3, 0),
             new Tuple<int, int>(-3, 1),
             new Tuple<int, int>(-2, 1),
             new Tuple<int, int>(-1, 1),
@@ -77,22 +76,19 @@ namespace CrabsSkyblockChallenge
             new Tuple<int, int>( 1, 1),
             new Tuple<int, int>( 2, 1),
             new Tuple<int, int>( 3, 1),
-            new Tuple<int, int>( 4, 1),
         };
 
         static void PlaceSpawnIsland(int x, int y)
         {
-            WorldGen.PlaceTile(x, y, ModContent.TileType<Tiles.InfiniteBlock>());
-
             foreach (var offset in SpawnIslandOffsets)
             {
                 WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, TileID.Stone);
             }
 
-            WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
-            WorldGen.PlaceTile(x + 4, y - 1, TileID.Torches, style: TorchID.Torch);
+            WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
+            WorldGen.PlaceTile(x + 3, y - 1, TileID.Torches, style: TorchID.Torch);
 
-            int chestIndex = WorldGen.PlaceChest(x + 1, y - 1);
+            int chestIndex = WorldGen.PlaceChest(x - 3, y - 1);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -103,6 +99,7 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
+                chest.item[nextSlot++] = new Item(ItemID.Sandstone, stack: 25);
 
                 if (Main.expertMode || Main.masterMode)
                 {
@@ -114,7 +111,7 @@ namespace CrabsSkyblockChallenge
                 }
             }
 
-            WorldGen.PlaceLiquid(x + 3, y, LiquidID.Water, amount: 255);
+            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 255);
 
             int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
             Main.npc[guideIndex].homeless = true;
