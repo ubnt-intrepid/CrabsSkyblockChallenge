@@ -88,7 +88,6 @@ namespace CrabsSkyblockChallenge.NPCs
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Sandstone, minimumDropped: 5, maximumDropped: 10));
-                npcLoot.Add(ItemDropRule.Common(ItemID.DesertFossil, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (Array.IndexOf(HornetNPCs, npc.type) != -1)
@@ -125,15 +124,23 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void GetChat(NPC npc, ref string chat)
         {
+            var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
+
             if (npc.type == NPCID.Guide)
             {
-                var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
-                if (!me.ReceiveStarterBag && (Main.expertMode || Main.masterMode))
+                if (!me.RecieveStarterBag && (Main.expertMode || Main.masterMode))
                 {
                     chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
-                    me.ReceiveStarterBag = true;
+                    me.RecieveStarterBag = true;
                     me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
                 }
+            }
+
+            if (npc.type == NPCID.Merchant && !me.RecieveExtractinator)
+            {
+                chat = "Now is a time to extract Ores and Gems.";
+                me.RecieveExtractinator = true;
+                me.Player.QuickSpawnItem(ItemID.Extractinator);
             }
         }
 
@@ -145,12 +152,23 @@ namespace CrabsSkyblockChallenge.NPCs
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
                 nextSlot++;
 
-                shop.item[nextSlot].SetDefaults(ItemID.Extractinator);
+                shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
                 nextSlot++;
 
-                shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
-                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(copper: 50);
-                nextSlot++;
+                if (Main.CurrentPlayer.ZoneSnow)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.SlushBlock);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.DesertFossil);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
+                    nextSlot++;
+                }
             }
 
             if (type == NPCID.Dryad)
