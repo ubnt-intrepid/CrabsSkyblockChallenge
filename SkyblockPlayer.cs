@@ -10,24 +10,24 @@ namespace CrabsSkyblockChallenge
         const string RecieveStarterBagName = "RecieveStarterBag";
         public bool RecieveStarterBag = false;
 
-        const string RecieveExtractinatorName = "RecieveExtractinator";
-        public bool RecieveExtractinator = false;
+        const string RecieveFromMerchantName = "RecieveFromMerchant";
+        public bool RecieveFromMerchant = false;
 
-        const string RecieveHiveWandName = "RecieveHiveWand";
-        public bool RecieveHiveWand = false;
+        const string RecieveFromDryadName = "RecieveFromDryad";
+        public bool RecieveFromDryad = false;
 
         public override void LoadData(TagCompound tag)
         {
             RecieveStarterBag = tag.ContainsKey(RecieveStarterBagName) && tag.GetBool(RecieveStarterBagName);
-            RecieveExtractinator = tag.ContainsKey(RecieveExtractinatorName) && tag.GetBool(RecieveExtractinatorName);
-            RecieveHiveWand = tag.ContainsKey(RecieveHiveWandName) && tag.GetBool(RecieveHiveWandName);
+            RecieveFromMerchant = tag.ContainsKey(RecieveFromMerchantName) && tag.GetBool(RecieveFromMerchantName);
+            RecieveFromDryad = tag.ContainsKey(RecieveFromDryadName) && tag.GetBool(RecieveFromDryadName);
         }
 
         public override void SaveData(TagCompound tag)
         {
             tag.Set(RecieveStarterBagName, RecieveStarterBag);
-            tag.Set(RecieveExtractinatorName, RecieveExtractinator);
-            tag.Set(RecieveHiveWandName, RecieveHiveWand);
+            tag.Set(RecieveFromMerchantName, RecieveFromMerchant);
+            tag.Set(RecieveFromDryadName, RecieveFromDryad);
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)

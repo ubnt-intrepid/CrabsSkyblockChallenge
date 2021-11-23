@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace CrabsSkyblockChallenge.NPCs
 {
-    public class SkyblockGlobalNPC : GlobalNPC
+    class EnemyLootRules : GlobalNPC
     {
         static readonly int[] AntlionNPCs = new int[]
         {
@@ -121,7 +121,10 @@ namespace CrabsSkyblockChallenge.NPCs
                 npcLoot.Add(ItemDropRule.Common(ItemID.SnowGlobe, chanceDenominator: 100));
             }
         }
+    }
 
+    class TownNPCMods : GlobalNPC
+    {
         public override void GetChat(NPC npc, ref string chat)
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
@@ -136,17 +139,18 @@ namespace CrabsSkyblockChallenge.NPCs
                 }
             }
 
-            if (npc.type == NPCID.Merchant && !me.RecieveExtractinator)
+            if (npc.type == NPCID.Merchant && !me.RecieveFromMerchant)
             {
-                chat = "Now is a time to extract Ores and Gems.";
-                me.RecieveExtractinator = true;
+                chat = "Now is a time to get ready to confront evil presenses.";
+                me.RecieveFromMerchant = true;
                 me.Player.QuickSpawnItem(ItemID.Extractinator);
+                me.Player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
             }
 
-            if (npc.type == NPCID.Dryad && !me.RecieveHiveWand)
+            if (npc.type == NPCID.Dryad && !me.RecieveFromDryad)
             {
                 chat = "Be careful with poisoned Bee needles.";
-                me.RecieveHiveWand = true;
+                me.RecieveFromDryad = true;
                 me.Player.QuickSpawnItem(ItemID.HiveWand);
             }
         }
@@ -155,10 +159,6 @@ namespace CrabsSkyblockChallenge.NPCs
         {
             if (type == NPCID.Merchant)
             {
-                shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
-                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2);
-                nextSlot++;
-
                 shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
                 nextSlot++;
@@ -174,6 +174,12 @@ namespace CrabsSkyblockChallenge.NPCs
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.DesertFossil);
                     shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
+                    nextSlot++;
+                }
+
+                if (NPC.downedBoss1 && NPC.AnyNPCs(NPCID.Nurse))
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
                     nextSlot++;
                 }
             }
