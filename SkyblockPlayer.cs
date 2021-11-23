@@ -7,7 +7,7 @@ namespace CrabsSkyblockChallenge
 {
     public class SkyblockPlayer : ModPlayer
     {
-        const string ReceiveStarterBagName = "ReceiveStarterBag";
+        const string RecieveStarterBagName = "RecieveStarterBag";
         public bool RecieveStarterBag = false;
 
         const string RecieveExtractinatorName = "RecieveExtractinator";
@@ -15,13 +15,13 @@ namespace CrabsSkyblockChallenge
 
         public override void LoadData(TagCompound tag)
         {
-            RecieveStarterBag = tag.ContainsKey(ReceiveStarterBagName) && tag.GetBool(ReceiveStarterBagName);
+            RecieveStarterBag = tag.ContainsKey(RecieveStarterBagName) && tag.GetBool(RecieveStarterBagName);
             RecieveExtractinator = tag.ContainsKey(RecieveExtractinatorName) && tag.GetBool(RecieveExtractinatorName);
         }
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Set(ReceiveStarterBagName, RecieveStarterBag);
+            tag.Set(RecieveStarterBagName, RecieveStarterBag);
             tag.Set(RecieveExtractinatorName, RecieveExtractinator);
         }
 
