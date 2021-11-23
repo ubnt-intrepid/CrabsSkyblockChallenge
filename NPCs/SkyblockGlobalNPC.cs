@@ -142,6 +142,13 @@ namespace CrabsSkyblockChallenge.NPCs
                 me.RecieveExtractinator = true;
                 me.Player.QuickSpawnItem(ItemID.Extractinator);
             }
+
+            if (npc.type == NPCID.Dryad && !me.RecieveHiveWand)
+            {
+                chat = "Be careful with poisoned Bee needles.";
+                me.RecieveHiveWand = true;
+                me.Player.QuickSpawnItem(ItemID.HiveWand);
+            }
         }
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)

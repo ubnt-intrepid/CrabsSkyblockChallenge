@@ -13,16 +13,21 @@ namespace CrabsSkyblockChallenge
         const string RecieveExtractinatorName = "RecieveExtractinator";
         public bool RecieveExtractinator = false;
 
+        const string RecieveHiveWandName = "RecieveHiveWand";
+        public bool RecieveHiveWand = false;
+
         public override void LoadData(TagCompound tag)
         {
             RecieveStarterBag = tag.ContainsKey(RecieveStarterBagName) && tag.GetBool(RecieveStarterBagName);
             RecieveExtractinator = tag.ContainsKey(RecieveExtractinatorName) && tag.GetBool(RecieveExtractinatorName);
+            RecieveHiveWand = tag.ContainsKey(RecieveHiveWandName) && tag.GetBool(RecieveHiveWandName);
         }
 
         public override void SaveData(TagCompound tag)
         {
             tag.Set(RecieveStarterBagName, RecieveStarterBag);
             tag.Set(RecieveExtractinatorName, RecieveExtractinator);
+            tag.Set(RecieveHiveWandName, RecieveHiveWand);
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
