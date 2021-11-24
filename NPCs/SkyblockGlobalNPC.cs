@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace CrabsSkyblockChallenge.NPCs
 {
-    class EnemyLootRules : GlobalNPC
+    public class SkyblockGlobalNPC : GlobalNPC
     {
         static readonly int[] AntlionNPCs = new int[]
         {
@@ -121,32 +121,29 @@ namespace CrabsSkyblockChallenge.NPCs
                 npcLoot.Add(ItemDropRule.Common(ItemID.SnowGlobe, chanceDenominator: 100));
             }
         }
-    }
-
-    class TownNPCMods : GlobalNPC
-    {
-        static bool IsStarterBagProvider(NPC npc)
-        {
-            return (Main.tenthAnniversaryWorld && npc.type == NPCID.Princess)
-                || (Main.getGoodWorld && npc.type == NPCID.Demolitionist)
-                || (Main.drunkWorld && npc.type == NPCID.PartyGirl)
-                || (Main.notTheBeesWorld && npc.type == NPCID.Merchant)
-                || npc.type == NPCID.Guide;
-        }
 
         public override void GetChat(NPC npc, ref string chat)
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
 
-            if (!me.RecieveStarterItems && IsStarterBagProvider(npc))
+            if (!me.RecieveStarterItems && (Main.expertMode || Main.masterMode))
             {
-                chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
+                chat = "Are you expert Terrarian? These are gifts from Santa Claus.";
                 me.RecieveStarterItems = true;
-                me.Player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
-                if (Main.expertMode || Main.masterMode)
-                {
-                    me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
-                }
+
+                var player = me.Player;
+                player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
+                player.QuickSpawnItem(ItemID.SilverBroadsword);
+                player.QuickSpawnItem(ItemID.SilverPickaxe);
+                player.QuickSpawnItem(ItemID.SilverAxe);
+                player.QuickSpawnItem(ItemID.SilverHammer);
+                player.QuickSpawnItem(ItemID.BugNet);
+                player.QuickSpawnItem(ItemID.HermesBoots);
+                player.QuickSpawnItem(ItemID.CloudinaBottle);
+                player.QuickSpawnItem(ItemID.SlimeCrown, stack: 10);
+                player.QuickSpawnItem(ItemID.SuspiciousLookingEye, stack: 10);
+                player.QuickSpawnItem(ItemID.BloodMoonStarter, stack: 10);
+                player.QuickSpawnItem(ItemID.SnowGlobe, stack: 10);
             }
         }
 
