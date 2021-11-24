@@ -10,8 +10,6 @@ namespace CrabsSkyblockChallenge
 
         public override void AddRecipes()
         {
-            AddCraftingStationRecipes();
-
             AddSurfaceChestLootRecipes();
             AddCavernChestLootRecipies();
             AddLivingWoodRecipes();
@@ -19,6 +17,13 @@ namespace CrabsSkyblockChallenge
             AddUndergroundJungleRecipes();
             AddMushroomRecipes();
             AddUnderworldRecipes();
+
+            CreateRecipe(ItemID.Hellforge)
+                .AddIngredient(ItemID.Furnace)
+                .AddIngredient(ItemID.Hellstone, stack: 30)
+                .AddIngredient(ItemID.Obsidian, stack: 30)
+                .AddTile(TileID.Anvils)
+                .Register();
 
             CreateRecipe(ItemID.SharpeningStation)
                 .AddRecipeGroup(RecipeGroupID.IronBar, stack: 5)
@@ -59,43 +64,6 @@ namespace CrabsSkyblockChallenge
 
             CreateRecipe(ItemID.SlimeBlock)
                 .AddIngredient(ItemID.Gel)
-                .Register();
-        }
-
-        void AddCraftingStationRecipes()
-        {
-            CreateRecipe(ItemID.LivingLoom)
-                .AddRecipeGroup(RecipeGroupID.Wood, stack: 20)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-
-            CreateRecipe(ItemID.HoneyDispenser)
-                .AddIngredient(ItemID.HoneyBlock, stack: 10)
-                .AddRecipeGroup(RecipeGroupID.Wood, stack: 5)
-                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe(ItemID.SkyMill)
-                .AddIngredient(ItemID.StoneBlock, stack: 20)
-                .AddIngredient(ItemID.Cloud, stack: 10)
-                .AddIngredient(ItemID.FallenStar)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            // imported from Calamity Mod
-            CreateRecipe(ItemID.IceMachine)
-                .AddIngredient(ItemID.SnowBlock, stack: 25)
-                .AddIngredient(ItemID.IceBlock, stack: 15)
-                .AddRecipeGroup(RecipeGroupID.IronBar, stack: 3)
-                .AddTile(TileID.Anvils)
-                .Register();
-
-            CreateRecipe(ItemID.Hellforge)
-                .AddIngredient(ItemID.Furnace)
-                .AddIngredient(ItemID.Hellstone, stack: 30)
-                .AddIngredient(ItemID.Obsidian, stack: 30)
-                .AddTile(TileID.Anvils)
                 .Register();
         }
 
