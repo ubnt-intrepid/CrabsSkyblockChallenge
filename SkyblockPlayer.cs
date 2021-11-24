@@ -7,27 +7,17 @@ namespace CrabsSkyblockChallenge
 {
     public class SkyblockPlayer : ModPlayer
     {
-        const string RecieveStarterBagName = "RecieveStarterBag";
-        public bool RecieveStarterBag = false;
-
-        const string RecieveFromMerchantName = "RecieveFromMerchant";
-        public bool RecieveFromMerchant = false;
-
-        const string RecieveFromDryadName = "RecieveFromDryad";
-        public bool RecieveFromDryad = false;
+        const string RecieveStarterItemsName = "RecieveStarterItems";
+        public bool RecieveStarterItems = false;
 
         public override void LoadData(TagCompound tag)
         {
-            RecieveStarterBag = tag.ContainsKey(RecieveStarterBagName) && tag.GetBool(RecieveStarterBagName);
-            RecieveFromMerchant = tag.ContainsKey(RecieveFromMerchantName) && tag.GetBool(RecieveFromMerchantName);
-            RecieveFromDryad = tag.ContainsKey(RecieveFromDryadName) && tag.GetBool(RecieveFromDryadName);
+            RecieveStarterItems = tag.ContainsKey(RecieveStarterItemsName) && tag.GetBool(RecieveStarterItemsName);
         }
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Set(RecieveStarterBagName, RecieveStarterBag);
-            tag.Set(RecieveFromMerchantName, RecieveFromMerchant);
-            tag.Set(RecieveFromDryadName, RecieveFromDryad);
+            tag.Set(RecieveStarterItemsName, RecieveStarterItems);
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)

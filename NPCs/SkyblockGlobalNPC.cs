@@ -138,29 +138,15 @@ namespace CrabsSkyblockChallenge.NPCs
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
 
-            if (IsStarterBagProvider(npc) && !me.RecieveStarterBag && (Main.expertMode || Main.masterMode))
+            if (!me.RecieveStarterItems && IsStarterBagProvider(npc))
             {
                 chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
-                me.RecieveStarterBag = true;
-                me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
-                return;
-            }
-
-            if (npc.type == NPCID.Merchant && !me.RecieveFromMerchant)
-            {
-                chat = "Now is a time to get ready to confront evil presenses.";
-                me.RecieveFromMerchant = true;
-                me.Player.QuickSpawnItem(ItemID.Extractinator);
+                me.RecieveStarterItems = true;
                 me.Player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
-                return;
-            }
-
-            if (npc.type == NPCID.Dryad && !me.RecieveFromDryad)
-            {
-                chat = "Be careful with poisoned Bee needles.";
-                me.RecieveFromDryad = true;
-                me.Player.QuickSpawnItem(ItemID.HiveWand);
-                return;
+                if (Main.expertMode || Main.masterMode)
+                {
+                    me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
+                }
             }
         }
 

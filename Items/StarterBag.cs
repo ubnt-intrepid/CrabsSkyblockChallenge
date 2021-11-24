@@ -37,6 +37,10 @@ namespace CrabsSkyblockChallenge.Items
             player.QuickSpawnItem(ItemID.BugNet);
             player.QuickSpawnItem(ItemID.HermesBoots);
             player.QuickSpawnItem(ItemID.CloudinaBottle);
+            player.QuickSpawnItem(ItemID.SlimeCrown, stack: 10);
+            player.QuickSpawnItem(ItemID.SuspiciousLookingEye, stack: 10);
+            player.QuickSpawnItem(ItemID.BloodMoonStarter, stack: 10);
+            player.QuickSpawnItem(ItemID.SnowGlobe, stack: 10);
         }
     }
 }
