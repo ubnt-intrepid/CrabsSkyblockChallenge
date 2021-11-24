@@ -81,7 +81,8 @@ namespace CrabsSkyblockChallenge
         {
             foreach (var offset in SpawnIslandOffsets)
             {
-                WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, TileID.Stone);
+                var placedTile = Main.notTheBeesWorld ? TileID.Hive : TileID.Stone;
+                WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, placedTile);
                 if (WorldGen.tenthAnniversaryWorldGen)
                 {
                     WorldGen.paintTile(x + offset.Item1, y + offset.Item2, PaintID.DeepPinkPaint);
