@@ -125,18 +125,25 @@ namespace CrabsSkyblockChallenge.NPCs
 
     class TownNPCMods : GlobalNPC
     {
+        static bool IsStarterBagProvider(NPC npc)
+        {
+            return (Main.tenthAnniversaryWorld && npc.type == NPCID.Princess)
+                || (Main.getGoodWorld && npc.type == NPCID.Demolitionist)
+                || (Main.drunkWorld && npc.type == NPCID.PartyGirl)
+                || (Main.notTheBeesWorld && npc.type == NPCID.Merchant)
+                || npc.type == NPCID.Guide;
+        }
+
         public override void GetChat(NPC npc, ref string chat)
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
 
-            if (npc.type == NPCID.Guide)
+            if (IsStarterBagProvider(npc) && !me.RecieveStarterBag && (Main.expertMode || Main.masterMode))
             {
-                if (!me.RecieveStarterBag && (Main.expertMode || Main.masterMode))
-                {
-                    chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
-                    me.RecieveStarterBag = true;
-                    me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
-                }
+                chat = "Are you expert Terrarian? This is a gift from Santa Claus.";
+                me.RecieveStarterBag = true;
+                me.Player.QuickSpawnItem(ModContent.ItemType<Items.StarterBag>());
+                return;
             }
 
             if (npc.type == NPCID.Merchant && !me.RecieveFromMerchant)
@@ -145,6 +152,7 @@ namespace CrabsSkyblockChallenge.NPCs
                 me.RecieveFromMerchant = true;
                 me.Player.QuickSpawnItem(ItemID.Extractinator);
                 me.Player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
+                return;
             }
 
             if (npc.type == NPCID.Dryad && !me.RecieveFromDryad)
@@ -152,6 +160,7 @@ namespace CrabsSkyblockChallenge.NPCs
                 chat = "Be careful with poisoned Bee needles.";
                 me.RecieveFromDryad = true;
                 me.Player.QuickSpawnItem(ItemID.HiveWand);
+                return;
             }
         }
 

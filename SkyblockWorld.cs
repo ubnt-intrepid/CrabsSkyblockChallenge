@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.GameContent.Events;
 using Terraria.ID;
 using Terraria.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
 
@@ -34,8 +36,6 @@ namespace CrabsSkyblockChallenge
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
         {
             progress.Message = "Generate Skyblock World";
-
-            WorldGen.clearWorld();
 
             Main.worldSurface = Main.maxTilesY * 0.3;
             Main.rockLayer = Main.maxTilesY * 0.5;
@@ -83,6 +83,10 @@ namespace CrabsSkyblockChallenge
             foreach (var offset in SpawnIslandOffsets)
             {
                 WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, TileID.Stone);
+                if (WorldGen.tenthAnniversaryWorldGen)
+                {
+                    WorldGen.paintTile(x + offset.Item1, y + offset.Item2, PaintID.DeepPinkPaint);
+                }
             }
 
             WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
@@ -113,11 +117,82 @@ namespace CrabsSkyblockChallenge
 
             WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 255);
 
-            int guideIndex = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
-            Main.npc[guideIndex].homeless = true;
-            Main.npc[guideIndex].homeTileX = x;
-            Main.npc[guideIndex].homeTileY = y;
-            Main.npc[guideIndex].direction = 1;
+            if (Main.tenthAnniversaryWorld)
+            {
+                BirthdayParty.GenuineParty = true;
+                BirthdayParty.PartyDaysOnCooldown = 5;
+
+                var andrew = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
+                Main.npc[andrew].GivenName = Language.GetTextValue("GuideNames.Andrew");
+                Main.npc[andrew].homeless = true;
+                Main.npc[andrew].homeTileX = x;
+                Main.npc[andrew].homeTileY = y;
+                Main.npc[andrew].direction = 1;
+                BirthdayParty.CelebratingNPCs.Add(andrew);
+
+                var whitney = NPC.NewNPC(x * 16, y * 16, NPCID.Steampunker);
+                Main.npc[whitney].GivenName = Language.GetTextValue("SteampunkerNames.Whitney");
+                Main.npc[whitney].homeless = true;
+                Main.npc[whitney].homeTileX = x;
+                Main.npc[whitney].homeTileY = y;
+                Main.npc[whitney].direction = 1;
+                BirthdayParty.CelebratingNPCs.Add(whitney);
+
+                var yorai = NPC.NewNPC(x * 16, y * 16, NPCID.Princess);
+                Main.npc[yorai].GivenName = Language.GetTextValue("PrincessNames.Yorai");
+                Main.npc[yorai].homeless = true;
+                Main.npc[yorai].homeTileX = x;
+                Main.npc[yorai].homeTileY = y;
+                Main.npc[yorai].direction = 1;
+                BirthdayParty.CelebratingNPCs.Add(yorai);
+
+                var organizer = NPC.NewNPC(x * 16, y * 16, NPCID.PartyGirl);
+                Main.npc[organizer].homeless = true;
+                Main.npc[organizer].homeTileX = x;
+                Main.npc[organizer].homeTileY = y;
+                Main.npc[organizer].direction = 1;
+                BirthdayParty.CelebratingNPCs.Add(organizer);
+
+                var bunny = NPC.NewNPC(x * 16, y * 16, NPCID.TownBunny);
+                Main.npc[bunny].homeless = true;
+                Main.npc[bunny].homeTileX = x;
+                Main.npc[bunny].homeTileY = y;
+                Main.npc[bunny].direction = 1;
+                Main.npc[bunny].townNpcVariationIndex = 1;
+                NPC.boughtBunny = true;
+            }
+            else if (Main.getGoodWorld)
+            {
+                var guide = NPC.NewNPC(x * 16, y * 16, NPCID.Demolitionist);
+                Main.npc[guide].homeless = true;
+                Main.npc[guide].homeTileX = x;
+                Main.npc[guide].homeTileY = y;
+                Main.npc[guide].direction = 1;
+            }
+            else if (Main.drunkWorld)
+            {
+                var guide = NPC.NewNPC(x * 16, y * 16, NPCID.PartyGirl);
+                Main.npc[guide].homeless = true;
+                Main.npc[guide].homeTileX = x;
+                Main.npc[guide].homeTileY = y;
+                Main.npc[guide].direction = 1;
+            }
+            else if (Main.notTheBeesWorld)
+            {
+                var guide = NPC.NewNPC(x * 16, y * 16, NPCID.Merchant);
+                Main.npc[guide].homeless = true;
+                Main.npc[guide].homeTileX = x;
+                Main.npc[guide].homeTileY = y;
+                Main.npc[guide].direction = 1;
+            }
+            else
+            {
+                var guide = NPC.NewNPC(x * 16, y * 16, NPCID.Guide);
+                Main.npc[guide].homeless = true;
+                Main.npc[guide].homeTileX = x;
+                Main.npc[guide].homeTileY = y;
+                Main.npc[guide].direction = 1;
+            }
         }
     }
 }
