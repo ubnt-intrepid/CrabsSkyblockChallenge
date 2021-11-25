@@ -194,6 +194,18 @@ namespace CrabsSkyblockChallenge.NPCs
                 shop.item[nextSlot].SetDefaults(ItemID.DirtBomb);
                 nextSlot++;
             }
+
+            if (type == NPCID.Clothier && Main.CurrentPlayer.ZoneGlowshroom)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.MushroomHat);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(ItemID.MushroomVest);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(ItemID.MushroomPants);
+                nextSlot++;
+            }
         }
     }
 }
