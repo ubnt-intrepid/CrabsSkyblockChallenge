@@ -126,10 +126,10 @@ namespace CrabsSkyblockChallenge.NPCs
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
 
-            if (!me.RecieveStarterItems && (Main.expertMode || Main.masterMode))
+            if (!me.ReceiveStarterItems && (Main.expertMode || Main.masterMode))
             {
                 chat = "Are you expert Terrarian? These are gifts from Santa Claus.";
-                me.RecieveStarterItems = true;
+                me.ReceiveStarterItems = true;
 
                 var player = me.Player;
                 player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);

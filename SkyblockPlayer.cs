@@ -7,17 +7,20 @@ namespace CrabsSkyblockChallenge
 {
     public class SkyblockPlayer : ModPlayer
     {
-        const string RecieveStarterItemsName = "RecieveStarterItems";
-        public bool RecieveStarterItems = false;
+        const string ReceiveStarterItemsName = "ReceiveStarterItems";
+        public bool ReceiveStarterItems = false;
 
         public override void LoadData(TagCompound tag)
         {
-            RecieveStarterItems = tag.ContainsKey(RecieveStarterItemsName) && tag.GetBool(RecieveStarterItemsName);
+            ReceiveStarterItems = tag.ContainsKey(ReceiveStarterItemsName);
         }
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Set(RecieveStarterItemsName, RecieveStarterItems);
+            if (ReceiveStarterItems)
+            {
+                tag[ReceiveStarterItemsName] = true;
+            }
         }
 
         public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
