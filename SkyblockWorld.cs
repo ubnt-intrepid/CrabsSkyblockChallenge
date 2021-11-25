@@ -43,6 +43,11 @@ namespace CrabsSkyblockChallenge
             Main.spawnTileX = (int)(Main.maxTilesX * 0.5);
             Main.spawnTileY = (int)Main.worldSurface;
 
+            if (Main.tenthAnniversaryWorld)
+            {
+                Main.spawnTileX = Utils.Clamp((int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.45)), 100, Main.maxTilesX - 100);
+            }
+
             PlaceSpawnIsland(Main.spawnTileX, Main.spawnTileY);
 
             // Dungeon and Jungle Temple are the only early structures in the world
