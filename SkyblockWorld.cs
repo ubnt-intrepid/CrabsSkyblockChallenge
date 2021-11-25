@@ -63,29 +63,29 @@ namespace CrabsSkyblockChallenge
         // y=0  [s] [s] [s] [s] (s) [s] :w: [s] [s]
         //  +                       [s] [s] [s] :t:
         //                   -  x=0  +
-        static readonly Tuple<int, int>[] SpawnIslandOffsets = new[] {
-            new Tuple<int, int>(-4, 0),
-            new Tuple<int, int>(-3, 0),
-            new Tuple<int, int>(-2, 0),
-            new Tuple<int, int>(-1, 0),
-            new Tuple<int, int>( 0, 0),
-            new Tuple<int, int>( 1, 0),
-            new Tuple<int, int>( 3, 0),
-            new Tuple<int, int>( 4, 0),
-            new Tuple<int, int>( 1, 1),
-            new Tuple<int, int>( 2, 1),
-            new Tuple<int, int>( 3, 1),
+        static readonly Tuple<int, int, bool>[] SpawnIslandOffsets = new Tuple<int, int, bool>[] {
+            new(-4, 0, false),
+            new(-3, 0, false),
+            new(-2, 0, false),
+            new(-1, 0, true),
+            new( 0, 0, true),
+            new( 1, 0, true),
+            new( 3, 0, false),
+            new( 4, 0, false),
+            new( 1, 1, false),
+            new( 2, 1, false),
+            new( 3, 1, false),
         };
 
         static void PlaceSpawnIsland(int x, int y)
         {
-            foreach (var offset in SpawnIslandOffsets)
+            foreach ((var i, var j, var altar) in SpawnIslandOffsets)
             {
-                var placedTile = Main.notTheBeesWorld ? TileID.Hive : TileID.Stone;
-                WorldGen.PlaceTile(x + offset.Item1, y + offset.Item2, placedTile);
+                var placedTile = !Main.notTheBeesWorld ? TileID.Stone : (altar ? TileID.CrispyHoneyBlock : TileID.Hive);
+                WorldGen.PlaceTile(x + i, y + j, placedTile);
                 if (WorldGen.tenthAnniversaryWorldGen)
                 {
-                    WorldGen.paintTile(x + offset.Item1, y + offset.Item2, PaintID.DeepPinkPaint);
+                    WorldGen.paintTile(x + i, y + j, PaintID.DeepPinkPaint);
                 }
             }
 
