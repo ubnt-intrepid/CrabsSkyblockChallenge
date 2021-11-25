@@ -93,7 +93,8 @@ namespace CrabsSkyblockChallenge
             WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
             WorldGen.PlaceTile(x + 4, y + 1, TileID.Torches, style: TorchID.Torch);
 
-            int chestIndex = WorldGen.PlaceChest(x + 3, y - 1);
+            var chestStyle = WorldGen.notTheBees ? 8 : 0; // 8: Rich Mahogany Chest
+            int chestIndex = WorldGen.PlaceChest(x + 3, y - 1, style: chestStyle);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
