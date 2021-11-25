@@ -110,7 +110,8 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.HiveWand);
             }
 
-            WorldGen.PlaceLiquid(x + 2, y, LiquidID.Water, amount: 255);
+            var liquidType = Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water;
+            WorldGen.PlaceLiquid(x + 2, y, (byte)liquidType, amount: 255);
 
             if (Main.tenthAnniversaryWorld)
             {

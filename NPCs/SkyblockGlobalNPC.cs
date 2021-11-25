@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -119,6 +120,21 @@ namespace CrabsSkyblockChallenge.NPCs
             if (Array.IndexOf(FrostRegionNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.SnowGlobe, chanceDenominator: 100));
+            }
+        }
+
+        public override void OnKill(NPC npc)
+        {
+            if (npc.type == NPCID.UmbrellaSlime && Main.getGoodWorld && Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                var waterX = (int)(npc.Center.X / 16f);
+                var waterY = (int)(npc.Center.Y / 16f);
+                if (!WorldGen.SolidTile(waterX, waterY) && Main.tile[waterX, waterY].LiquidAmount == 0)
+                {
+                    Main.tile[waterX, waterY].LiquidAmount = (byte)Main.rand.Next(50, 150);
+                    Main.tile[waterX, waterY].LiquidType = LiquidID.Water;
+                    WorldGen.SquareTileFrame(waterX, waterY);
+                }
             }
         }
 
