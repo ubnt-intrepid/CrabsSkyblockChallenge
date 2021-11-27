@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -62,7 +63,12 @@ namespace CrabsSkyblockChallenge.NPCs
         {
             for (int i = 0; i < 10; i++)
             {
-                var dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, Main.rand.Next(2) == 0 ? DustID.Dirt : DustID.t_Slime);
+                var dustType = Main.rand.Next(2) == 0 ? DustID.Dirt : DustID.t_Slime;
+                var dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, dustType);
+                if (dustType == DustID.t_Slime)
+                {
+                    dust.color = new Color(0, 80, 255, 60);
+                }
 
                 dust.velocity.X += Main.rand.NextFloat(-0.05f, 0.05f);
                 dust.velocity.Y += Main.rand.NextFloat(-0.05f, 0.05f);
