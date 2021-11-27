@@ -154,6 +154,7 @@ namespace CrabsSkyblockChallenge.NPCs
                 player.QuickSpawnItem(ItemID.SilverAxe);
                 player.QuickSpawnItem(ItemID.SilverHammer);
                 player.QuickSpawnItem(ItemID.BugNet);
+                player.QuickSpawnItem(ItemID.GoldenFishingRod);
                 player.QuickSpawnItem(ItemID.HermesBoots);
                 player.QuickSpawnItem(ItemID.CloudinaBottle);
                 player.QuickSpawnItem(ItemID.SlimeCrown, stack: 10);
