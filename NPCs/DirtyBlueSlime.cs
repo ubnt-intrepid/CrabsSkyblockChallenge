@@ -46,6 +46,7 @@ namespace CrabsSkyblockChallenge.NPCs
             npcLoot.Add(ItemDropRule.Common(ItemID.Gel, minimumDropped: 1, maximumDropped: Main.expertMode ? 3 : 2));
             npcLoot.Add(ItemDropRule.Common(ItemID.SlimeStaff, chanceDenominator: Main.expertMode || Main.masterMode ? 7000 : 10000));
             npcLoot.Add(ItemDropRule.Common(ItemID.DirtBlock, minimumDropped: 5, maximumDropped: 10));
+            npcLoot.Add(ItemDropRule.Common(ItemID.GrassSeeds, chanceDenominator: 200));
         }
 
         public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
@@ -61,7 +62,7 @@ namespace CrabsSkyblockChallenge.NPCs
         {
             for (int i = 0; i < 10; i++)
             {
-                var dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, DustID.Dirt);
+                var dust = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, Main.rand.Next(2) == 0 ? DustID.Dirt : DustID.t_Slime);
 
                 dust.velocity.X += Main.rand.NextFloat(-0.05f, 0.05f);
                 dust.velocity.Y += Main.rand.NextFloat(-0.05f, 0.05f);
