@@ -54,6 +54,10 @@ namespace CrabsSkyblockChallenge
             // (except the initial spawn point.)
             var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
             var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + Main.rand.Next(-200, 200);
+            if (WorldGen.drunkWorldGen)
+            {
+                dungeonY = Math.Max((int)(Main.rockLayer + Main.rand.Next(-100, 100)), (int)(Main.worldSurface + 100));
+            }
             WorldGen.MakeDungeon(dungeonX, dungeonY);
 
             var templeX = (int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.3));
