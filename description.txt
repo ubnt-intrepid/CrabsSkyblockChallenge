@@ -1,1 +1,5 @@
-One Block Challenge is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+Crab's Skyblock Challenge is a tModLoader MOD that introduces Minecraft's Skyblock challenge mode in Terraria.
+
+This MOD was inspired from ZapdosGuy29's Sky Terra, and aims to make as few vanilla changes as possible.
+
+Sky Terra: https://www.curseforge.com/terraria/maps/skyterra
