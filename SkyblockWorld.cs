@@ -66,41 +66,35 @@ namespace CrabsSkyblockChallenge
             WorldGen.templePart2();
         }
 
-        //      :e: :e: :e:
-        //      :e: :e: :e: :a: :a: :a:     :c: :c:
-        //  -   :e: (e) :e: :a: (a) :a:     (c) :c:
-        // y=0  [s] [s] [s] [s] (s) [s] :w: [s] [s]
-        //  +                       [s] [s] [s] :t:
-        //                   -  x=0  +
-        static readonly Tuple<int, int, bool>[] SpawnIslandOffsets = new Tuple<int, int, bool>[] {
-            new(-4, 0, false),
-            new(-3, 0, false),
-            new(-2, 0, false),
-            new(-1, 0, true),
-            new( 0, 0, true),
-            new( 1, 0, true),
-            new( 3, 0, false),
-            new( 4, 0, false),
-            new( 1, 1, false),
-            new( 2, 1, false),
-            new( 3, 1, false),
+        //
+        //             :e: :e: :e: :a: :a: :a:     :c: :c:
+        //             :e: :e: :e: :a: (a) :a:     (c) :c:
+        // (-) [x] [x] :e: (e) :e: [x] [x] [x] :w: [x] [x]
+        // y=0 [x] [x] [x] [x] [x] [x] [x] [x] [x] [x] [x]
+        // (+)         [x] [x] [x] [x] [x] [x] [x]
+        //                     [x] [x] :t:
+        //                     (-) x=0 (+)
+        static readonly Tuple<int, int>[] SpawnIslandOffsets = new Tuple<int, int>[] {
+            new(-5,-1), new(-4,-1),                                     new(0,-1), new(1,-1), new(2,-1),            new(4,-1), new(5,-1),  
+            new(-5, 0), new(-4, 0), new(-3, 0), new(-2, 0), new(-1, 0), new(0, 0), new(1, 0), new(2, 0), new(3, 0), new(4, 0), new(5, 0),
+                                    new(-3, 1), new(-2, 1), new(-1, 1), new(0, 1), new(1, 1), new(2, 1), new(3, 1),
+                                                            new(-1, 2), new(0, 2),
         };
 
         static void PlaceSpawnIsland(int x, int y)
         {
-            foreach ((var i, var j, var altar) in SpawnIslandOffsets)
+            foreach ((var i, var j) in SpawnIslandOffsets)
             {
-                var placedTile = !Main.notTheBeesWorld ? TileID.Stone : (altar ? TileID.CrispyHoneyBlock : TileID.Hive);
-                WorldGen.PlaceTile(x + i, y + j, placedTile);
+                WorldGen.PlaceTile(x + i, y + j, TileID.Dirt);
                 if (WorldGen.tenthAnniversaryWorldGen)
                 {
                     WorldGen.paintTile(x + i, y + j, PaintID.DeepPinkPaint);
                 }
             }
 
-            WorldGen.PlaceTile(x - 3, y - 1, TileID.Extractinator);
-            WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
-            WorldGen.PlaceTile(x + 4, y + 1, TileID.Torches, style: TorchID.Torch);
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
+            WorldGen.PlaceTile(x + 1, y - 2, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
+            WorldGen.PlaceTile(x + 1, y + 2, TileID.Torches, style: TorchID.Torch);
 
             ushort chestType = TileID.Containers;
             int chestStyle = 0;
@@ -139,7 +133,7 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            int chestIndex = WorldGen.PlaceChest(x + 3, y - 1, type: chestType, style: chestStyle);
+            int chestIndex = WorldGen.PlaceChest(x + 4, y - 2, type: chestType, style: chestStyle);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -156,7 +150,7 @@ namespace CrabsSkyblockChallenge
             }
 
             var liquidType = Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water;
-            WorldGen.PlaceLiquid(x + 2, y, (byte)liquidType, amount: 255);
+            WorldGen.PlaceLiquid(x + 3, y - 1, (byte)liquidType, amount: 255);
 
             if (Main.tenthAnniversaryWorld)
             {
