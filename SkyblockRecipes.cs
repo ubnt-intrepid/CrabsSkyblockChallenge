@@ -10,10 +10,6 @@ namespace CrabsSkyblockChallenge
 
         public override void AddRecipes()
         {
-            CreateRecipe(ItemID.SlimeBlock)
-                .AddIngredient(ItemID.Gel)
-                .Register();
-
             CreateRecipe(ItemID.HardenedSand)
                 .AddIngredient(ItemID.SandBlock)
                 .AddTile(TileID.Furnaces)

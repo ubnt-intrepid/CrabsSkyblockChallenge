@@ -92,7 +92,7 @@ namespace CrabsSkyblockChallenge
                 }
             }
 
-            WorldGen.PlaceTile(x - 2, y - 1, TileID.Extractinator);
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Solidifier);
             WorldGen.PlaceTile(x + 1, y - 2, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
             WorldGen.PlaceTile(x + 1, y + 2, TileID.Torches, style: TorchID.Torch);
 
@@ -147,6 +147,7 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.Sandstone, stack: 25);
                 chest.item[nextSlot++] = new Item(ItemID.HiveWand);
+                chest.item[nextSlot++] = new Item(ItemID.Extractinator);
             }
 
             var liquidType = Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water;
