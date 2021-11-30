@@ -148,7 +148,6 @@ namespace CrabsSkyblockChallenge.NPCs
                 me.ReceiveStarterItems = true;
 
                 var player = me.Player;
-                player.QuickSpawnItem(ItemID.LifeCrystal, stack: 5);
                 player.QuickSpawnItem(ItemID.SilverBroadsword);
                 player.QuickSpawnItem(ItemID.SilverPickaxe);
                 player.QuickSpawnItem(ItemID.SilverAxe);
