@@ -76,6 +76,10 @@ namespace CrabsSkyblockChallenge
             var marbleIslandX = Main.maxTilesX - Main.rand.Next(150, 250);
             var marbleIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
             PlaceMarbleIsland(marbleIslandX, marbleIslandY);
+
+            var cavernIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100);
+            var cavernIslandY = Main.UnderworldLayer - Main.rand.Next(150, 250);
+            PlaceCavernIsland(cavernIslandX, cavernIslandY);
         }
 
         //
@@ -362,7 +366,6 @@ namespace CrabsSkyblockChallenge
                 int nextSlot = 0;
 
                 chest.item[nextSlot++] = new Item(ItemID.StaffofRegrowth);
-                chest.item[nextSlot++] = new Item(ItemID.Extractinator);
                 chest.item[nextSlot++] = new Item(ItemID.HiveWand);
             }
         }
@@ -571,6 +574,119 @@ namespace CrabsSkyblockChallenge
                 int nextSlot = 0;
 
                 chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+            }
+        }
+
+        //           w w
+        //         w w w w w
+        //       w w s s w w w w
+        // -     l w s s c c w l
+        // 0     l w s s c c w l w
+        // +   w l w x x x x x l x 
+        //   g x x x x       x x x
+        //   x x x               x
+        //             - 0 +
+        static readonly Tuple<int, int>[] CavernIslandOffsets = new Tuple<int, int>[] {
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+
+            new(-5, 2),
+            new(-4, 2),
+            new(-3, 2),
+            new(-2, 2),
+            new( 2, 2),
+            new( 3, 2),
+            new( 4, 2),
+
+            new(-6, 3),
+            new(-5, 3),
+            new(-4, 3),
+            new( 4, 3),
+        };
+        static readonly Tuple<int, int>[] CavernIslandWallOffsets = new Tuple<int, int>[] {
+            new(-2, -4),
+            new(-1, -4),
+
+            new(-3, -3),
+            new(-2, -3),
+            new(-1, -3),
+            new( 0, -3),
+            new( 1, -3),
+
+            new(-4, -2),
+            new(-3, -2),
+            new(-2, -2),
+            new(-1, -2),
+            new( 0, -2),
+            new( 1, -2),
+            new( 2, -2),
+            new( 3, -2),
+
+            new(-4, -1),
+            new(-3, -1),
+            new(-2, -1),
+            new(-1, -1),
+            new( 0, -1),
+            new( 1, -1),
+            new( 2, -1),
+            new( 3, -1),
+
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new(-1, 0),
+            new( 0, 0),
+            new( 1, 0),
+            new( 2, 0),
+            new( 3, 0),
+            new( 4, 0),
+
+            new(-5, 1),
+            new(-4, 1),
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+        };
+
+        static void PlaceCavernIsland(int x, int y)
+        {
+            foreach ((var i, var j) in CavernIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.Stone);
+            }
+            foreach ((var i, var j) in CavernIslandWallOffsets)
+            {
+                WorldGen.PlaceWall(x + i, y + j, WallID.SpiderUnsafe);
+            }
+            WorldGen.PlaceTile(x - 6, y + 2, TileID.Mud);
+            WorldGen.PlaceTile(x - 6, y + 2, TileID.MushroomGrass);
+
+            WorldGen.PlaceTile(x - 2, y, TileID.Statues, style: 37); // Heart Statue
+            WorldGen.PlaceTile(x - 4, y + 1, TileID.Lamps, style: 32); // Spider Lamp
+            WorldGen.PlaceTile(x + 3, y + 1, TileID.Lamps, style: 32);
+
+            int chestIndex = WorldGen.PlaceChest(x, y, type: TileID.Containers2, style: 2); // Spider Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.BandofRegeneration);
+                chest.item[nextSlot++] = new Item(ItemID.MagicMirror);
+                chest.item[nextSlot++] = new Item(ItemID.ShoeSpikes);
+                chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
+                chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
+                chest.item[nextSlot++] = new Item(ItemID.Mace);
+                chest.item[nextSlot++] = new Item(ItemID.FlareGun);
+                chest.item[nextSlot++] = new Item(ItemID.Flare, stack: Main.rand.Next(25, 50));
             }
         }
     }
