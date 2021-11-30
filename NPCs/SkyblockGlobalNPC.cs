@@ -152,12 +152,6 @@ namespace CrabsSkyblockChallenge.NPCs
                 player.QuickSpawnItem(ItemID.SilverPickaxe);
                 player.QuickSpawnItem(ItemID.SilverAxe);
                 player.QuickSpawnItem(ItemID.SilverHammer);
-                player.QuickSpawnItem(ItemID.BugNet);
-                player.QuickSpawnItem(ItemID.GoldenFishingRod);
-                player.QuickSpawnItem(ItemID.SlimeCrown, stack: 10);
-                player.QuickSpawnItem(ItemID.SuspiciousLookingEye, stack: 10);
-                player.QuickSpawnItem(ItemID.BloodMoonStarter, stack: 10);
-                player.QuickSpawnItem(ItemID.SnowGlobe, stack: 10);
             }
         }
 
