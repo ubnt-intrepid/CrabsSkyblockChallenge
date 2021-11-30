@@ -22,22 +22,5 @@ namespace CrabsSkyblockChallenge
                 tag[ReceiveStarterItemsName] = true;
             }
         }
-
-        public override bool CanBeHitByNPC(NPC npc, ref int cooldownSlot)
-        {
-            if (npc.type == ModContent.NPCType<NPCs.DirtyBlueSlime>())
-            {
-                // Check only the default accessory slot, and cannot be used with utility Mods like Antisocial.
-                for (int i = 3; i < 10; i++)
-                {
-                    if (Player.IsAValidEquipmentSlotForIteration(i) && Player.armor[i].type == ItemID.RoyalGel)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
     }
 }

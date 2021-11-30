@@ -50,8 +50,6 @@ namespace CrabsSkyblockChallenge
 
             PlaceSpawnIsland(Main.spawnTileX, Main.spawnTileY);
 
-            // Dungeon and Jungle Temple are the only early structures in the world
-            // (except the initial spawn point.)
             var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
             var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + Main.rand.Next(-200, 200);
             if (WorldGen.drunkWorldGen)
@@ -64,43 +62,82 @@ namespace CrabsSkyblockChallenge
             var templeY = Main.rand.Next((int)Main.rockLayer, Main.UnderworldLayer - 200);
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
+
+            var jungleIslandX = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(150, 250));
+            PlaceJungleIsland(jungleIslandX, Main.spawnTileY);
+
+            var sandstoneIslandX = (int)((Main.maxTilesX * 0.5 + dungeonDirection * 200 + dungeonX) * 0.5) + Main.rand.Next(-50, 50);
+            PlaceSandstoneIsland(sandstoneIslandX, Main.spawnTileY);
+
+            var graniteIslandX = Main.rand.Next(150, 250);
+            var graniteIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
+            PlaceGraniteIsland(graniteIslandX, graniteIslandY);
+
+            var marbleIslandX = Main.maxTilesX - Main.rand.Next(150, 250);
+            var marbleIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
+            PlaceMarbleIsland(marbleIslandX, marbleIslandY);
+
+            var cavernIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100);
+            var cavernIslandY = Main.UnderworldLayer - Main.rand.Next(150, 250);
+            PlaceCavernIsland(cavernIslandX, cavernIslandY);
         }
 
-        //      :e: :e: :e:
-        //      :e: :e: :e: :a: :a: :a:     :c: :c:
-        //  -   :e: (e) :e: :a: (a) :a:     (c) :c:
-        // y=0  [s] [s] [s] [s] (s) [s] :w: [s] [s]
-        //  +                       [s] [s] [s] :t:
-        //                   -  x=0  +
-        static readonly Tuple<int, int, bool>[] SpawnIslandOffsets = new Tuple<int, int, bool>[] {
-            new(-4, 0, false),
-            new(-3, 0, false),
-            new(-2, 0, false),
-            new(-1, 0, true),
-            new( 0, 0, true),
-            new( 1, 0, true),
-            new( 3, 0, false),
-            new( 4, 0, false),
-            new( 1, 1, false),
-            new( 2, 1, false),
-            new( 3, 1, false),
+        //
+        //         s s s a a a   c c
+        //         s s s a a a   c c
+        // -   x x s s s x x x w x x
+        // 0   x x x x x x x x x x x
+        // +       x x x x x x x
+        //             x x t
+        //
+        //             - 0 +
+        static readonly Tuple<int, int>[] SpawnIslandOffsets = new Tuple<int, int>[] {
+            new(-5, -1),
+            new(-4, -1),
+            new( 0, -1),
+            new( 1, -1),
+            new( 2, -1),
+            new( 4, -1),
+            new( 5, -1),  
+
+            new(-5, 0),
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new(-1, 0),
+            new( 0, 0),
+            new( 1, 0),
+            new( 2, 0),
+            new( 3, 0),
+            new( 4, 0),
+            new( 5, 0),
+
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+
+            new(-1, 2),
+            new( 0, 2),
         };
 
         static void PlaceSpawnIsland(int x, int y)
         {
-            foreach ((var i, var j, var altar) in SpawnIslandOffsets)
+            foreach ((var i, var j) in SpawnIslandOffsets)
             {
-                var placedTile = !Main.notTheBeesWorld ? TileID.Stone : (altar ? TileID.CrispyHoneyBlock : TileID.Hive);
-                WorldGen.PlaceTile(x + i, y + j, placedTile);
+                WorldGen.PlaceTile(x + i, y + j, TileID.Dirt);
                 if (WorldGen.tenthAnniversaryWorldGen)
                 {
                     WorldGen.paintTile(x + i, y + j, PaintID.DeepPinkPaint);
                 }
             }
 
-            WorldGen.PlaceTile(x - 3, y - 1, TileID.Extractinator);
-            WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
-            WorldGen.PlaceTile(x + 4, y + 1, TileID.Torches, style: TorchID.Torch);
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Solidifier);
+            WorldGen.PlaceTile(x + 1, y - 2, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
+            WorldGen.PlaceTile(x + 1, y + 2, TileID.Torches, style: TorchID.Torch);
 
             ushort chestType = TileID.Containers;
             int chestStyle = 0;
@@ -139,24 +176,14 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            int chestIndex = WorldGen.PlaceChest(x + 3, y - 1, type: chestType, style: chestStyle);
+            int chestIndex = WorldGen.PlaceChest(x + 4, y - 2, type: chestType, style: chestStyle);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.Acorn, stack: 10);
-                chest.item[nextSlot++] = new Item(ItemID.JungleGrassSeeds);
-                chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
-                chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
-                chest.item[nextSlot++] = new Item(ItemID.Marble, stack: 25);
-                chest.item[nextSlot++] = new Item(ItemID.Granite, stack: 25);
-                chest.item[nextSlot++] = new Item(ItemID.Sandstone, stack: 25);
-                chest.item[nextSlot++] = new Item(ItemID.HiveWand);
+                chest.item[nextSlot++] = new Item(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
             }
-
-            var liquidType = Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water;
-            WorldGen.PlaceLiquid(x + 2, y, (byte)liquidType, amount: 255);
 
             if (Main.tenthAnniversaryWorld)
             {
@@ -233,6 +260,437 @@ namespace CrabsSkyblockChallenge
                 Main.npc[guide].homeTileX = x;
                 Main.npc[guide].homeTileY = y;
                 Main.npc[guide].direction = 1;
+            }
+        }
+
+
+        //             l                 l
+        //             l   s s           l
+        //       x x x l   s s c c       l x x
+        // 0 x x x x x x x s s c c     x x x x x x
+        //   x x x x x x x x x x x w x x x x x x x
+        //           x x x x x x x x x x x x x x
+        //               x x x x x x x x   x
+        //                   0
+        static readonly Tuple<int, int, bool>[] JungleIslandOffsets = new Tuple<int, int, bool>[] {
+            new(-6, -1, true),
+            new(-5, -1, true),
+            new(-4, -1, true),
+            new( 7, -1, true),
+            new( 8, -1, true),
+
+            new(-8, 0, true),
+            new(-7, 0, true),
+            new(-6, 0, false),
+            new(-5, 0, false),
+            new(-4, 0, false),
+            new(-3, 0, false),
+            new(-2, 0, true),
+            new( 5, 0, true),
+            new( 6, 0, true),
+            new( 7, 0, false),
+            new( 8, 0, false),
+            new( 9, 0, true),
+            new(10, 0, true),
+
+            new(-8, 1, true),
+            new(-7, 1, true),
+            new(-6, 1, true),
+            new(-5, 1, true),
+            new(-4, 1, false),
+            new(-3, 1, false),
+            new(-2, 1, false),
+            new(-1, 1, false),
+            new( 0, 1, false),
+            new( 1, 1, false),
+            new( 2, 1, false),
+            new( 4, 1, false),
+            new( 5, 1, false),
+            new( 6, 1, false),
+            new( 7, 1, false),
+            new( 8, 1, false),
+            new( 9, 1, false),
+            new(10, 1, true),
+
+            new(-4, 2, true),
+            new(-3, 2, true),
+            new(-2, 2, false),
+            new(-1, 2, false),
+            new( 0, 2, false),
+            new( 1, 2, false),
+            new( 2, 2, false),
+            new( 3, 2, false),
+            new( 4, 2, false),
+            new( 5, 2, false),
+            new( 6, 2, false),
+            new( 7, 2, false),
+            new( 8, 2, true),
+            new( 9, 2, true),
+
+            new(-2, 3, true),
+            new(-1, 3, true),
+            new( 0, 3, true),
+            new( 1, 3, true),
+            new( 2, 3, true),
+            new( 3, 3, true),
+            new( 4, 3, true),
+            new( 5, 3, true),
+            new( 7, 3, true),
+        };
+
+        static void PlaceJungleIsland(int x, int y)
+        {
+            foreach ((var i, var j, var grass) in JungleIslandOffsets)
+            {
+                
+                WorldGen.PlaceTile(x + i, y + j, TileID.Mud);
+                if (grass)
+                {
+                    WorldGen.PlaceTile(x + i, y + j, TileID.JungleGrass);
+                }
+            }
+
+            var liquidType = Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water;
+            WorldGen.PlaceLiquid(x + 3, y + 1, (byte)liquidType, amount: 255);
+
+            WorldGen.PlaceTile(x - 1, y, TileID.Statues, style: 16); // Hornet Statue
+            WorldGen.PlaceTile(x - 3, y - 1, TileID.Lamps, style: 6); // Rich Mahogany Lamp
+            WorldGen.PlaceTile(x + 6, y - 1, TileID.Lamps, style: 6);
+
+            int chestIndex = WorldGen.PlaceChest(x + 1, y, type: TileID.Containers, style: 10); // Ivy Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.StaffofRegrowth);
+                chest.item[nextSlot++] = new Item(ItemID.HiveWand);
+                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
+                chest.item[nextSlot++] = new Item(ItemID.BugNet);
+            }
+        }
+
+        //         l           l
+        //         l     e e e l
+        // -       l c c e e e l   x x
+        // 0     x x c c e e e x x x x
+        // + x x x x x x x x x x x
+        //   x x x x x x x x x x
+        //     x x x x x x x x
+        //       x   x x x x
+        //           x x x
+        //           x   x
+        //           - 0 +
+        static readonly Tuple<int, int>[] SandstoneIslandOffsets = new Tuple<int, int>[] {
+            new(6, -1),
+            new(7, -1),
+
+            new(-3, 0),
+            new(-2, 0),
+            new( 4, 0),
+            new( 5, 0),
+            new( 6, 0),
+            new( 7, 0),
+
+            new(-5, 1),
+            new(-4, 1),
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+            new( 5, 1),
+
+            new(-5, 2),
+            new(-4, 2),
+            new(-3, 2),
+            new(-2, 2),
+            new(-1, 2),
+            new( 0, 2),
+            new( 1, 2),
+            new( 2, 2),
+            new( 3, 2),
+            new( 4, 2),
+
+            new(-4, 3),
+            new(-3, 3),
+            new(-2, 3),
+            new(-1, 3),
+            new( 0, 3),
+            new( 1, 3),
+            new( 2, 3),
+            new( 3, 3),
+
+            new(-3, 4),
+            new(-1, 4),
+            new( 0, 4),
+            new( 1, 4),
+            new( 2, 4),
+
+            new(-1, 5),
+            new( 0, 5),
+            new( 1, 5),
+
+            new(-1, 6),
+            new( 1, 6),
+        };
+
+        static void PlaceSandstoneIsland(int x, int y)
+        {
+            foreach ((var i, var j) in SandstoneIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.Sandstone);
+            }
+
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Lamps, style: 38); // Sandstone Lamp
+            WorldGen.PlaceTile(x + 4, y - 1, TileID.Lamps, style: 38);
+
+            WorldGen.PlaceTile(x + 2, y, TileID.Extractinator);
+
+            int chestIndex = WorldGen.PlaceChest(x - 1, y, type: TileID.Containers2, style: 10); // Sandstone Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
+            }
+        }
+
+        //       l             l
+        //       l   s s       l
+        // - x x l   s s c c   l x x
+        // 0 x x x x s s c c x x x x
+        // +     x x x x x x x x
+        //           x x x x
+        //           - 0 +
+        static readonly Tuple<int, int>[] GraniteIslandOffsets = new Tuple<int, int>[] {
+            new(-5, -1),
+            new(-4, -1),
+            new( 5, -1),
+            new( 6, -1),
+
+            new(-5, 0),
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new( 3, 0),
+            new( 4, 0),
+            new( 5, 0),
+            new( 6, 0),
+
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+
+            new(-1, 2),
+            new( 0, 2),
+            new( 1, 2),
+            new( 2, 2),
+        };
+
+        static void PlaceGraniteIsland(int x, int y)
+        {
+            foreach ((var i, var j) in GraniteIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.Granite);
+            }
+
+            WorldGen.PlaceTile(x - 1, y, TileID.Statues, style: 73); // Granite Golem Statue
+            WorldGen.PlaceTile(x - 3, y - 1, TileID.Lamps, style: 29); // Granite Lamp
+            WorldGen.PlaceTile(x + 4, y - 1, TileID.Lamps, style: 29);
+
+            int chestIndex = WorldGen.PlaceChest(x + 1, y, type: TileID.Containers, style: 50); // Granite Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.SnowGlobe, stack: 10);
+            }
+        }
+
+
+        //       l             l
+        //       l   s s       l
+        // - x x l   s s c c   l x x
+        // 0 x x x x s s c c x x x x
+        // +     x x x x x x x x
+        //           x x x x
+        //           - 0 +
+        static readonly Tuple<int, int>[] MarbleIslandOffsets = new Tuple<int, int>[] {
+            new(-5, -1),
+            new(-4, -1),
+            new( 5, -1),
+            new( 6, -1),
+
+            new(-5, 0),
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new( 3, 0),
+            new( 4, 0),
+            new( 5, 0),
+            new( 6, 0),
+
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+
+            new(-1, 2),
+            new( 0, 2),
+            new( 1, 2),
+            new( 2, 2),
+        };
+
+        static void PlaceMarbleIsland(int x, int y)
+        {
+            foreach ((var i, var j) in MarbleIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.Marble);
+            }
+
+            WorldGen.PlaceTile(x - 1, y, TileID.Statues, style: 72); // Hoplite Statue
+            WorldGen.PlaceTile(x - 3, y - 1, TileID.Lamps, style: 30); // Marble Lamp
+            WorldGen.PlaceTile(x + 4, y - 1, TileID.Lamps, style: 30);
+
+            int chestIndex = WorldGen.PlaceChest(x + 1, y, type: TileID.Containers, style: 51); // Marble Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.BloodMoonStarter, stack: 10);
+            }
+        }
+
+        //           w w
+        //         w w w w w
+        //       w w s s w w w w
+        // -     l w s s c c w l
+        // 0     l w s s c c w l w
+        // +   w l w x x x x x l x 
+        //   g x x x x       x x x
+        //   x x x               x
+        //             - 0 +
+        static readonly Tuple<int, int>[] CavernIslandOffsets = new Tuple<int, int>[] {
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+
+            new(-5, 2),
+            new(-4, 2),
+            new(-3, 2),
+            new(-2, 2),
+            new( 2, 2),
+            new( 3, 2),
+            new( 4, 2),
+
+            new(-6, 3),
+            new(-5, 3),
+            new(-4, 3),
+            new( 4, 3),
+        };
+        static readonly Tuple<int, int>[] CavernIslandWallOffsets = new Tuple<int, int>[] {
+            new(-2, -4),
+            new(-1, -4),
+
+            new(-3, -3),
+            new(-2, -3),
+            new(-1, -3),
+            new( 0, -3),
+            new( 1, -3),
+
+            new(-4, -2),
+            new(-3, -2),
+            new(-2, -2),
+            new(-1, -2),
+            new( 0, -2),
+            new( 1, -2),
+            new( 2, -2),
+            new( 3, -2),
+
+            new(-4, -1),
+            new(-3, -1),
+            new(-2, -1),
+            new(-1, -1),
+            new( 0, -1),
+            new( 1, -1),
+            new( 2, -1),
+            new( 3, -1),
+
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new(-1, 0),
+            new( 0, 0),
+            new( 1, 0),
+            new( 2, 0),
+            new( 3, 0),
+            new( 4, 0),
+
+            new(-5, 1),
+            new(-4, 1),
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+        };
+
+        static void PlaceCavernIsland(int x, int y)
+        {
+            foreach ((var i, var j) in CavernIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.Stone);
+            }
+            foreach ((var i, var j) in CavernIslandWallOffsets)
+            {
+                WorldGen.PlaceWall(x + i, y + j, WallID.SpiderUnsafe);
+            }
+            WorldGen.PlaceTile(x - 6, y + 2, TileID.Mud);
+            WorldGen.PlaceTile(x - 6, y + 2, TileID.MushroomGrass);
+
+            WorldGen.PlaceTile(x - 2, y, TileID.Statues, style: 37); // Heart Statue
+            WorldGen.PlaceTile(x - 4, y + 1, TileID.Lamps, style: 32); // Spider Lamp
+            WorldGen.PlaceTile(x + 3, y + 1, TileID.Lamps, style: 32);
+
+            int chestIndex = WorldGen.PlaceChest(x, y, type: TileID.Containers2, style: 2); // Spider Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
+                chest.item[nextSlot++] = new Item(ItemID.BandofRegeneration);
+                chest.item[nextSlot++] = new Item(ItemID.MagicMirror);
+                chest.item[nextSlot++] = new Item(ItemID.ShoeSpikes);
+                chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
+                chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
+                chest.item[nextSlot++] = new Item(ItemID.Mace);
+                chest.item[nextSlot++] = new Item(ItemID.FlareGun);
+                chest.item[nextSlot++] = new Item(ItemID.Flare, stack: Main.rand.Next(25, 50));
             }
         }
     }
