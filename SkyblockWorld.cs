@@ -182,9 +182,7 @@ namespace CrabsSkyblockChallenge
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.MushroomGrassSeeds);
-                chest.item[nextSlot++] = new Item(ItemID.Cobweb, stack: 10);
-                chest.item[nextSlot++] = new Item(ItemID.DynastyWood, stack: 25);
+                chest.item[nextSlot++] = new Item(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
             }
 
             if (Main.tenthAnniversaryWorld)
