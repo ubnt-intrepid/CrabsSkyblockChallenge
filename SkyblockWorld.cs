@@ -367,11 +367,11 @@ namespace CrabsSkyblockChallenge
             }
         }
 
-        //         l        l
-        //         l        l
-        // -       l   c c  l      x x
-        // 0     x x x c c x x x x x
-        // +   x x x x x x x x x x
+        //         l           l
+        //         l     e e e l
+        // -       l c c e e e l   x x
+        // 0     x x c c e e e x x x x
+        // + x x x x x x x x x x x
         //   x x x x x x x x x x
         //     x x x x x x x x
         //       x   x x x x
@@ -384,13 +384,12 @@ namespace CrabsSkyblockChallenge
 
             new(-3, 0),
             new(-2, 0),
-            new(-1, 0),
-            new( 2, 0),
-            new( 3, 0),
             new( 4, 0),
             new( 5, 0),
             new( 6, 0),
+            new( 7, 0),
 
+            new(-5, 1),
             new(-4, 1),
             new(-3, 1),
             new(-2, 1),
@@ -444,9 +443,11 @@ namespace CrabsSkyblockChallenge
             }
 
             WorldGen.PlaceTile(x - 2, y - 1, TileID.Lamps, style: 38); // Sandstone Lamp
-            WorldGen.PlaceTile(x + 3, y - 1, TileID.Lamps, style: 38);
+            WorldGen.PlaceTile(x + 4, y - 1, TileID.Lamps, style: 38);
 
-            int chestIndex = WorldGen.PlaceChest(x, y, type: TileID.Containers2, style: 10); // Sandstone Chest
+            WorldGen.PlaceTile(x + 2, y, TileID.Extractinator);
+
+            int chestIndex = WorldGen.PlaceChest(x - 1, y, type: TileID.Containers2, style: 10); // Sandstone Chest
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
