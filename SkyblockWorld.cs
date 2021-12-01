@@ -185,6 +185,7 @@ namespace CrabsSkyblockChallenge
                 int nextSlot = 0;
 
                 chest.item[nextSlot++] = new Item(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
+                chest.item[nextSlot++] = new Item(WorldGen.SavedOreTiers.Iron, stack: 9);
             }
 
             if (Main.tenthAnniversaryWorld)

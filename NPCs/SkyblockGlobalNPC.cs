@@ -157,34 +157,34 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
-            if (type == NPCID.Merchant)
+            if (type == NPCID.Merchant && NPC.downedBoss1)
             {
-                shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
-                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
-                nextSlot++;
-
                 if (Main.CurrentPlayer.ZoneSnow)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.SlushBlock);
-                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 2);
                     nextSlot++;
                 }
-
-                if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
+                else if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.DesertFossil);
-                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 1);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 2);
+                    nextSlot++;
+                }
+                else
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 2);
                     nextSlot++;
                 }
 
-                if (NPC.downedBoss1 && NPC.AnyNPCs(NPCID.Nurse))
+                if (NPC.AnyNPCs(NPCID.Nurse))
                 {
-                    shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
+                    shop.item[nextSlot].SetDefaults(ItemID.HeartLantern);
                     nextSlot++;
                 }
             }
-
-            if (type == NPCID.Dryad)
+            else if (type == NPCID.Dryad)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.HerbBag);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
@@ -196,14 +196,12 @@ namespace CrabsSkyblockChallenge.NPCs
                     nextSlot++;
                 }
             }
-
-            if (type == NPCID.Demolitionist && Main.hardMode)
+            else if (type == NPCID.Demolitionist && Main.hardMode)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.DirtBomb);
                 nextSlot++;
             }
-
-            if (type == NPCID.Clothier && Main.CurrentPlayer.ZoneGlowshroom)
+            else if (type == NPCID.Clothier && Main.CurrentPlayer.ZoneGlowshroom)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.MushroomHat);
                 nextSlot++;
