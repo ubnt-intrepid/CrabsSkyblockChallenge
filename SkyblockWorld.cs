@@ -66,6 +66,9 @@ namespace CrabsSkyblockChallenge
             var jungleIslandX = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(150, 250));
             PlaceJungleIsland(jungleIslandX, Main.spawnTileY);
 
+            var altarIslandX = templeX + Main.rand.Next(-100, 100);
+            PlaceAltarIsland(altarIslandX, Main.spawnTileY);
+
             var sandstoneIslandX = (int)((Main.maxTilesX * 0.5 + dungeonDirection * 200 + dungeonX) * 0.5) + Main.rand.Next(-50, 50);
             PlaceSandstoneIsland(sandstoneIslandX, Main.spawnTileY);
 
@@ -83,9 +86,9 @@ namespace CrabsSkyblockChallenge
         }
 
         //
-        //         s s s a a a   c c
-        //         s s s a a a   c c
-        // -   x x s s s x x x w x x
+        //         s s s   c c
+        //         s s s   c c
+        // -   x x s s s x x x x   x
         // 0   x x x x x x x x x x x
         // +       x x x x x x x
         //             x x t
@@ -97,7 +100,7 @@ namespace CrabsSkyblockChallenge
             new( 0, -1),
             new( 1, -1),
             new( 2, -1),
-            new( 4, -1),
+            new( 3, -1),
             new( 5, -1),  
 
             new(-5, 0),
@@ -136,7 +139,6 @@ namespace CrabsSkyblockChallenge
             }
 
             WorldGen.PlaceTile(x - 2, y - 1, TileID.Solidifier);
-            WorldGen.PlaceTile(x + 1, y - 2, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
             WorldGen.PlaceTile(x + 1, y + 2, TileID.Torches, style: TorchID.Torch);
 
             ushort chestType = TileID.Containers;
@@ -176,7 +178,7 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            int chestIndex = WorldGen.PlaceChest(x + 4, y - 2, type: chestType, style: chestStyle);
+            int chestIndex = WorldGen.PlaceChest(x + 1, y - 2, type: chestType, style: chestStyle);
             if (chestIndex != -1)
             {
                 var chest = Main.chest[chestIndex];
@@ -342,7 +344,6 @@ namespace CrabsSkyblockChallenge
         {
             foreach ((var i, var j, var grass) in JungleIslandOffsets)
             {
-                
                 WorldGen.PlaceTile(x + i, y + j, TileID.Mud);
                 if (grass)
                 {
@@ -369,6 +370,51 @@ namespace CrabsSkyblockChallenge
                 chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
             }
         }
+
+
+        //
+        //         a a a
+        // - d x x a a a   x x
+        // 0 x x x x x x x x
+        // +     x x x x   x
+        //           x
+        //         - 0 +
+        static readonly Tuple<int, int>[] AltarIslandOffsets = new Tuple<int, int>[] {
+            new(-3, -1),
+            new(-2, -1),
+            new( 3, -1),
+            new( 4, -1),
+
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new(-1, 0),
+            new( 0, 0),
+            new( 1, 0),
+            new( 2, 0),
+            new( 3, 0),
+
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 3, 1),
+
+            new(0, 2),
+        };
+
+        static void PlaceAltarIsland(int x, int y)
+        {
+            foreach ((var i, var j) in AltarIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, WorldGen.crimson ? TileID.Crimstone : TileID.Ebonstone);
+            }
+            WorldGen.PlaceTile(x - 4, y - 1, TileID.Dirt);
+            WorldGen.PlaceTile(x - 4, y - 1, WorldGen.crimson ? TileID.CrimsonGrass : TileID.CorruptGrass);
+
+            WorldGen.PlaceTile(x, y - 1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
+        }
+
 
         //         l           l
         //         l     e e e l
