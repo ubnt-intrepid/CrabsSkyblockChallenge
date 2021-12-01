@@ -365,8 +365,8 @@ namespace CrabsSkyblockChallenge
 
                 chest.item[nextSlot++] = new Item(ItemID.StaffofRegrowth);
                 chest.item[nextSlot++] = new Item(ItemID.HiveWand);
-                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
                 chest.item[nextSlot++] = new Item(ItemID.BugNet);
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
             }
         }
 
@@ -456,7 +456,9 @@ namespace CrabsSkyblockChallenge
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
+                chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
                 chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
             }
         }
@@ -515,7 +517,9 @@ namespace CrabsSkyblockChallenge
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.FlareGun);
+                chest.item[nextSlot++] = new Item(ItemID.Flare, stack: Main.rand.Next(25, 50));
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
                 chest.item[nextSlot++] = new Item(ItemID.SnowGlobe, stack: 10);
             }
         }
@@ -575,7 +579,9 @@ namespace CrabsSkyblockChallenge
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 5);
+                chest.item[nextSlot++] = new Item(ItemID.ShoeSpikes);
+                chest.item[nextSlot++] = new Item(ItemID.Mace);
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
                 chest.item[nextSlot++] = new Item(ItemID.BloodMoonStarter, stack: 10);
             }
         }
@@ -682,15 +688,11 @@ namespace CrabsSkyblockChallenge
                 var chest = Main.chest[chestIndex];
                 int nextSlot = 0;
 
-                chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
                 chest.item[nextSlot++] = new Item(ItemID.BandofRegeneration);
                 chest.item[nextSlot++] = new Item(ItemID.MagicMirror);
-                chest.item[nextSlot++] = new Item(ItemID.ShoeSpikes);
-                chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
-                chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
-                chest.item[nextSlot++] = new Item(ItemID.Mace);
-                chest.item[nextSlot++] = new Item(ItemID.FlareGun);
-                chest.item[nextSlot++] = new Item(ItemID.Flare, stack: Main.rand.Next(25, 50));
+                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
+                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
+                chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
             }
         }
     }
