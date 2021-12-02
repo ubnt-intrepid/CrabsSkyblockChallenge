@@ -81,11 +81,6 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            if (npc.type == NPCID.SandSlime)
-            {
-                npcLoot.Add(ItemDropRule.Common(ItemID.SandBlock, minimumDropped: 3, maximumDropped: 5));
-            }
-
             if (Array.IndexOf(AntlionNPCs, npc.type) != -1)
             {
                 npcLoot.Add(ItemDropRule.Common(ItemID.Sandstone, minimumDropped: 5, maximumDropped: 10));
@@ -108,13 +103,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
             if (Array.IndexOf(LavaFlavoredNPCs, npc.type) != -1)
             {
-                npcLoot.Add(ItemDropRule.Common(ItemID.AshBlock, minimumDropped: 5, maximumDropped: 10));
                 npcLoot.Add(ItemDropRule.Common(ItemID.Hellstone, minimumDropped: 3, maximumDropped: 5));
-            }
-
-            if (npc.type == NPCID.Harpy)
-            {
-                npcLoot.Add(ItemDropRule.Common(ItemID.Cloud, minimumDropped: 3, maximumDropped: 5));
             }
 
             if (Array.IndexOf(FrostRegionNPCs, npc.type) != -1)
