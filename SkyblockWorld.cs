@@ -66,11 +66,22 @@ namespace CrabsSkyblockChallenge
             var jungleIslandX = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(150, 250));
             PlaceJungleIsland(jungleIslandX, Main.spawnTileY);
 
+            var snowIslandX = dungeonX + dungeonDirection * Main.rand.Next(250, 350);
+            PlaceSnowIsland(snowIslandX, Main.spawnTileY);
+
             var altarIslandX = templeX + Main.rand.Next(-100, 100);
             PlaceAltarIsland(altarIslandX, Main.spawnTileY);
 
             var sandstoneIslandX = (int)((Main.maxTilesX * 0.5 + dungeonDirection * 200 + dungeonX) * 0.5) + Main.rand.Next(-50, 50);
             PlaceSandstoneIsland(sandstoneIslandX, Main.spawnTileY);
+
+            var oceanIslandX = Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200);
+            PlaceOceanIsland(oceanIslandX, Main.spawnTileY);
+
+
+            var skyIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-400, 400);
+            var skyIslandY = (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50);
+            PlaceSkyIsland(skyIslandX, skyIslandY);
 
             var graniteIslandX = Main.rand.Next(150, 250);
             var graniteIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
@@ -510,6 +521,378 @@ namespace CrabsSkyblockChallenge
             }
         }
 
+        //         l                   l
+        //         l                   l
+        //         l   m m m s s c c   l
+        // -   x x x   m m m s s c c   x x x
+        // 0 x x x x x m m m s s x x x x x x x
+        // +     x x x x x x x x x x x x x
+        //           x x x x x x x x x
+        //           x x x x x
+        //             - 0 +
+        static readonly Tuple<int, int>[] SnowIslandOffsets = new Tuple<int, int>[]
+        {
+            new(-5, -1),
+            new(-4, -1),
+            new(-3, -1),
+            new( 7, -1),
+            new( 8, -1),
+            new( 9, -1),
+
+            new(-6, 0),
+            new(-5, 0),
+            new(-4, 0),
+            new(-3, 0),
+            new(-2, 0),
+            new( 4, 0),
+            new( 5, 0),
+            new( 6, 0),
+            new( 7, 0),
+            new( 8, 0),
+            new( 9, 0),
+            new(10, 0),
+
+            new(-4, 1),
+            new(-3, 1),
+            new(-2, 1),
+            new(-1, 1),
+            new( 0, 1),
+            new( 1, 1),
+            new( 2, 1),
+            new( 3, 1),
+            new( 4, 1),
+            new( 5, 1),
+            new( 6, 1),
+            new( 7, 1),
+            new( 8, 1),
+
+            new(-2, 2),
+            new(-1, 2),
+            new( 0, 2),
+            new( 1, 2),
+            new( 2, 2),
+            new( 3, 2),
+            new( 4, 2),
+            new( 5, 2),
+            new( 6, 2),
+
+            new(-2, 3),
+            new(-1, 3),
+            new( 0, 3),
+            new( 1, 3),
+            new( 2, 3),
+        };
+
+        static void PlaceSnowIsland(int x, int y)
+        {
+            foreach ((var i, var j) in SnowIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, TileID.SnowBlock);
+            }
+
+            WorldGen.PlaceTile(x + 2, y, TileID.Statues, style:68); // Undead Viking Statue
+            WorldGen.PlaceTile(x, y, TileID.IceMachine);
+
+            WorldGen.PlaceTile(x - 3, y - 2, TileID.Lamps, style: 20); // Boreal Wood Lamp
+            WorldGen.PlaceTile(x + 7, y - 2, TileID.Lamps, style: 20);
+
+            int chestIndex = WorldGen.PlaceChest(x + 4, y - 1, type: TileID.Containers, style: 11); // Frozen Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.IceSkates);
+            }
+        }
+
+        //                       l                   l
+        //                       l       s s m m m   l
+        //                       l   c c s s m m m   l
+        // -                   x x x c c s s m m m x x x
+        // 0 d d d     d d d x x x x x x x x x x x x x x x d d d d d d
+        // +   d d d d d d d d d x x x x x x x x x x x d d d d d d d d d d
+        //         d d d d d d d d d d d d x x d d d d d d d d d d d d d d d
+        //           d d d d d d d d d d d d d d d d d d d d d d d
+        //                   d d d d d d d d d d d d d d d d
+        //                             d d d d d d d d d 
+        //                                 - 0 +
+        static readonly Tuple<int, int, int>[] SkyIslandOffsets = new Tuple<int, int, int>[]
+        {
+            new(-7, -1, TileID.Sunplate),
+            new(-6, -1, TileID.Sunplate),
+            new(-5, -1, TileID.Sunplate),
+            new( 3, -1, TileID.Sunplate),
+            new( 4, -1, TileID.Sunplate),
+            new( 5, -1, TileID.Sunplate),
+
+            new(-16, 0, TileID.Cloud),
+            new(-15, 0, TileID.Cloud),
+            new(-14, 0, TileID.Cloud),
+            new(-11, 0, TileID.Cloud),
+            new(-10, 0, TileID.Cloud),
+            new( -9, 0, TileID.Cloud),
+            new( -8, 0, TileID.Sunplate),
+            new( -7, 0, TileID.Sunplate),
+            new( -6, 0, TileID.Sunplate),
+            new( -5, 0, TileID.Sunplate),
+            new( -4, 0, TileID.Sunplate),
+            new( -3, 0, TileID.Sunplate),
+            new( -2, 0, TileID.Sunplate),
+            new( -1, 0, TileID.Sunplate),
+            new(  0, 0, TileID.Sunplate),
+            new(  1, 0, TileID.Sunplate),
+            new(  2, 0, TileID.Sunplate),
+            new(  3, 0, TileID.Sunplate),
+            new(  4, 0, TileID.Sunplate),
+            new(  5, 0, TileID.Sunplate),
+            new(  6, 0, TileID.Sunplate),
+            new(  7, 0, TileID.Cloud),
+            new(  8, 0, TileID.Cloud),
+            new(  9, 0, TileID.Cloud),
+            new( 10, 0, TileID.Cloud),
+            new( 11, 0, TileID.Cloud),
+            new( 12, 0, TileID.Cloud),
+
+            new(-15, 1, TileID.Cloud),
+            new(-14, 1, TileID.Cloud),
+            new(-13, 1, TileID.Cloud),
+            new(-12, 1, TileID.Cloud),
+            new(-11, 1, TileID.Cloud),
+            new(-10, 1, TileID.Cloud),
+            new( -9, 1, TileID.Cloud),
+            new( -8, 1, TileID.Cloud),
+            new( -7, 1, TileID.Cloud),
+            new( -6, 1, TileID.Sunplate),
+            new( -5, 1, TileID.Sunplate),
+            new( -4, 1, TileID.Sunplate),
+            new( -3, 1, TileID.Sunplate),
+            new( -2, 1, TileID.Sunplate),
+            new( -1, 1, TileID.Sunplate),
+            new(  0, 1, TileID.Sunplate),
+            new(  1, 1, TileID.Sunplate),
+            new(  2, 1, TileID.Sunplate),
+            new(  3, 1, TileID.Sunplate),
+            new(  4, 1, TileID.Sunplate),
+            new(  5, 1, TileID.Cloud),
+            new(  6, 1, TileID.Cloud),
+            new(  7, 1, TileID.Cloud),
+            new(  8, 1, TileID.Cloud),
+            new(  9, 1, TileID.Cloud),
+            new( 10, 1, TileID.Cloud),
+            new( 11, 1, TileID.Cloud),
+            new( 12, 1, TileID.Cloud),
+            new( 13, 1, TileID.Cloud),
+            new( 14, 1, TileID.Cloud),
+
+            new(-13, 2, TileID.Cloud),
+            new(-12, 2, TileID.Cloud),
+            new(-11, 2, TileID.Cloud),
+            new(-10, 2, TileID.Cloud),
+            new( -9, 2, TileID.Cloud),
+            new( -8, 2, TileID.Cloud),
+            new( -7, 2, TileID.Cloud),
+            new( -6, 2, TileID.Cloud),
+            new( -5, 2, TileID.Cloud),
+            new( -4, 2, TileID.Cloud),
+            new( -3, 2, TileID.Cloud),
+            new( -2, 2, TileID.Cloud),
+            new( -1, 2, TileID.Sunplate),
+            new(  0, 2, TileID.Sunplate),
+            new(  1, 2, TileID.Cloud),
+            new(  2, 2, TileID.Cloud),
+            new(  3, 2, TileID.Cloud),
+            new(  4, 2, TileID.Cloud),
+            new(  5, 2, TileID.Cloud),
+            new(  6, 2, TileID.Cloud),
+            new(  7, 2, TileID.Cloud),
+            new(  8, 2, TileID.Cloud),
+            new(  9, 2, TileID.Cloud),
+            new( 10, 2, TileID.Cloud),
+            new( 11, 2, TileID.Cloud),
+            new( 12, 2, TileID.Cloud),
+            new( 13, 2, TileID.Cloud),
+            new( 14, 2, TileID.Cloud),
+            new( 15, 2, TileID.Cloud),
+
+            new(-12, 3, TileID.Cloud),
+            new(-11, 3, TileID.Cloud),
+            new(-10, 3, TileID.Cloud),
+            new( -9, 3, TileID.Cloud),
+            new( -8, 3, TileID.Cloud),
+            new( -7, 3, TileID.Cloud),
+            new( -6, 3, TileID.Cloud),
+            new( -5, 3, TileID.Cloud),
+            new( -4, 3, TileID.Cloud),
+            new( -3, 3, TileID.Cloud),
+            new( -2, 3, TileID.Cloud),
+            new( -1, 3, TileID.Cloud),
+            new(  0, 3, TileID.Cloud),
+            new(  1, 3, TileID.Cloud),
+            new(  2, 3, TileID.Cloud),
+            new(  3, 3, TileID.Cloud),
+            new(  4, 3, TileID.Cloud),
+            new(  5, 3, TileID.Cloud),
+            new(  6, 3, TileID.Cloud),
+            new(  7, 3, TileID.Cloud),
+            new(  8, 3, TileID.Cloud),
+            new(  9, 3, TileID.Cloud),
+            new( 10, 3, TileID.Cloud),
+
+            new( -8, 4, TileID.Cloud),
+            new( -7, 4, TileID.Cloud),
+            new( -6, 4, TileID.Cloud),
+            new( -5, 4, TileID.Cloud),
+            new( -4, 4, TileID.Cloud),
+            new( -3, 4, TileID.Cloud),
+            new( -2, 4, TileID.Cloud),
+            new( -1, 4, TileID.Cloud),
+            new(  0, 4, TileID.Cloud),
+            new(  1, 4, TileID.Cloud),
+            new(  2, 4, TileID.Cloud),
+            new(  3, 4, TileID.Cloud),
+            new(  4, 4, TileID.Cloud),
+            new(  5, 4, TileID.Cloud),
+            new(  6, 4, TileID.Cloud),
+            new(  7, 4, TileID.Cloud),
+
+            new( -3, 5, TileID.Cloud),
+            new( -2, 5, TileID.Cloud),
+            new( -1, 5, TileID.Cloud),
+            new(  0, 5, TileID.Cloud),
+            new(  1, 5, TileID.Cloud),
+            new(  2, 5, TileID.Cloud),
+            new(  3, 5, TileID.Cloud),
+            new(  4, 5, TileID.Cloud),
+            new(  5, 5, TileID.Cloud),
+        };
+        
+        static void PlaceSkyIsland(int x, int y)
+        {
+            foreach ((var i, var j, var type) in SkyIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, type);
+            }
+
+            WorldGen.PlaceTile(x - 2, y - 1, TileID.Statues, style: 70); // Harpy Statue
+            WorldGen.PlaceTile(x + 1, y - 1, TileID.SkyMill);
+
+            WorldGen.PlaceTile(x - 6, y - 2, TileID.Lamps, style: 9); // Skyware Lamp
+            WorldGen.PlaceTile(x + 4, y - 2, TileID.Lamps, style: 9);
+
+            int chestIndex = WorldGen.PlaceChest(x - 4, y - 1, type: TileID.Containers, style: 13); // Skyware Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.CreativeWings);
+                chest.item[nextSlot++] = new Item(ItemID.ShinyRedBalloon);
+                chest.item[nextSlot++] = new Item(ItemID.Starfury);
+            }
+        }
+
+        //             s s
+        //     t       s s c c         t
+        // - x x x x x s s c c x x x x x x
+        // 0 x x x x x x x x x x x x x x h
+        // + h h x x x x x x x x x x h h h
+        //     h h h h x x x x x h h h
+        //           h h h h h h h
+        //             - 0 +
+        static readonly Tuple<int, int, int>[] OceanIslandOffsets = new Tuple<int, int, int>[]
+        {
+            new(-6, -1, TileID.Sand),
+            new(-5, -1, TileID.Sand),
+            new(-4, -1, TileID.Sand),
+            new(-3, -1, TileID.Sand),
+            new(-2, -1, TileID.Sand),
+            new( 3, -1, TileID.Sand),
+            new( 4, -1, TileID.Sand),
+            new( 5, -1, TileID.Sand),
+            new( 6, -1, TileID.Sand),
+            new( 7, -1, TileID.Sand),
+            new( 8, -1, TileID.Sand),
+
+            new(-6, 0, TileID.Sand),
+            new(-5, 0, TileID.Sand),
+            new(-4, 0, TileID.Sand),
+            new(-3, 0, TileID.Sand),
+            new(-2, 0, TileID.Sand),
+            new(-1, 0, TileID.Sand),
+            new( 0, 0, TileID.Sand),
+            new( 1, 0, TileID.Sand),
+            new( 2, 0, TileID.Sand),
+            new( 3, 0, TileID.Sand),
+            new( 4, 0, TileID.Sand),
+            new( 5, 0, TileID.Sand),
+            new( 6, 0, TileID.Sand),
+            new( 7, 0, TileID.Sand),
+            new( 8, 0, TileID.HardenedSand),
+
+            new(-6, 1, TileID.HardenedSand),
+            new(-5, 1, TileID.HardenedSand),
+            new(-4, 1, TileID.Sand),
+            new(-3, 1, TileID.Sand),
+            new(-2, 1, TileID.Sand),
+            new(-1, 1, TileID.Sand),
+            new( 0, 1, TileID.Sand),
+            new( 1, 1, TileID.Sand),
+            new( 2, 1, TileID.Sand),
+            new( 3, 1, TileID.Sand),
+            new( 4, 1, TileID.Sand),
+            new( 5, 1, TileID.Sand),
+            new( 6, 1, TileID.HardenedSand),
+            new( 7, 1, TileID.HardenedSand),
+            new( 8, 1, TileID.HardenedSand),
+
+            new(-5, 2, TileID.HardenedSand),
+            new(-4, 2, TileID.HardenedSand),
+            new(-3, 2, TileID.HardenedSand),
+            new(-2, 2, TileID.HardenedSand),
+            new(-1, 2, TileID.Sand),
+            new( 0, 2, TileID.Sand),
+            new( 1, 2, TileID.Sand),
+            new( 2, 2, TileID.Sand),
+            new( 3, 2, TileID.Sand),
+            new( 4, 2, TileID.HardenedSand),
+            new( 5, 2, TileID.HardenedSand),
+            new( 6, 2, TileID.HardenedSand),
+
+            new(-2, 3, TileID.HardenedSand),
+            new(-1, 3, TileID.HardenedSand),
+            new( 0, 3, TileID.HardenedSand),
+            new( 1, 3, TileID.HardenedSand),
+            new( 2, 3, TileID.HardenedSand),
+            new( 3, 3, TileID.HardenedSand),
+            new( 4, 3, TileID.HardenedSand),
+
+        };
+
+        static void PlaceOceanIsland(int x, int y)
+        {
+            foreach ((var i, var j, var type) in OceanIslandOffsets)
+            {
+                WorldGen.PlaceTile(x + i, y + j, type);
+            }
+
+            WorldGen.PlaceTile(x - 1, y - 1, TileID.Statues, style: 5); // Goblin Statue
+            WorldGen.PlaceTile(x - 5, y - 2, TileID.Torches, style: 17); // Coral Torch
+            WorldGen.PlaceTile(x + 7, y - 2, TileID.Torches, style: 17);
+
+            int chestIndex = WorldGen.PlaceChest(x + 1, y - 1, type: TileID.Containers, style: 17); // Water Chest
+            if (chestIndex != -1)
+            {
+                var chest = Main.chest[chestIndex];
+                int nextSlot = 0;
+
+                chest.item[nextSlot++] = new Item(ItemID.WaterWalkingBoots);
+                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
+                chest.item[nextSlot++] = new Item(ItemID.JourneymanBait, stack: 20);
+            }
+        }
+
+
         //       l             l
         //       l   s s       l
         // - x x l   s s c c   l x x
@@ -737,7 +1120,6 @@ namespace CrabsSkyblockChallenge
 
                 chest.item[nextSlot++] = new Item(ItemID.BandofRegeneration);
                 chest.item[nextSlot++] = new Item(ItemID.MagicMirror);
-                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
                 chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
                 chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
             }
