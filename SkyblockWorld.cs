@@ -63,37 +63,39 @@ namespace CrabsSkyblockChallenge
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
 
-            var jungleIslandX = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(150, 250));
+            var jungleIslandX = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(250, 350));
             PlaceJungleIsland(jungleIslandX, Main.spawnTileY);
 
-            var snowIslandX = dungeonX + dungeonDirection * Main.rand.Next(250, 350);
+            var snowIslandX = (int)(Main.maxTilesX * 0.5 + dungeonDirection * Main.rand.Next(250, 350));
             PlaceSnowIsland(snowIslandX, Main.spawnTileY);
 
             var altarIslandX = templeX + Main.rand.Next(-100, 100);
             PlaceAltarIsland(altarIslandX, Main.spawnTileY);
 
-            var sandstoneIslandX = (int)((Main.maxTilesX * 0.5 + dungeonDirection * 200 + dungeonX) * 0.5) + Main.rand.Next(-50, 50);
-            PlaceSandstoneIsland(sandstoneIslandX, Main.spawnTileY);
+            var sandstoneIslandX = Main.rand.Next(2) == 0 ? jungleIslandX : snowIslandX + Main.rand.Next(-50, 50);
+            var sandstoneIslandY = (int)Main.rockLayer - Main.rand.Next(50, 150);
+            PlaceSandstoneIsland(sandstoneIslandX, sandstoneIslandY);
 
             var oceanIslandX = Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200);
             PlaceOceanIsland(oceanIslandX, Main.spawnTileY);
 
 
-            var skyIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-400, 400);
-            var skyIslandY = (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50);
-            PlaceSkyIsland(skyIslandX, skyIslandY);
+            var cavernIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100);
+            var cavernIslandY = Main.UnderworldLayer - Main.rand.Next(50, 150);
+            PlaceCavernIsland(cavernIslandX, cavernIslandY);
 
-            var graniteIslandX = Main.rand.Next(150, 250);
+            var graniteIslandX = (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450);
             var graniteIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
             PlaceGraniteIsland(graniteIslandX, graniteIslandY);
 
-            var marbleIslandX = Main.maxTilesX - Main.rand.Next(150, 250);
+            var marbleIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450);
             var marbleIslandY = (int)(Main.rockLayer + Main.rand.Next(150, 200));
             PlaceMarbleIsland(marbleIslandX, marbleIslandY);
 
-            var cavernIslandX = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100);
-            var cavernIslandY = Main.UnderworldLayer - Main.rand.Next(150, 250);
-            PlaceCavernIsland(cavernIslandX, cavernIslandY);
+
+            var skyIslandX = (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100);
+            var skyIslandY = (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50);
+            PlaceSkyIsland(skyIslandX, skyIslandY);
         }
 
         //
