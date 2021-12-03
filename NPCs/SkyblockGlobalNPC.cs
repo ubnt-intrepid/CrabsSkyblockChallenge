@@ -114,7 +114,7 @@ namespace CrabsSkyblockChallenge.NPCs
 
         public override void OnKill(NPC npc)
         {
-            if (npc.type == NPCID.UmbrellaSlime && Main.getGoodWorld && Main.netMode != NetmodeID.MultiplayerClient)
+            if (npc.type == NPCID.UmbrellaSlime && (Main.getGoodWorld || Main.notTheBeesWorld) && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 var waterX = (int)(npc.Center.X / 16f);
                 var waterY = (int)(npc.Center.Y / 16f);

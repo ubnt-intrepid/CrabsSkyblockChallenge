@@ -359,7 +359,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {                 -4, -3, -2,           2, 3, 4, 5, 6, 7, 8, 9     },  2, TileID.JungleGrass);
             PlaceTile(new[] {                         -2, -1, 0, 1, 2, 3, 4, 5,    7           },  3, TileID.JungleGrass);
 
-            PlaceLiquid(3, 1, (byte)(Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water));
+            PlaceLiquid(3, 1, WorldGen.getGoodWorldGen ? (byte)LiquidID.Lava : WorldGen.notTheBees ? (byte)LiquidID.Honey : (byte)LiquidID.Water);
 
             PlaceTile(-1, 0, TileID.Statues, style: 16); // Hornet Statue
             PlaceTile(3, -1, TileID.Lamps, style: 6); // Rich Mahogany Lamp
@@ -560,9 +560,10 @@ namespace CrabsSkyblockChallenge
             PlaceWall(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4 },  1, WallID.SpiderUnsafe);
             PlaceWall(new[] {     -4, -3,               2,      },  2, WallID.SpiderUnsafe);
 
-            PlaceTile(new[] {                 -2, -1, 0, 1, 2       }, 1, TileID.Stone);
-            PlaceTile(new[] {     -5, -4, -3, -2,           2, 3, 4 }, 2, TileID.Stone);
-            PlaceTile(new[] { -6, -5, -4,                         4 }, 3, TileID.Stone);
+            var type = WorldGen.notTheBees ? TileID.CrispyHoneyBlock : TileID.Stone;
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2       }, 1, type);
+            PlaceTile(new[] {     -5, -4, -3, -2,           2, 3, 4 }, 2, type);
+            PlaceTile(new[] { -6, -5, -4,                         4 }, 3, type);
 
             PlaceTile(-6, 2, TileID.MushroomGrass);
 
