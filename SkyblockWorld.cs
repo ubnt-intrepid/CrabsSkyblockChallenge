@@ -162,10 +162,10 @@ namespace CrabsSkyblockChallenge
             WorldGen.PlaceLiquid(X + i, Y + j, liquidType: type, amount: amount);
         }
 
-        protected Chest PlaceChest(int i, int j, ushort type = 21, int style = 0)
+        protected Chest PlaceChest(int i, int j, ushort type = TileID.Containers, int style = 0)
         {
             int num = WorldGen.PlaceChest(X + i, Y + j, type: type, style: style);
-            return num != 0 ? Main.chest[num] : null;
+            return num != -1 ? Main.chest[num] : null;
         }
     }
 
@@ -221,7 +221,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(-1, 2, TileID.Dirt, paintColor: paintColor);
             PlaceTile( 0, 2, TileID.Dirt, paintColor: paintColor);
 
-            PlaceTile(2, 1, TileID.Solidifier);
+            PlaceTile(-2, -1, TileID.Solidifier);
             PlaceTile(1, 2, TileID.Torches, style: TorchID.Torch);
 
             ushort chestType = TileID.Containers;
@@ -431,7 +431,7 @@ namespace CrabsSkyblockChallenge
 
             PlaceLiquid(3, 1, (byte)(Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water));
 
-            PlaceTile(1, 0, TileID.Statues, style: 16); // Hornet Statue
+            PlaceTile(-1, 0, TileID.Statues, style: 16); // Hornet Statue
             PlaceTile(3, -1, TileID.Lamps, style: 6); // Rich Mahogany Lamp
             PlaceTile(6, -1, TileID.Lamps, style: 6);
 
