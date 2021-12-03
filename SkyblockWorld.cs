@@ -130,31 +130,40 @@ namespace CrabsSkyblockChallenge
 
         protected FloatingIsland(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
-        protected void PlaceTile(int i, int j, int type, int style = 0, int paintColor = 0)
+        protected void PlaceTile(int xoffset, int yoffset, int type, int style = 0, byte paintColor = 0) => PlaceTile(new[] { xoffset }, new[] { yoffset }, type, style, paintColor);
+        protected void PlaceTile(int[] xoffsets, int yoffset, int type, int style = 0, byte paintColor = 0) => PlaceTile(xoffsets, new[] { yoffset }, type, style, paintColor);
+        protected void PlaceTile(int xoffset, int[] yoffsets, int type, int style = 0, byte paintColor = 0) => PlaceTile(new[] { xoffset }, yoffsets, type, style, paintColor);
+        protected void PlaceTile(int[] xoffsets, int[] yoffsets, int type, int style = 0, byte paintColor = 0)
         {
-            if (type is (TileID.JungleGrass or TileID.MushroomGrass))
+            foreach (var i in xoffsets)
             {
-                WorldGen.PlaceTile(X + i, Y + j, Type: TileID.Mud);
-            }
-            else if (type is (TileID.Grass or TileID.CorruptGrass or TileID.CrimsonGrass or TileID.HallowedGrass))
-            {
-                WorldGen.PlaceTile(X + i, Y + j, Type: TileID.Dirt);
-            }
-            WorldGen.PlaceTile(X + i, Y + j, Type: type, style: style);
-
-            if (paintColor != 0)
-            {
-                WorldGen.paintColor(paintColor);
+                foreach (var j in yoffsets)
+                {
+                    WorldGen.PlaceTile(X + i, Y + j, Type: type, style: style);
+                    if (paintColor != 0)
+                    {
+                        WorldGen.paintTile(X + i, Y + j, paintColor);
+                    }
+                }
             }
         }
 
-        protected void PlaceWall(int i, int j, int type)
+        protected void PlaceWall(int xoffset, int yoffset, int type) => PlaceWall(new[] { xoffset }, new[] { yoffset }, type);
+        protected void PlaceWall(int[] xoffsets, int yoffset, int type) => PlaceWall(xoffsets, new[] { yoffset }, type);
+        protected void PlaceWall(int xoffset, int[] yoffsets, int type) => PlaceWall(new[] { xoffset }, yoffsets, type);
+        protected void PlaceWall(int[] xoffsets, int[] yoffsets, int type)
         {
-            WorldGen.PlaceWall(X + i, Y + j, type);
+            foreach (var i in xoffsets)
+            {
+                foreach (var j in yoffsets)
+                {
+                    WorldGen.PlaceWall(X + i, Y + j, type);
+                }
+            }
         }
 
         protected void PlaceLiquid(int i, int j, byte type = LiquidID.Water, byte amount = 255)
@@ -171,6 +180,15 @@ namespace CrabsSkyblockChallenge
 
     sealed class SpawnIsland : FloatingIsland
     {
+        //
+        //         s s s   c c
+        //         s s s   c c
+        // -   x x s s s x x x x   x
+        // 0   x x x x x x x x x x x
+        // +       x x x x x x x
+        //             x x t
+        //
+        //             - 0 +
 
         public SpawnIsland(int x, int y) : base(x, y)
         {
@@ -178,48 +196,12 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            //
-            //         s s s   c c
-            //         s s s   c c
-            // -   x x s s s x x x x   x
-            // 0   x x x x x x x x x x x
-            // +       x x x x x x x
-            //             x x t
-            //
-            //             - 0 +
+            var paintColor = WorldGen.tenthAnniversaryWorldGen ? PaintID.DeepPinkPaint : (byte)0;
 
-            var paintColor = WorldGen.tenthAnniversaryWorldGen ? PaintID.DeepPinkPaint : 0;
-
-            PlaceTile(-5, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-4, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 0, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 1, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 2, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 3, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 5, -1, TileID.Dirt, paintColor: paintColor);  
-
-            PlaceTile(-5, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-4, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-3, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-2, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-1, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 0, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 1, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 2, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 3, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 4, 0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 5, 0, TileID.Dirt, paintColor: paintColor);
-
-            PlaceTile(-3, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-2, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(-1, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 0, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 1, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 2, 1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 3, 1, TileID.Dirt, paintColor: paintColor);
-
-            PlaceTile(-1, 2, TileID.Dirt, paintColor: paintColor);
-            PlaceTile( 0, 2, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -1, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3       },  1, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] {                 -1, 0                },  2, TileID.Dirt, paintColor: paintColor);
 
             PlaceTile(-2, -1, TileID.Solidifier);
             PlaceTile(1, 2, TileID.Torches, style: TorchID.Torch);
@@ -365,69 +347,17 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-6, -1, TileID.JungleGrass);
-            PlaceTile(-5, -1, TileID.JungleGrass);
-            PlaceTile(-4, -1, TileID.JungleGrass);
-            PlaceTile( 7, -1, TileID.JungleGrass);
-            PlaceTile( 8, -1, TileID.JungleGrass);
+            PlaceTile(new[] {         -6, -5, -4,                                  7, 8        }, -1, TileID.Mud);
+            PlaceTile(new[] { -8, -7, -6, -5, -4, -3, -2,                    5, 6, 7, 8, 9, 10 },  0, TileID.Mud);
+            PlaceTile(new[] { -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2,    4, 5, 6, 7, 8, 9, 10 },  1, TileID.Mud);
+            PlaceTile(new[] {                 -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9     },  2, TileID.Mud);
+            PlaceTile(new[] {                         -2, -1, 0, 1, 2, 3, 4, 5,    7           },  3, TileID.Mud);
 
-            PlaceTile(-8, 0, TileID.JungleGrass);
-            PlaceTile(-7, 0, TileID.JungleGrass);
-            PlaceTile(-6, 0, TileID.Mud);
-            PlaceTile(-5, 0, TileID.Mud);
-            PlaceTile(-4, 0, TileID.Mud);
-            PlaceTile(-3, 0, TileID.Mud);
-            PlaceTile(-2, 0, TileID.JungleGrass);
-            PlaceTile( 5, 0, TileID.JungleGrass);
-            PlaceTile( 6, 0, TileID.JungleGrass);
-            PlaceTile( 7, 0, TileID.Mud);
-            PlaceTile( 8, 0, TileID.Mud);
-            PlaceTile( 9, 0, TileID.JungleGrass);
-            PlaceTile(10, 0, TileID.JungleGrass);
-
-            PlaceTile(-8, 1, TileID.JungleGrass);
-            PlaceTile(-7, 1, TileID.JungleGrass);
-            PlaceTile(-6, 1, TileID.JungleGrass);
-            PlaceTile(-5, 1, TileID.JungleGrass);
-            PlaceTile(-4, 1, TileID.Mud);
-            PlaceTile(-3, 1, TileID.Mud);
-            PlaceTile(-2, 1, TileID.Mud);
-            PlaceTile(-1, 1, TileID.Mud);
-            PlaceTile( 0, 1, TileID.Mud);
-            PlaceTile( 1, 1, TileID.Mud);
-            PlaceTile( 2, 1, TileID.Mud);
-            PlaceTile( 4, 1, TileID.Mud);
-            PlaceTile( 5, 1, TileID.Mud);
-            PlaceTile( 6, 1, TileID.Mud);
-            PlaceTile( 7, 1, TileID.Mud);
-            PlaceTile( 8, 1, TileID.Mud);
-            PlaceTile( 9, 1, TileID.Mud);
-            PlaceTile(10, 1, TileID.JungleGrass);
-
-            PlaceTile(-4, 2, TileID.JungleGrass);
-            PlaceTile(-3, 2, TileID.JungleGrass);
-            PlaceTile(-2, 2, TileID.Mud);
-            PlaceTile(-1, 2, TileID.Mud);
-            PlaceTile( 0, 2, TileID.Mud);
-            PlaceTile( 1, 2, TileID.Mud);
-            PlaceTile( 2, 2, TileID.Mud);
-            PlaceTile( 3, 2, TileID.Mud);
-            PlaceTile( 4, 2, TileID.Mud);
-            PlaceTile( 5, 2, TileID.Mud);
-            PlaceTile( 6, 2, TileID.Mud);
-            PlaceTile( 7, 2, TileID.Mud);
-            PlaceTile( 8, 2, TileID.JungleGrass);
-            PlaceTile( 9, 2, TileID.JungleGrass);
-
-            PlaceTile(-2, 3, TileID.JungleGrass);
-            PlaceTile(-1, 3, TileID.JungleGrass);
-            PlaceTile( 0, 3, TileID.JungleGrass);
-            PlaceTile( 1, 3, TileID.JungleGrass);
-            PlaceTile( 2, 3, TileID.JungleGrass);
-            PlaceTile( 3, 3, TileID.JungleGrass);
-            PlaceTile( 4, 3, TileID.JungleGrass);
-            PlaceTile( 5, 3, TileID.JungleGrass);
-            PlaceTile( 7, 3, TileID.JungleGrass);
+            PlaceTile(new[] {         -6, -5, -4,                                  7, 8        }, -1, TileID.JungleGrass);
+            PlaceTile(new[] { -8, -7, -6,     -4, -3, -2,                    5, 6, 7, 8, 9, 10 },  0, TileID.JungleGrass);
+            PlaceTile(new[] { -8, -7, -6, -5, -4,     -2, -1, 0, 1, 2,    4, 5,          9, 10 },  1, TileID.JungleGrass);
+            PlaceTile(new[] {                 -4, -3, -2,           2, 3, 4, 5, 6, 7, 8, 9     },  2, TileID.JungleGrass);
+            PlaceTile(new[] {                         -2, -1, 0, 1, 2, 3, 4, 5,    7           },  3, TileID.JungleGrass);
 
             PlaceLiquid(3, 1, (byte)(Main.getGoodWorld ? LiquidID.Lava : LiquidID.Water));
 
@@ -465,55 +395,11 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-5, -1, TileID.SnowBlock);
-            PlaceTile(-4, -1, TileID.SnowBlock);
-            PlaceTile(-3, -1, TileID.SnowBlock);
-            PlaceTile( 7, -1, TileID.SnowBlock);
-            PlaceTile( 8, -1, TileID.SnowBlock);
-            PlaceTile( 9, -1, TileID.SnowBlock);
-
-            PlaceTile(-6, 0, TileID.SnowBlock);
-            PlaceTile(-5, 0, TileID.SnowBlock);
-            PlaceTile(-4, 0, TileID.SnowBlock);
-            PlaceTile(-3, 0, TileID.SnowBlock);
-            PlaceTile(-2, 0, TileID.SnowBlock);
-            PlaceTile( 4, 0, TileID.SnowBlock);
-            PlaceTile( 5, 0, TileID.SnowBlock);
-            PlaceTile( 6, 0, TileID.SnowBlock);
-            PlaceTile( 7, 0, TileID.SnowBlock);
-            PlaceTile( 8, 0, TileID.SnowBlock);
-            PlaceTile( 9, 0, TileID.SnowBlock);
-            PlaceTile(10, 0, TileID.SnowBlock);
-
-            PlaceTile(-4, 1, TileID.SnowBlock);
-            PlaceTile(-3, 1, TileID.SnowBlock);
-            PlaceTile(-2, 1, TileID.SnowBlock);
-            PlaceTile(-1, 1, TileID.SnowBlock);
-            PlaceTile( 0, 1, TileID.SnowBlock);
-            PlaceTile( 1, 1, TileID.SnowBlock);
-            PlaceTile( 2, 1, TileID.SnowBlock);
-            PlaceTile( 3, 1, TileID.SnowBlock);
-            PlaceTile( 4, 1, TileID.SnowBlock);
-            PlaceTile( 5, 1, TileID.SnowBlock);
-            PlaceTile( 6, 1, TileID.SnowBlock);
-            PlaceTile( 7, 1, TileID.SnowBlock);
-            PlaceTile( 8, 1, TileID.SnowBlock);
-
-            PlaceTile(-2, 2, TileID.SnowBlock);
-            PlaceTile(-1, 2, TileID.SnowBlock);
-            PlaceTile( 0, 2, TileID.SnowBlock);
-            PlaceTile( 1, 2, TileID.SnowBlock);
-            PlaceTile( 2, 2, TileID.SnowBlock);
-            PlaceTile( 3, 2, TileID.SnowBlock);
-            PlaceTile( 4, 2, TileID.SnowBlock);
-            PlaceTile( 5, 2, TileID.SnowBlock);
-            PlaceTile( 6, 2, TileID.SnowBlock);
-
-            PlaceTile(-2, 3, TileID.SnowBlock);
-            PlaceTile(-1, 3, TileID.SnowBlock);
-            PlaceTile( 0, 3, TileID.SnowBlock);
-            PlaceTile( 1, 3, TileID.SnowBlock);
-            PlaceTile( 2, 3, TileID.SnowBlock);
+            PlaceTile(new[] {     -5, -4, -3,                              7, 8, 9     }, -1, TileID.SnowBlock);
+            PlaceTile(new[] { -6, -5, -4, -3, -2,                 4, 5, 6, 7, 8, 9, 10 },  0, TileID.SnowBlock);
+            PlaceTile(new[] {         -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8        },  1, TileID.SnowBlock);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4, 5, 6              },  2, TileID.SnowBlock);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2                          },  3, TileID.SnowBlock);
 
             PlaceTile(2, 0, TileID.Statues, style:68); // Undead Viking Statue
             PlaceTile(0, 0, TileID.IceMachine);
@@ -547,31 +433,13 @@ namespace CrabsSkyblockChallenge
         public void PlaceTiles()
         {
             var type = WorldGen.crimson ? TileID.Crimstone : TileID.Ebonstone;
-            var grassType = WorldGen.crimson ? TileID.CrimsonGrass : TileID.CorruptGrass;
+            PlaceTile(new[] {     -3, -2,              3, 4 }, -1, type);
+            PlaceTile(new[] { -4, -3, -2, -1, 0, 1, 2, 3    },  0, type);
+            PlaceTile(new[] {         -2, -1, 0, 1,    3    },  1, type);
+            PlaceTile(new[] {                 0             },  2, type);
 
-            PlaceTile(-3, -1, type);
-            PlaceTile(-2, -1, type);
-            PlaceTile( 3, -1, type);
-            PlaceTile( 4, -1, type);
-
-            PlaceTile(-4, 0, type);
-            PlaceTile(-3, 0, type);
-            PlaceTile(-2, 0, type);
-            PlaceTile(-1, 0, type);
-            PlaceTile( 0, 0, type);
-            PlaceTile( 1, 0, type);
-            PlaceTile( 2, 0, type);
-            PlaceTile( 3, 0, type);
-
-            PlaceTile(-2, 1, type);
-            PlaceTile(-1, 1, type);
-            PlaceTile( 0, 1, type);
-            PlaceTile( 1, 1, type);
-            PlaceTile( 3, 1, type);
-
-            PlaceTile(0, 2, type);
-
-            PlaceTile(-4, -1, grassType);
+            PlaceTile(-4, -1, TileID.Dirt);
+            PlaceTile(-4, -1, WorldGen.crimson ? TileID.CrimsonGrass : TileID.CorruptGrass);
 
             PlaceTile(0, -1, TileID.DemonAltar, style: WorldGen.crimson ? 1 : 0);
         }
@@ -597,60 +465,14 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(6, -1, TileID.Sandstone);
-            PlaceTile(7, -1, TileID.Sandstone);
-
-            PlaceTile(-3, 0, TileID.Sandstone);
-            PlaceTile(-2, 0, TileID.Sandstone);
-            PlaceTile( 4, 0, TileID.Sandstone);
-            PlaceTile( 5, 0, TileID.Sandstone);
-            PlaceTile( 6, 0, TileID.Sandstone);
-            PlaceTile( 7, 0, TileID.Sandstone);
-
-            PlaceTile(-5, 1, TileID.Sandstone);
-            PlaceTile(-4, 1, TileID.Sandstone);
-            PlaceTile(-3, 1, TileID.Sandstone);
-            PlaceTile(-2, 1, TileID.Sandstone);
-            PlaceTile(-1, 1, TileID.Sandstone);
-            PlaceTile( 0, 1, TileID.Sandstone);
-            PlaceTile( 1, 1, TileID.Sandstone);
-            PlaceTile( 2, 1, TileID.Sandstone);
-            PlaceTile( 3, 1, TileID.Sandstone);
-            PlaceTile( 4, 1, TileID.Sandstone);
-            PlaceTile( 5, 1, TileID.Sandstone);
-
-            PlaceTile(-5, 2, TileID.Sandstone);
-            PlaceTile(-4, 2, TileID.Sandstone);
-            PlaceTile(-3, 2, TileID.Sandstone);
-            PlaceTile(-2, 2, TileID.Sandstone);
-            PlaceTile(-1, 2, TileID.Sandstone);
-            PlaceTile( 0, 2, TileID.Sandstone);
-            PlaceTile( 1, 2, TileID.Sandstone);
-            PlaceTile( 2, 2, TileID.Sandstone);
-            PlaceTile( 3, 2, TileID.Sandstone);
-            PlaceTile( 4, 2, TileID.Sandstone);
-
-            PlaceTile(-4, 3, TileID.Sandstone);
-            PlaceTile(-3, 3, TileID.Sandstone);
-            PlaceTile(-2, 3, TileID.Sandstone);
-            PlaceTile(-1, 3, TileID.Sandstone);
-            PlaceTile( 0, 3, TileID.Sandstone);
-            PlaceTile( 1, 3, TileID.Sandstone);
-            PlaceTile( 2, 3, TileID.Sandstone);
-            PlaceTile( 3, 3, TileID.Sandstone);
-
-            PlaceTile(-3, 4, TileID.Sandstone);
-            PlaceTile(-1, 4, TileID.Sandstone);
-            PlaceTile( 0, 4, TileID.Sandstone);
-            PlaceTile( 1, 4, TileID.Sandstone);
-            PlaceTile( 2, 4, TileID.Sandstone);
-
-            PlaceTile(-1, 5, TileID.Sandstone);
-            PlaceTile( 0, 5, TileID.Sandstone);
-            PlaceTile( 1, 5, TileID.Sandstone);
-
-            PlaceTile(-1, 6, TileID.Sandstone);
-            PlaceTile( 1, 6, TileID.Sandstone);
+            PlaceTile(new[] {                                       6, 7 }, -1, TileID.Sandstone);
+            PlaceTile(new[] {         -3, -2,                 4, 5, 6, 7 },  0, TileID.Sandstone);
+            PlaceTile(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5       },  1, TileID.Sandstone);
+            PlaceTile(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4          },  2, TileID.Sandstone);
+            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3             },  3, TileID.Sandstone);
+            PlaceTile(new[] {         -3,     -1, 0, 1, 2                },  4, TileID.Sandstone);
+            PlaceTile(new[] {                 -1, 0, 1                   },  5, TileID.Sandstone);
+            PlaceTile(new[] {                 -1,    1                   },  6, TileID.Sandstone);
 
             PlaceTile(-2, -1, TileID.Lamps, style: 38); // Sandstone Lamp
             PlaceTile(4, -1, TileID.Lamps, style: 38);
@@ -686,72 +508,18 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-6, -1, TileID.Sand);
-            PlaceTile(-5, -1, TileID.Sand);
-            PlaceTile(-4, -1, TileID.Sand);
-            PlaceTile(-3, -1, TileID.Sand);
-            PlaceTile(-2, -1, TileID.Sand);
-            PlaceTile( 3, -1, TileID.Sand);
-            PlaceTile( 4, -1, TileID.Sand);
-            PlaceTile( 5, -1, TileID.Sand);
-            PlaceTile( 6, -1, TileID.Sand);
-            PlaceTile( 7, -1, TileID.Sand);
-            PlaceTile( 8, -1, TileID.Sand);
+            PlaceTile(new[] { -6, -5, -4, -3, -2,              3, 4, 5, 6, 7, 8 }, -1, TileID.Sand);
+            PlaceTile(new[] { -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7    },  0, TileID.Sand);
+            PlaceTile(new[] {         -4, -3, -2, -1, 0, 1, 2, 3, 4, 5          },  1, TileID.Sand);
+            PlaceTile(new[] {                     -1, 0, 1, 2, 3                },  2, TileID.Sand);
 
-            PlaceTile(-6, 0, TileID.Sand);
-            PlaceTile(-5, 0, TileID.Sand);
-            PlaceTile(-4, 0, TileID.Sand);
-            PlaceTile(-3, 0, TileID.Sand);
-            PlaceTile(-2, 0, TileID.Sand);
-            PlaceTile(-1, 0, TileID.Sand);
-            PlaceTile( 0, 0, TileID.Sand);
-            PlaceTile( 1, 0, TileID.Sand);
-            PlaceTile( 2, 0, TileID.Sand);
-            PlaceTile( 3, 0, TileID.Sand);
-            PlaceTile( 4, 0, TileID.Sand);
-            PlaceTile( 5, 0, TileID.Sand);
-            PlaceTile( 6, 0, TileID.Sand);
-            PlaceTile( 7, 0, TileID.Sand);
-            PlaceTile( 8, 0, TileID.HardenedSand);
-
-            PlaceTile(-6, 1, TileID.HardenedSand);
-            PlaceTile(-5, 1, TileID.HardenedSand);
-            PlaceTile(-4, 1, TileID.Sand);
-            PlaceTile(-3, 1, TileID.Sand);
-            PlaceTile(-2, 1, TileID.Sand);
-            PlaceTile(-1, 1, TileID.Sand);
-            PlaceTile( 0, 1, TileID.Sand);
-            PlaceTile( 1, 1, TileID.Sand);
-            PlaceTile( 2, 1, TileID.Sand);
-            PlaceTile( 3, 1, TileID.Sand);
-            PlaceTile( 4, 1, TileID.Sand);
-            PlaceTile( 5, 1, TileID.Sand);
-            PlaceTile( 6, 1, TileID.HardenedSand);
-            PlaceTile( 7, 1, TileID.HardenedSand);
-            PlaceTile( 8, 1, TileID.HardenedSand);
-
-            PlaceTile(-5, 2, TileID.HardenedSand);
-            PlaceTile(-4, 2, TileID.HardenedSand);
-            PlaceTile(-3, 2, TileID.HardenedSand);
-            PlaceTile(-2, 2, TileID.HardenedSand);
-            PlaceTile(-1, 2, TileID.Sand);
-            PlaceTile( 0, 2, TileID.Sand);
-            PlaceTile( 1, 2, TileID.Sand);
-            PlaceTile( 2, 2, TileID.Sand);
-            PlaceTile( 3, 2, TileID.Sand);
-            PlaceTile( 4, 2, TileID.HardenedSand);
-            PlaceTile( 5, 2, TileID.HardenedSand);
-            PlaceTile( 6, 2, TileID.HardenedSand);
-
-            PlaceTile(-2, 3, TileID.HardenedSand);
-            PlaceTile(-1, 3, TileID.HardenedSand);
-            PlaceTile( 0, 3, TileID.HardenedSand);
-            PlaceTile( 1, 3, TileID.HardenedSand);
-            PlaceTile( 2, 3, TileID.HardenedSand);
-            PlaceTile( 3, 3, TileID.HardenedSand);
-            PlaceTile( 4, 3, TileID.HardenedSand);
+            PlaceTile(new[] {                                                 8 }, 0, TileID.HardenedSand);
+            PlaceTile(new[] { -6, -5,                                   6, 7, 8 }, 1, TileID.HardenedSand);
+            PlaceTile(new[] {     -5, -4, -3, -2,                 4, 5, 6       }, 2, TileID.HardenedSand);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4             }, 3, TileID.HardenedSand);
 
             PlaceTile(-1, -1, TileID.Statues, style: 5); // Goblin Statue
+
             PlaceTile(-5, -2, TileID.Torches, style: 17); // Coral Torch
             PlaceTile(7, -2, TileID.Torches, style: 17);
 
@@ -784,78 +552,24 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-2, 1, TileID.Stone);
-            PlaceTile(-1, 1, TileID.Stone);
-            PlaceTile( 0, 1, TileID.Stone);
-            PlaceTile( 1, 1, TileID.Stone);
-            PlaceTile( 2, 1, TileID.Stone);
+            PlaceWall(new[] {             -2, -1                }, -4, WallID.SpiderUnsafe);
+            PlaceWall(new[] {         -3, -2, -1, 0, 1          }, -3, WallID.SpiderUnsafe);
+            PlaceWall(new[] {     -4, -3, -2, -1, 0, 1, 2, 3    }, -2, WallID.SpiderUnsafe);
+            PlaceWall(new[] {     -4, -3, -2, -1, 0, 1, 2, 3    }, -1, WallID.SpiderUnsafe);
+            PlaceWall(new[] {     -4, -3, -2, -1, 0, 1, 2, 3, 4 },  0, WallID.SpiderUnsafe);
+            PlaceWall(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4 },  1, WallID.SpiderUnsafe);
+            PlaceWall(new[] {     -4, -3,               2,      },  2, WallID.SpiderUnsafe);
 
-            PlaceTile(-5, 2, TileID.Stone);
-            PlaceTile(-4, 2, TileID.Stone);
-            PlaceTile(-3, 2, TileID.Stone);
-            PlaceTile(-2, 2, TileID.Stone);
-            PlaceTile( 2, 2, TileID.Stone);
-            PlaceTile( 3, 2, TileID.Stone);
-            PlaceTile( 4, 2, TileID.Stone);
-
-            PlaceTile(-6, 3, TileID.Stone);
-            PlaceTile(-5, 3, TileID.Stone);
-            PlaceTile(-4, 3, TileID.Stone);
-            PlaceTile( 4, 3, TileID.Stone);
-
-            PlaceWall(-2, -4, WallID.SpiderUnsafe);
-            PlaceWall(-1, -4, WallID.SpiderUnsafe);
-
-            PlaceWall(-3, -3, WallID.SpiderUnsafe);
-            PlaceWall(-2, -3, WallID.SpiderUnsafe);
-            PlaceWall(-1, -3, WallID.SpiderUnsafe);
-            PlaceWall( 0, -3, WallID.SpiderUnsafe);
-            PlaceWall( 1, -3, WallID.SpiderUnsafe);
-
-            PlaceWall(-4, -2, WallID.SpiderUnsafe);
-            PlaceWall(-3, -2, WallID.SpiderUnsafe);
-            PlaceWall(-2, -2, WallID.SpiderUnsafe);
-            PlaceWall(-1, -2, WallID.SpiderUnsafe);
-            PlaceWall( 0, -2, WallID.SpiderUnsafe);
-            PlaceWall( 1, -2, WallID.SpiderUnsafe);
-            PlaceWall( 2, -2, WallID.SpiderUnsafe);
-            PlaceWall( 3, -2, WallID.SpiderUnsafe);
-
-            PlaceWall(-4, -1, WallID.SpiderUnsafe);
-            PlaceWall(-3, -1, WallID.SpiderUnsafe);
-            PlaceWall(-2, -1, WallID.SpiderUnsafe);
-            PlaceWall(-1, -1, WallID.SpiderUnsafe);
-            PlaceWall( 0, -1, WallID.SpiderUnsafe);
-            PlaceWall( 1, -1, WallID.SpiderUnsafe);
-            PlaceWall( 2, -1, WallID.SpiderUnsafe);
-            PlaceWall( 3, -1, WallID.SpiderUnsafe);
-
-            PlaceWall(-4, 0, WallID.SpiderUnsafe);
-            PlaceWall(-3, 0, WallID.SpiderUnsafe);
-            PlaceWall(-2, 0, WallID.SpiderUnsafe);
-            PlaceWall(-1, 0, WallID.SpiderUnsafe);
-            PlaceWall( 0, 0, WallID.SpiderUnsafe);
-            PlaceWall( 1, 0, WallID.SpiderUnsafe);
-            PlaceWall( 2, 0, WallID.SpiderUnsafe);
-            PlaceWall( 3, 0, WallID.SpiderUnsafe);
-            PlaceWall( 4, 0, WallID.SpiderUnsafe);
-
-            PlaceWall(-5, 1, WallID.SpiderUnsafe);
-            PlaceWall(-4, 1, WallID.SpiderUnsafe);
-            PlaceWall(-3, 1, WallID.SpiderUnsafe);
-            PlaceWall(-2, 1, WallID.SpiderUnsafe);
-            PlaceWall(-1, 1, WallID.SpiderUnsafe);
-            PlaceWall( 0, 1, WallID.SpiderUnsafe);
-            PlaceWall( 1, 1, WallID.SpiderUnsafe);
-            PlaceWall( 2, 1, WallID.SpiderUnsafe);
-            PlaceWall( 3, 1, WallID.SpiderUnsafe);
-            PlaceWall( 4, 1, WallID.SpiderUnsafe);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2       }, 1, TileID.Stone);
+            PlaceTile(new[] {     -5, -4, -3, -2,           2, 3, 4 }, 2, TileID.Stone);
+            PlaceTile(new[] { -6, -5, -4,                         4 }, 3, TileID.Stone);
 
             PlaceTile(-6, 2, TileID.MushroomGrass);
 
             PlaceTile(-2, 0, TileID.Statues, style: 37); // Heart Statue
+
             PlaceTile(-4, 1, TileID.Lamps, style: 32); // Spider Lamp
-            PlaceTile(3, 1, TileID.Lamps, style: 32);
+            PlaceTile( 3, 1, TileID.Lamps, style: 32);
 
             var chest = PlaceChest(0, 0, type: TileID.Containers2, style: 2); // Spider Chest
             if (chest != null)
@@ -885,39 +599,20 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-5, -1, TileID.Granite);
-            PlaceTile(-4, -1, TileID.Granite);
-            PlaceTile( 5, -1, TileID.Granite);
-            PlaceTile( 6, -1, TileID.Granite);
+            PlaceTile(new[] { -5, -4,                            5, 6 }, -1, TileID.Granite);
+            PlaceTile(new[] { -5, -4, -3, -2,              3, 4, 5, 6 },  0, TileID.Granite);
+            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Granite);
+            PlaceTile(new[] {                 -1, 0, 1, 2             },  2, TileID.Granite);
 
-            PlaceTile(-5, 0, TileID.Granite);
-            PlaceTile(-4, 0, TileID.Granite);
-            PlaceTile(-3, 0, TileID.Granite);
-            PlaceTile(-2, 0, TileID.Granite);
-            PlaceTile( 3, 0, TileID.Granite);
-            PlaceTile( 4, 0, TileID.Granite);
-            PlaceTile( 5, 0, TileID.Granite);
-            PlaceTile( 6, 0, TileID.Granite);
+            // Granite Golem Statue
+            PlaceTile(-1, 0, TileID.Statues, style: 73);
 
-            PlaceTile(-3, 1, TileID.Granite);
-            PlaceTile(-2, 1, TileID.Granite);
-            PlaceTile(-1, 1, TileID.Granite);
-            PlaceTile( 0, 1, TileID.Granite);
-            PlaceTile( 1, 1, TileID.Granite);
-            PlaceTile( 2, 1, TileID.Granite);
-            PlaceTile( 3, 1, TileID.Granite);
-            PlaceTile( 4, 1, TileID.Granite);
+            // Granite Lamp
+            PlaceTile(-3, -1, TileID.Lamps, style: 29);
+            PlaceTile( 4, -1, TileID.Lamps, style: 29);
 
-            PlaceTile(-1, 2, TileID.Granite);
-            PlaceTile( 0, 2, TileID.Granite);
-            PlaceTile( 1, 2, TileID.Granite);
-            PlaceTile( 2, 2, TileID.Granite);
-
-            PlaceTile(-1, 0, TileID.Statues, style: 73); // Granite Golem Statue
-            PlaceTile(-3, -1, TileID.Lamps, style: 29); // Granite Lamp
-            PlaceTile(4, -1, TileID.Lamps, style: 29);
-
-            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 50); // Granite Chest
+            // Granite Chest
+            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 50);
             if (chest != null)
             {
                 int nextSlot = 0;
@@ -945,39 +640,20 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(-5, -1, TileID.Marble);
-            PlaceTile(-4, -1, TileID.Marble);
-            PlaceTile( 5, -1, TileID.Marble);
-            PlaceTile( 6, -1, TileID.Marble);
+            PlaceTile(new[] { -5, -4,                            5, 6 }, -1, TileID.Marble);
+            PlaceTile(new[] { -5, -4, -3, -2,              3, 4, 5, 6 },  0, TileID.Marble);
+            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Marble);
+            PlaceTile(new[] {                 -1, 0, 1, 2             },  2, TileID.Marble);
 
-            PlaceTile(-5, 0, TileID.Marble);
-            PlaceTile(-4, 0, TileID.Marble);
-            PlaceTile(-3, 0, TileID.Marble);
-            PlaceTile(-2, 0, TileID.Marble);
-            PlaceTile( 3, 0, TileID.Marble);
-            PlaceTile( 4, 0, TileID.Marble);
-            PlaceTile( 5, 0, TileID.Marble);
-            PlaceTile( 6, 0, TileID.Marble);
+            // Hoplite Statue
+            PlaceTile(-1, 0, TileID.Statues, style: 72);
 
-            PlaceTile(-3, 1, TileID.Marble);
-            PlaceTile(-2, 1, TileID.Marble);
-            PlaceTile(-1, 1, TileID.Marble);
-            PlaceTile( 0, 1, TileID.Marble);
-            PlaceTile( 1, 1, TileID.Marble);
-            PlaceTile( 2, 1, TileID.Marble);
-            PlaceTile( 3, 1, TileID.Marble);
-            PlaceTile( 4, 1, TileID.Marble);
+            // Marble Lamp
+            PlaceTile(-3, -1, TileID.Lamps, style: 30);
+            PlaceTile( 4, -1, TileID.Lamps, style: 30);
 
-            PlaceTile(-1, 2, TileID.Marble);
-            PlaceTile( 0, 2, TileID.Marble);
-            PlaceTile( 1, 2, TileID.Marble);
-            PlaceTile( 2, 2, TileID.Marble);
-
-            PlaceTile(-1, 0, TileID.Statues, style: 72); // Hoplite Statue
-            PlaceTile(-3, -1, TileID.Lamps, style: 30); // Marble Lamp
-            PlaceTile(4, -1, TileID.Lamps, style: 30);
-
-            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 51); // Marble Chest
+            // Marble Chest
+            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 51);
             if (chest != null)
             {
                 int nextSlot = 0;
@@ -1009,160 +685,27 @@ namespace CrabsSkyblockChallenge
         
         public void PlaceTiles()
         {
-            PlaceTile(-7, -1, TileID.Sunplate);
-            PlaceTile(-6, -1, TileID.Sunplate);
-            PlaceTile(-5, -1, TileID.Sunplate);
-            PlaceTile( 3, -1, TileID.Sunplate);
-            PlaceTile( 4, -1, TileID.Sunplate);
-            PlaceTile( 5, -1, TileID.Sunplate);
+            PlaceTile(new[] {     -7, -6, -5,                          3, 4, 5    }, -1, TileID.Sunplate);
+            PlaceTile(new[] { -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6 },  0, TileID.Sunplate);
+            PlaceTile(new[] {         -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Sunplate);
+            PlaceTile(new[] {                             -1, 0                   },  2, TileID.Sunplate);
 
-            PlaceTile(-16, 0, TileID.Cloud);
-            PlaceTile(-15, 0, TileID.Cloud);
-            PlaceTile(-14, 0, TileID.Cloud);
-            PlaceTile(-11, 0, TileID.Cloud);
-            PlaceTile(-10, 0, TileID.Cloud);
-            PlaceTile( -9, 0, TileID.Cloud);
-            PlaceTile( -8, 0, TileID.Sunplate);
-            PlaceTile( -7, 0, TileID.Sunplate);
-            PlaceTile( -6, 0, TileID.Sunplate);
-            PlaceTile( -5, 0, TileID.Sunplate);
-            PlaceTile( -4, 0, TileID.Sunplate);
-            PlaceTile( -3, 0, TileID.Sunplate);
-            PlaceTile( -2, 0, TileID.Sunplate);
-            PlaceTile( -1, 0, TileID.Sunplate);
-            PlaceTile(  0, 0, TileID.Sunplate);
-            PlaceTile(  1, 0, TileID.Sunplate);
-            PlaceTile(  2, 0, TileID.Sunplate);
-            PlaceTile(  3, 0, TileID.Sunplate);
-            PlaceTile(  4, 0, TileID.Sunplate);
-            PlaceTile(  5, 0, TileID.Sunplate);
-            PlaceTile(  6, 0, TileID.Sunplate);
-            PlaceTile(  7, 0, TileID.Cloud);
-            PlaceTile(  8, 0, TileID.Cloud);
-            PlaceTile(  9, 0, TileID.Cloud);
-            PlaceTile( 10, 0, TileID.Cloud);
-            PlaceTile( 11, 0, TileID.Cloud);
-            PlaceTile( 12, 0, TileID.Cloud);
-
-            PlaceTile(-15, 1, TileID.Cloud);
-            PlaceTile(-14, 1, TileID.Cloud);
-            PlaceTile(-13, 1, TileID.Cloud);
-            PlaceTile(-12, 1, TileID.Cloud);
-            PlaceTile(-11, 1, TileID.Cloud);
-            PlaceTile(-10, 1, TileID.Cloud);
-            PlaceTile( -9, 1, TileID.Cloud);
-            PlaceTile( -8, 1, TileID.Cloud);
-            PlaceTile( -7, 1, TileID.Cloud);
-            PlaceTile( -6, 1, TileID.Sunplate);
-            PlaceTile( -5, 1, TileID.Sunplate);
-            PlaceTile( -4, 1, TileID.Sunplate);
-            PlaceTile( -3, 1, TileID.Sunplate);
-            PlaceTile( -2, 1, TileID.Sunplate);
-            PlaceTile( -1, 1, TileID.Sunplate);
-            PlaceTile(  0, 1, TileID.Sunplate);
-            PlaceTile(  1, 1, TileID.Sunplate);
-            PlaceTile(  2, 1, TileID.Sunplate);
-            PlaceTile(  3, 1, TileID.Sunplate);
-            PlaceTile(  4, 1, TileID.Sunplate);
-            PlaceTile(  5, 1, TileID.Cloud);
-            PlaceTile(  6, 1, TileID.Cloud);
-            PlaceTile(  7, 1, TileID.Cloud);
-            PlaceTile(  8, 1, TileID.Cloud);
-            PlaceTile(  9, 1, TileID.Cloud);
-            PlaceTile( 10, 1, TileID.Cloud);
-            PlaceTile( 11, 1, TileID.Cloud);
-            PlaceTile( 12, 1, TileID.Cloud);
-            PlaceTile( 13, 1, TileID.Cloud);
-            PlaceTile( 14, 1, TileID.Cloud);
-
-            PlaceTile(-13, 2, TileID.Cloud);
-            PlaceTile(-12, 2, TileID.Cloud);
-            PlaceTile(-11, 2, TileID.Cloud);
-            PlaceTile(-10, 2, TileID.Cloud);
-            PlaceTile( -9, 2, TileID.Cloud);
-            PlaceTile( -8, 2, TileID.Cloud);
-            PlaceTile( -7, 2, TileID.Cloud);
-            PlaceTile( -6, 2, TileID.Cloud);
-            PlaceTile( -5, 2, TileID.Cloud);
-            PlaceTile( -4, 2, TileID.Cloud);
-            PlaceTile( -3, 2, TileID.Cloud);
-            PlaceTile( -2, 2, TileID.Cloud);
-            PlaceTile( -1, 2, TileID.Sunplate);
-            PlaceTile(  0, 2, TileID.Sunplate);
-            PlaceTile(  1, 2, TileID.Cloud);
-            PlaceTile(  2, 2, TileID.Cloud);
-            PlaceTile(  3, 2, TileID.Cloud);
-            PlaceTile(  4, 2, TileID.Cloud);
-            PlaceTile(  5, 2, TileID.Cloud);
-            PlaceTile(  6, 2, TileID.Cloud);
-            PlaceTile(  7, 2, TileID.Cloud);
-            PlaceTile(  8, 2, TileID.Cloud);
-            PlaceTile(  9, 2, TileID.Cloud);
-            PlaceTile( 10, 2, TileID.Cloud);
-            PlaceTile( 11, 2, TileID.Cloud);
-            PlaceTile( 12, 2, TileID.Cloud);
-            PlaceTile( 13, 2, TileID.Cloud);
-            PlaceTile( 14, 2, TileID.Cloud);
-            PlaceTile( 15, 2, TileID.Cloud);
-
-            PlaceTile(-12, 3, TileID.Cloud);
-            PlaceTile(-11, 3, TileID.Cloud);
-            PlaceTile(-10, 3, TileID.Cloud);
-            PlaceTile( -9, 3, TileID.Cloud);
-            PlaceTile( -8, 3, TileID.Cloud);
-            PlaceTile( -7, 3, TileID.Cloud);
-            PlaceTile( -6, 3, TileID.Cloud);
-            PlaceTile( -5, 3, TileID.Cloud);
-            PlaceTile( -4, 3, TileID.Cloud);
-            PlaceTile( -3, 3, TileID.Cloud);
-            PlaceTile( -2, 3, TileID.Cloud);
-            PlaceTile( -1, 3, TileID.Cloud);
-            PlaceTile(  0, 3, TileID.Cloud);
-            PlaceTile(  1, 3, TileID.Cloud);
-            PlaceTile(  2, 3, TileID.Cloud);
-            PlaceTile(  3, 3, TileID.Cloud);
-            PlaceTile(  4, 3, TileID.Cloud);
-            PlaceTile(  5, 3, TileID.Cloud);
-            PlaceTile(  6, 3, TileID.Cloud);
-            PlaceTile(  7, 3, TileID.Cloud);
-            PlaceTile(  8, 3, TileID.Cloud);
-            PlaceTile(  9, 3, TileID.Cloud);
-            PlaceTile( 10, 3, TileID.Cloud);
-
-            PlaceTile( -8, 4, TileID.Cloud);
-            PlaceTile( -7, 4, TileID.Cloud);
-            PlaceTile( -6, 4, TileID.Cloud);
-            PlaceTile( -5, 4, TileID.Cloud);
-            PlaceTile( -4, 4, TileID.Cloud);
-            PlaceTile( -3, 4, TileID.Cloud);
-            PlaceTile( -2, 4, TileID.Cloud);
-            PlaceTile( -1, 4, TileID.Cloud);
-            PlaceTile(  0, 4, TileID.Cloud);
-            PlaceTile(  1, 4, TileID.Cloud);
-            PlaceTile(  2, 4, TileID.Cloud);
-            PlaceTile(  3, 4, TileID.Cloud);
-            PlaceTile(  4, 4, TileID.Cloud);
-            PlaceTile(  5, 4, TileID.Cloud);
-            PlaceTile(  6, 4, TileID.Cloud);
-            PlaceTile(  7, 4, TileID.Cloud);
-
-            PlaceTile( -3, 5, TileID.Cloud);
-            PlaceTile( -2, 5, TileID.Cloud);
-            PlaceTile( -1, 5, TileID.Cloud);
-            PlaceTile(  0, 5, TileID.Cloud);
-            PlaceTile(  1, 5, TileID.Cloud);
-            PlaceTile(  2, 5, TileID.Cloud);
-            PlaceTile(  3, 5, TileID.Cloud);
-            PlaceTile(  4, 5, TileID.Cloud);
-            PlaceTile(  5, 5, TileID.Cloud);
+            PlaceTile(new[] { -16, -15, -14,           -11, -10, -9,                                                      7, 8, 9, 10, 11, 12             }, 0, TileID.Cloud);
+            PlaceTile(new[] {      -15, -14, -13, -12, -11, -10, -9, -8, -7,                                        5, 6, 7, 8, 9, 10, 11, 12, 13, 14     }, 1, TileID.Cloud);
+            PlaceTile(new[] {                -13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2,        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }, 2, TileID.Cloud);
+            PlaceTile(new[] {                     -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10                     }, 3, TileID.Cloud);
+            PlaceTile(new[] {                                        -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7                               }, 4, TileID.Cloud);
+            PlaceTile(new[] {                                                            -3, -2, -1, 0, 1, 2, 3, 4, 5                                     }, 5, TileID.Cloud);
 
             PlaceTile(-2, -1, TileID.Statues, style: 70); // Harpy Statue
             PlaceTile(1, -1, TileID.SkyMill);
 
-            PlaceTile(-6, -2, TileID.Lamps, style: 9); // Skyware Lamp
-            PlaceTile(4, -2, TileID.Lamps, style: 9);
+            // Skyware Lamp
+            PlaceTile(-6, -2, TileID.Lamps, style: 9);
+            PlaceTile( 4, -2, TileID.Lamps, style: 9);
 
-            var chest = PlaceChest(-4, -1, type: TileID.Containers, style: 13); // Skyware Chest
+            // Skyware Chest
+            var chest = PlaceChest(-4, -1, type: TileID.Containers, style: 13);
             if (chest != null)
             {
                 int nextSlot = 0;
