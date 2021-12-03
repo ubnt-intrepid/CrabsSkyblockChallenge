@@ -417,13 +417,13 @@ namespace CrabsSkyblockChallenge
 
     sealed class SnowIsland : FloatingIsland
     {
-        //         l                   l
-        //         l                   l
-        //         l   m m m s s c c   l
-        // -   x x x   m m m s s c c   x x x
-        // 0 x x x x x m m m s s x x x x x x x
-        // +     x x x x x x x x x x x x x
-        //           x x x x x x x x x
+        //         l               l
+        //         l               l
+        //         l   s s         l
+        // -   x x x   s s c c     x x
+        // 0 x x x x x s s c c x x x x x x
+        // +     x x x x x x x x x x x x
+        //           x x x x x x x x
         //           x x x x x
         //             - 0 +
 
@@ -433,19 +433,21 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(new[] {     -5, -4, -3,                              7, 8, 9     }, -1, TileID.SnowBlock);
-            PlaceTile(new[] { -6, -5, -4, -3, -2,                 4, 5, 6, 7, 8, 9, 10 },  0, TileID.SnowBlock);
-            PlaceTile(new[] {         -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8        },  1, TileID.SnowBlock);
-            PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4, 5, 6              },  2, TileID.SnowBlock);
-            PlaceTile(new[] {                 -2, -1, 0, 1, 2                          },  3, TileID.SnowBlock);
+            PlaceTile(new[] {     -5, -4, -3,                        5, 6        }, -1, TileID.SnowBlock);
+            PlaceTile(new[] { -6, -5, -4, -3, -2,              3, 4, 5, 6, 7, 8  },  0, TileID.SnowBlock);
+            PlaceTile(new[] {         -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7     },  1, TileID.SnowBlock);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4, 5           },  2, TileID.SnowBlock);
+            PlaceTile(new[] {                 -2, -1, 0, 1, 2                    },  3, TileID.SnowBlock);
 
-            PlaceTile(2, 0, TileID.Statues, style:68); // Undead Viking Statue
-            PlaceTile(0, 0, TileID.IceMachine);
+            // Undead Viking Statue
+            PlaceTile(-1, 0, TileID.Statues, style:68);
 
-            PlaceTile(-3, -2, TileID.Lamps, style: 20); // Boreal Wood Lamp
-            PlaceTile(7, -2, TileID.Lamps, style: 20);
+            // Boreal Wood Lamp
+            PlaceTile(-3, -2, TileID.Lamps, style: 20);
+            PlaceTile( 5, -2, TileID.Lamps, style: 20);
 
-            PlaceChest(4, -1, type: TileID.Containers, style: 11); // Frozen Chest
+            // Frozen Chest
+            PlaceChest(1, 0, type: TileID.Containers, style: 11);
         }
     }
 
@@ -662,10 +664,10 @@ namespace CrabsSkyblockChallenge
 
     sealed class SkyIsland : FloatingIsland
     {
-        //                       l                   l
-        //                       l       s s m m m   l
-        //                       l   c c s s m m m   l
-        // -                   x x x c c s s m m m x x x
+        //                         l                 l
+        //                         l     s s         l
+        //                         l     s s c c     l
+        // -                     x x x   s s c c   x x x
         // 0 d d d     d d d x x x x x x x x x x x x x x x d d d d d d
         // +   d d d d d d d d d x x x x x x x x x x x d d d d d d d d d d
         //         d d d d d d d d d d d d x x d d d d d d d d d d d d d d d
@@ -680,7 +682,7 @@ namespace CrabsSkyblockChallenge
         
         public void PlaceTiles()
         {
-            PlaceTile(new[] {     -7, -6, -5,                          3, 4, 5    }, -1, TileID.Sunplate);
+            PlaceTile(new[] {         -6, -5, -4,                      3, 4, 5    }, -1, TileID.Sunplate);
             PlaceTile(new[] { -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6 },  0, TileID.Sunplate);
             PlaceTile(new[] {         -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Sunplate);
             PlaceTile(new[] {                             -1, 0                   },  2, TileID.Sunplate);
@@ -692,15 +694,15 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {                                        -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7                               }, 4, TileID.Cloud);
             PlaceTile(new[] {                                                            -3, -2, -1, 0, 1, 2, 3, 4, 5                                     }, 5, TileID.Cloud);
 
-            PlaceTile(-2, -1, TileID.Statues, style: 70); // Harpy Statue
-            PlaceTile(1, -1, TileID.SkyMill);
+            // Harpy Statue
+            PlaceTile(-2, -1, TileID.Statues, style: 70);
 
             // Skyware Lamp
-            PlaceTile(-6, -2, TileID.Lamps, style: 9);
+            PlaceTile(-5, -2, TileID.Lamps, style: 9);
             PlaceTile( 4, -2, TileID.Lamps, style: 9);
 
             // Skyware Chest
-            PlaceChest(-4, -1, type: TileID.Containers, style: 13);
+            PlaceChest(0, -1, type: TileID.Containers, style: 13);
         }
     }
 }
