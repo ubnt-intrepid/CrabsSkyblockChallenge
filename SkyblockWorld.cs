@@ -66,18 +66,78 @@ namespace CrabsSkyblockChallenge
                 y: Main.spawnTileY
             );
             spawn.PlaceTiles();
+            spawn.AddChestItem(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
+            spawn.AddChestItem(WorldGen.SavedOreTiers.Iron == TileID.Lead ? ItemID.LeadOre : ItemID.IronOre, stack: 9);
 
             var jungle = new JungleIsland(
                 x: (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(250, 350)),
                 y: Main.spawnTileY
             );
             jungle.PlaceTiles();
+            jungle.AddChestItem(ItemID.StaffofRegrowth);
+            jungle.AddChestItem(ItemID.HiveWand);
+            jungle.AddChestItem(ItemID.BugNet);
 
             var snow = new SnowIsland(
                 x: (int)(Main.maxTilesX * 0.5 + dungeonDirection * Main.rand.Next(250, 350)),
                 y: Main.spawnTileY
             );
             snow.PlaceTiles();
+            snow.AddChestItem(ItemID.IceSkates);
+            snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
+
+            var sandstone = new SandstoneIsland(
+                x: (Main.rand.Next(2) == 0 ? jungle.X : snow.X) + Main.rand.Next(-50, 50),
+                y: (int)Main.rockLayer - Main.rand.Next(50, 150)
+            );
+            sandstone.PlaceTiles();
+            sandstone.AddChestItem(ItemID.HermesBoots);
+            sandstone.AddChestItem(ItemID.CloudinaBottle);
+            sandstone.AddChestItem(ItemID.LuckyHorseshoe);
+
+            var ocean = new OceanIsland(
+                x: Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200),
+                y: Main.spawnTileY
+            );
+            ocean.PlaceTiles();
+            ocean.AddChestItem(ItemID.WaterWalkingBoots);
+            ocean.AddChestItem(ItemID.GoldenFishingRod);
+            ocean.AddChestItem(ItemID.JourneymanBait, stack: 20);
+
+            var cavern = new CavernIsland(
+                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100),
+                y: Main.UnderworldLayer - Main.rand.Next(50, 150)
+            );
+            cavern.PlaceTiles();
+            cavern.AddChestItem(ItemID.BandofRegeneration);
+            cavern.AddChestItem(ItemID.MagicMirror);
+            cavern.AddChestItem(ItemID.SuspiciousLookingEye, stack: 10);
+
+            var granite = new GraniteIsland(
+                x: (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450),
+                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
+            );
+            granite.PlaceTiles();
+            granite.AddChestItem(ItemID.FlareGun);
+            granite.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
+
+            var marble = new MarbleIsland(
+                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450),
+                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
+            );
+            marble.PlaceTiles();
+            marble.AddChestItem(ItemID.ShoeSpikes);
+            marble.AddChestItem(ItemID.Mace);
+            marble.AddChestItem(ItemID.BloodMoonStarter, stack: 10);
+
+            var sky = new SkyIsland(
+                x: (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100),
+                y: (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50)
+            );
+            sky.PlaceTiles();
+            sky.AddChestItem(ItemID.CreativeWings);
+            sky.AddChestItem(ItemID.ShinyRedBalloon);
+            sky.AddChestItem(ItemID.Starfury);
 
             var altar = new AltarIsland(
                 x: templeX + Main.rand.Next(-100, 100),
@@ -85,41 +145,15 @@ namespace CrabsSkyblockChallenge
             );
             altar.PlaceTiles();
 
-            var sandstone = new SandstoneIsland(
-                x: (Main.rand.Next(2) == 0 ? jungle.X : snow.X) + Main.rand.Next(-50, 50),
-                y: (int)Main.rockLayer - Main.rand.Next(50, 150)
-            );
-            sandstone.PlaceTiles();
-
-            var ocean = new OceanIsland(
-                x: Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200),
-                y: Main.spawnTileY
-            );
-            ocean.PlaceTiles();
-
-            var cavern = new CavernIsland(
-                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100),
-                y: Main.UnderworldLayer - Main.rand.Next(50, 150)
-            );
-            cavern.PlaceTiles();
-
-            var granite = new GraniteIsland(
-                x: (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450),
-                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            );
-            granite.PlaceTiles();
-
-            var marble = new MarbleIsland(
-                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450),
-                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            );
-            marble.PlaceTiles();
-
-            var sky = new SkyIsland(
-                x: (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100),
-                y: (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50)
-            );
-            sky.PlaceTiles();
+            #region Place Life Crystals
+            var lifeCrystalIslands = new List<FloatingIsland> { jungle, snow, sandstone, ocean, cavern, granite, marble, sky };
+            for (int i = 0; i < 5; i++)
+            {
+                var num = Main.rand.Next(0, lifeCrystalIslands.Count);
+                lifeCrystalIslands[num].AddChestItem(ItemID.LifeCrystal, stack: 3);
+                lifeCrystalIslands.RemoveAt(num);
+            }
+            #endregion
         }
     }
 
@@ -127,6 +161,9 @@ namespace CrabsSkyblockChallenge
     {
         public int X { get; private set; }
         public int Y { get; private set; }
+
+        private int chestIndex = -1;
+        private int chestNextSlot = -1;
 
         protected FloatingIsland(int x, int y)
         {
@@ -171,10 +208,21 @@ namespace CrabsSkyblockChallenge
             WorldGen.PlaceLiquid(X + i, Y + j, liquidType: type, amount: amount);
         }
 
-        protected Chest PlaceChest(int i, int j, ushort type = TileID.Containers, int style = 0)
+        protected void PlaceChest(int i, int j, ushort type = TileID.Containers, int style = 0)
         {
             int num = WorldGen.PlaceChest(X + i, Y + j, type: type, style: style);
-            return num != -1 ? Main.chest[num] : null;
+            if (num != -1)
+            {
+                chestIndex = num;
+                chestNextSlot = 0;
+            }
+        }
+
+        public void AddChestItem(int type, int stack = 1, int prefix = 0)
+        {
+            var chest = Main.chest[chestIndex];
+            chest.item[chestNextSlot] = new Item(type, stack, prefix);
+            chestNextSlot++;
         }
     }
 
@@ -243,13 +291,7 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            var chest = PlaceChest(1, -2, chestType, chestStyle);
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
-                chest.item[nextSlot++] = new Item(WorldGen.SavedOreTiers.Iron == TileID.Lead ? ItemID.LeadOre : ItemID.IronOre, stack: 9);
-            }
+            PlaceChest(1, -2, chestType, chestStyle);
 
             if (Main.tenthAnniversaryWorld)
             {
@@ -365,15 +407,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(3, -1, TileID.Lamps, style: 6); // Rich Mahogany Lamp
             PlaceTile(6, -1, TileID.Lamps, style: 6);
 
-            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 10); // Ivy Chest
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.StaffofRegrowth);
-                chest.item[nextSlot++] = new Item(ItemID.HiveWand);
-                chest.item[nextSlot++] = new Item(ItemID.BugNet);
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
-            }
+            PlaceChest(1, 0, type: TileID.Containers, style: 10); // Ivy Chest
         }
     }
 
@@ -407,12 +441,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(-3, -2, TileID.Lamps, style: 20); // Boreal Wood Lamp
             PlaceTile(7, -2, TileID.Lamps, style: 20);
 
-            var chest = PlaceChest(4, -1, type: TileID.Containers, style: 11); // Frozen Chest
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.IceSkates);
-            }
+            PlaceChest(4, -1, type: TileID.Containers, style: 11); // Frozen Chest
         }
     }
 
@@ -479,15 +508,7 @@ namespace CrabsSkyblockChallenge
 
             PlaceTile(2, 0, TileID.Extractinator);
 
-            var chest = PlaceChest(-1, 0, type: TileID.Containers2, style: 10); // Sandstone Chest
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.HermesBoots);
-                chest.item[nextSlot++] = new Item(ItemID.CloudinaBottle);
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
-                chest.item[nextSlot++] = new Item(ItemID.SlimeCrown, stack: 10);
-            }
+            PlaceChest(-1, 0, type: TileID.Containers2, style: 10); // Sandstone Chest
         }
     }
 
@@ -523,14 +544,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(-5, -2, TileID.Torches, style: 17); // Coral Torch
             PlaceTile(7, -2, TileID.Torches, style: 17);
 
-            var chest = PlaceChest(1, -1, type: TileID.Containers, style: 17); // Water Chest
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.WaterWalkingBoots);
-                chest.item[nextSlot++] = new Item(ItemID.GoldenFishingRod);
-                chest.item[nextSlot++] = new Item(ItemID.JourneymanBait, stack: 20);
-            }
+            PlaceChest(1, -1, type: TileID.Containers, style: 17); // Water Chest
         }
     }
 
@@ -572,15 +586,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile(-4, 1, TileID.Lamps, style: 32); // Spider Lamp
             PlaceTile( 3, 1, TileID.Lamps, style: 32);
 
-            var chest = PlaceChest(0, 0, type: TileID.Containers2, style: 2); // Spider Chest
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.BandofRegeneration);
-                chest.item[nextSlot++] = new Item(ItemID.MagicMirror);
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
-                chest.item[nextSlot++] = new Item(ItemID.SuspiciousLookingEye, stack: 10);
-            }
+            PlaceChest(0, 0, type: TileID.Containers2, style: 2); // Spider Chest
         }
     }
 
@@ -613,15 +619,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile( 4, -1, TileID.Lamps, style: 29);
 
             // Granite Chest
-            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 50);
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.FlareGun);
-                chest.item[nextSlot++] = new Item(ItemID.Flare, stack: Main.rand.Next(25, 50));
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
-                chest.item[nextSlot++] = new Item(ItemID.SnowGlobe, stack: 10);
-            }
+            PlaceChest(1, 0, type: TileID.Containers, style: 50);
         }
     }
 
@@ -654,15 +652,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile( 4, -1, TileID.Lamps, style: 30);
 
             // Marble Chest
-            var chest = PlaceChest(1, 0, type: TileID.Containers, style: 51);
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.ShoeSpikes);
-                chest.item[nextSlot++] = new Item(ItemID.Mace);
-                chest.item[nextSlot++] = new Item(ItemID.LifeCrystal, stack: 3);
-                chest.item[nextSlot++] = new Item(ItemID.BloodMoonStarter, stack: 10);
-            }
+            PlaceChest(1, 0, type: TileID.Containers, style: 51);
         }
     }
 
@@ -706,14 +696,7 @@ namespace CrabsSkyblockChallenge
             PlaceTile( 4, -2, TileID.Lamps, style: 9);
 
             // Skyware Chest
-            var chest = PlaceChest(-4, -1, type: TileID.Containers, style: 13);
-            if (chest != null)
-            {
-                int nextSlot = 0;
-                chest.item[nextSlot++] = new Item(ItemID.CreativeWings);
-                chest.item[nextSlot++] = new Item(ItemID.ShinyRedBalloon);
-                chest.item[nextSlot++] = new Item(ItemID.Starfury);
-            }
+            PlaceChest(-4, -1, type: TileID.Containers, style: 13);
         }
     }
 }
