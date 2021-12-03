@@ -229,8 +229,8 @@ namespace CrabsSkyblockChallenge
     sealed class SpawnIsland : FloatingIsland
     {
         //
-        //         s s s   c c
-        //         s s s   c c
+        //         s s s c c p p
+        //         s s s c c p p
         // -   x x s s s x x x x   x
         // 0   x x x x x x x x x x x
         // +       x x x x x x x
@@ -253,6 +253,11 @@ namespace CrabsSkyblockChallenge
 
             PlaceTile(-2, -1, TileID.Solidifier);
             PlaceTile(1, 2, TileID.Torches, style: TorchID.Torch);
+
+            if (WorldGen.dontStarveWorldGen)
+            {
+                PlaceTile(3, -2, TileID.CookingPots);
+            }
 
             ushort chestType = TileID.Containers;
             int chestStyle = 0;
@@ -291,7 +296,7 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            PlaceChest(1, -2, chestType, chestStyle);
+            PlaceChest(0, -2, chestType, chestStyle);
 
             if (Main.tenthAnniversaryWorld)
             {
