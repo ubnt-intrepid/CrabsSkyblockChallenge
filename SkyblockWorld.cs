@@ -403,11 +403,15 @@ namespace CrabsSkyblockChallenge
 
             PlaceLiquid(3, 1, WorldGen.getGoodWorldGen ? (byte)LiquidID.Lava : WorldGen.notTheBees ? (byte)LiquidID.Honey : (byte)LiquidID.Water);
 
-            PlaceTile(-1, 0, TileID.Statues, style: 16); // Hornet Statue
-            PlaceTile(3, -1, TileID.Lamps, style: 6); // Rich Mahogany Lamp
-            PlaceTile(6, -1, TileID.Lamps, style: 6);
+            // Hornet Statue
+            PlaceTile(-1, 0, TileID.Statues, style: 16);
 
-            PlaceChest(1, 0, type: TileID.Containers, style: 10); // Ivy Chest
+            // Rich Mahogany Lamp
+            PlaceTile(-3, -1, TileID.Lamps, style: 6);
+            PlaceTile( 6, -1, TileID.Lamps, style: 6);
+
+            // Ivy Chest
+            PlaceChest(1, 0, type: TileID.Containers, style: 10);
         }
     }
 
