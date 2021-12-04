@@ -1,11 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace CrabsSkyblockChallenge.NPCs
+namespace CrabsSkyblockChallenge
 {
     public class SkyblockGlobalNPC : GlobalNPC
     {
