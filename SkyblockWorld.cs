@@ -45,7 +45,8 @@ namespace CrabsSkyblockChallenge
 
             if (Main.tenthAnniversaryWorld)
             {
-                Main.spawnTileX = Utils.Clamp((int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.45)), 100, Main.maxTilesX - 100);
+                // The beach side opposite the Dungeon entrance.
+                Main.spawnTileX = (int)(Main.maxTilesX * 0.5 * (1 - dungeonDirection)) + dungeonDirection * Main.rand.Next(150, 250);
             }
 
             #region Setup Dungeon and Jungle Temple
@@ -99,7 +100,8 @@ namespace CrabsSkyblockChallenge
 
             var ocean = new OceanIsland
             {
-                X = Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200),
+                // The same direction as Dungeon, and opposite the spawn point on celebrationmk10 world.
+                X = (int)(Main.maxTilesX * 0.5 * (1 + dungeonDirection)) - dungeonDirection * Main.rand.Next(150, 250),
                 Y = Main.spawnTileY
             };
             ocean.PlaceTiles();
