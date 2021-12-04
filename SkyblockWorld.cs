@@ -65,7 +65,7 @@ namespace CrabsSkyblockChallenge
 
             #endregion
 
-            #region Setup island locations
+            #region Setup floating islands
 
             // TODO: detect collision
 
@@ -111,20 +111,6 @@ namespace CrabsSkyblockChallenge
             };
             cavern.PlaceTiles();
 
-            var granite = new GraniteIsland
-            {
-                X = (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450),
-                Y = (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            };
-            granite.PlaceTiles();
-
-            var marble = new MarbleIsland
-            {
-                X = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450),
-                Y = (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            };
-            marble.PlaceTiles();
-
             var sky = new SkyIsland
             {
                 X = (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100),
@@ -146,31 +132,34 @@ namespace CrabsSkyblockChallenge
             jungle.AddChestItem(ItemID.StaffofRegrowth);
             jungle.AddChestItem(ItemID.HiveWand);
             jungle.AddChestItem(ItemID.BugNet);
+            jungle.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             snow.AddChestItem(ItemID.IceSkates);
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
+            snow.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             sandstone.AddChestItem(ItemID.MagicConch);
             sandstone.AddChestItem(ItemID.CatBast);
+            sandstone.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             ocean.AddChestItem(ItemID.WaterWalkingBoots);
             ocean.AddChestItem(ItemID.GoldenFishingRod);
             ocean.AddChestItem(ItemID.JourneymanBait, stack: 20);
+            ocean.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             cavern.AddChestItem(ItemID.BandofRegeneration);
+            cavern.AddChestItem(ItemID.LuckyHorseshoe);
+            cavern.AddChestItem(ItemID.ShoeSpikes);
+            cavern.AddChestItem(ItemID.Mace);
+            cavern.AddChestItem(ItemID.FlareGun);
+            cavern.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
             cavern.AddChestItem(ItemID.SuspiciousLookingEye, stack: 10);
-
-            granite.AddChestItem(ItemID.FlareGun);
-            granite.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
-            granite.AddChestItem(ItemID.LuckyHorseshoe);
-
-            marble.AddChestItem(ItemID.ShoeSpikes);
-            marble.AddChestItem(ItemID.Mace);
-            marble.AddChestItem(ItemID.BloodMoonStarter, stack: 10);
+            cavern.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             sky.AddChestItem(ItemID.CreativeWings);
             sky.AddChestItem(ItemID.ShinyRedBalloon);
             sky.AddChestItem(ItemID.Starfury);
+            sky.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             // Boots and double-jump accessory
             switch (Main.rand.Next(3))
@@ -207,15 +196,6 @@ namespace CrabsSkyblockChallenge
 
                 default:
                     break;
-            }
-
-            // Life crystals
-            var lifeCrystalIslands = new List<FloatingIsland> { jungle, snow, sandstone, cavern, granite, marble, sky };
-            for (int i = 0; i < 5; i++)
-            {
-                var num = Main.rand.Next(0, lifeCrystalIslands.Count);
-                lifeCrystalIslands[num].AddChestItem(ItemID.LifeCrystal, stack: 3);
-                lifeCrystalIslands.RemoveAt(num);
             }
 
             #endregion
@@ -618,14 +598,14 @@ namespace CrabsSkyblockChallenge
 
     sealed class CavernIsland : FloatingIsland
     {
-        //           w w
-        //         w w w w w
-        //       w w s s w w w w
-        // -     l w s s c c w l
-        // 0     l w s s c c w l w
-        // +   w l w x x x x x l x 
-        //   g x x x x       x x x
-        //   x x x               x
+        //           s s
+        // -     l   s s c c   l
+        // 0     l   s s c c   l
+        // +     l   x x x x x l x 
+        //   M x x x x g m m x x x m
+        //   x x x g g g     m m x m m
+        //   g g g g g         m m m
+        //         g
         //             - 0 +
 
         public void PlaceTiles()
@@ -643,72 +623,27 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {     -5, -4, -3, -2,           2, 3, 4 }, 2, type);
             PlaceTile(new[] { -6, -5, -4,                         4 }, 3, type);
 
+            PlaceTile(new[] {                     -1 }, 2, TileID.Granite);
+            PlaceTile(new[] {             -3, -2, -1 }, 3, TileID.Granite);
+            PlaceTile(new[] { -6, -5, -4, -3, -2     }, 4, TileID.Granite);
+            PlaceTile(new[] {             -3         }, 5, TileID.Granite);
+
+            PlaceTile(new[] { 0, 1                }, 2, TileID.Marble);
+            PlaceTile(new[] {    1, 2, 3,    5, 6 }, 3, TileID.Marble);
+            PlaceTile(new[] {          3, 4, 5    }, 4, TileID.Marble);
+
+            PlaceTile(-6, 2, TileID.Mud);
             PlaceTile(-6, 2, TileID.MushroomGrass);
 
-            PlaceTile(-2, 0, TileID.Statues, style: 37); // Heart Statue
+            // Heart Statue
+            PlaceTile(-2, 0, TileID.Statues, style: 37);
 
-            PlaceTile(-4, 1, TileID.Lamps, style: 32); // Spider Lamp
+            // Spider Lamp
+            PlaceTile(-4, 1, TileID.Lamps, style: 32);
             PlaceTile( 3, 1, TileID.Lamps, style: 32);
 
-            PlaceChest(0, 0, type: TileID.Containers2, style: 2); // Spider Chest
-        }
-    }
-
-    sealed class GraniteIsland : FloatingIsland
-    {
-        //       l             l
-        //       l   s s       l
-        // - x x l   s s c c   l x x
-        // 0 x x x x s s c c x x x x
-        // +     x x x x x x x x
-        //           x x x x
-        //           - 0 +
-
-        public void PlaceTiles()
-        {
-            PlaceTile(new[] { -5, -4,                            5, 6 }, -1, TileID.Granite);
-            PlaceTile(new[] { -5, -4, -3, -2,              3, 4, 5, 6 },  0, TileID.Granite);
-            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Granite);
-            PlaceTile(new[] {                 -1, 0, 1, 2             },  2, TileID.Granite);
-
-            // Granite Golem Statue
-            PlaceTile(-1, 0, TileID.Statues, style: 73);
-
-            // Granite Lamp
-            PlaceTile(-3, -1, TileID.Lamps, style: 29);
-            PlaceTile( 4, -1, TileID.Lamps, style: 29);
-
-            // Granite Chest
-            PlaceChest(1, 0, type: TileID.Containers, style: 50);
-        }
-    }
-
-    sealed class MarbleIsland : FloatingIsland
-    {
-        //       l             l
-        //       l   s s       l
-        // - x x l   s s c c   l x x
-        // 0 x x x x s s c c x x x x
-        // +     x x x x x x x x
-        //           x x x x
-        //           - 0 +
-
-        public void PlaceTiles()
-        {
-            PlaceTile(new[] { -5, -4,                            5, 6 }, -1, TileID.Marble);
-            PlaceTile(new[] { -5, -4, -3, -2,              3, 4, 5, 6 },  0, TileID.Marble);
-            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4       },  1, TileID.Marble);
-            PlaceTile(new[] {                 -1, 0, 1, 2             },  2, TileID.Marble);
-
-            // Hoplite Statue
-            PlaceTile(-1, 0, TileID.Statues, style: 72);
-
-            // Marble Lamp
-            PlaceTile(-3, -1, TileID.Lamps, style: 30);
-            PlaceTile( 4, -1, TileID.Lamps, style: 30);
-
-            // Marble Chest
-            PlaceChest(1, 0, type: TileID.Containers, style: 51);
+            // Spider Chest
+            PlaceChest(0, 0, type: TileID.Containers2, style: 2);
         }
     }
 
