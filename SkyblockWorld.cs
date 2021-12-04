@@ -143,9 +143,6 @@ namespace CrabsSkyblockChallenge
 
             #region Setup chest loots
 
-            spawn.AddChestItem(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
-            spawn.AddChestItem(WorldGen.SavedOreTiers.Iron == TileID.Lead ? ItemID.LeadOre : ItemID.IronOre, stack: 9);
-
             jungle.AddChestItem(ItemID.StaffofRegrowth);
             jungle.AddChestItem(ItemID.HiveWand);
             jungle.AddChestItem(ItemID.BugNet);
@@ -298,11 +295,14 @@ namespace CrabsSkyblockChallenge
     {
         //
         //         s s s c c p p
-        //         s s s c c p p
+        //         s s s c c p p   t
         // -   x x s s s x x x x   x
-        // 0   x x x x x x x x x x x
-        // +       x x x x x x x
-        //             x x t
+        // 0   * x x x x x x x x x x * *
+        // +   * * x x x x x x x * * *
+        //       * * * x x i i i * *
+        //         * * * i i i i *
+        //           * * * i i * *
+        //               * * *
         //
         //             - 0 +
 
@@ -311,12 +311,25 @@ namespace CrabsSkyblockChallenge
             var paintColor = WorldGen.tenthAnniversaryWorldGen ? PaintID.DeepPinkPaint : (byte)0;
 
             PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(new[] { -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt, paintColor: paintColor);
             PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3       },  1, TileID.Dirt, paintColor: paintColor);
             PlaceTile(new[] {                 -1, 0                },  2, TileID.Dirt, paintColor: paintColor);
 
+            var baseBlockType = WorldGen.crimson ? TileID.FleshBlock : TileID.LesionBlock;
+            PlaceTile(new[] { -5,                                   6, 7 }, 0, baseBlockType);
+            PlaceTile(new[] { -5, -4,                         4, 5, 6    }, 1, baseBlockType);
+            PlaceTile(new[] {     -4, -3, -2,                 4, 5       }, 2, baseBlockType);
+            PlaceTile(new[] {         -3, -2, -1,             4          }, 3, baseBlockType);
+            PlaceTile(new[] {             -2, -1, 0,       3, 4          }, 4, baseBlockType);
+            PlaceTile(new[] {                     0, 1, 2                }, 5, baseBlockType);
+
+            PlaceTile(new[] {    1, 2, 3 }, 2, WorldGen.SavedOreTiers.Iron);
+            PlaceTile(new[] { 0, 1, 2, 3 }, 3, WorldGen.SavedOreTiers.Iron);
+            PlaceTile(new[] {    1, 2    }, 4, WorldGen.SavedOreTiers.Iron);
+
+
             PlaceTile(-2, -1, TileID.Solidifier);
-            PlaceTile(1, 2, TileID.Torches, style: TorchID.Torch);
+            PlaceTile(5, -2, TileID.Torches, style: TorchID.Torch);
 
             if (WorldGen.dontStarveWorldGen)
             {
