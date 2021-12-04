@@ -145,7 +145,32 @@ namespace CrabsSkyblockChallenge
 
         public override void SetupShop(int type, Chest shop, ref int nextSlot)
         {
-            if (type == NPCID.Merchant && NPC.downedBoss1)
+            switch (type)
+            {
+                case NPCID.Merchant:
+                    SetupMerchantShop(shop, ref nextSlot);
+                    break;
+
+                case NPCID.Dryad:
+                    SetupDryadShop(shop, ref nextSlot);
+                    break;
+
+                case NPCID.Demolitionist:
+                    SetupDemolitionistShop(shop, ref nextSlot);
+                    break;
+
+                case NPCID.Clothier:
+                    SetupClothierShop(shop, ref nextSlot);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private static void SetupMerchantShop(Chest shop, ref int nextSlot)
+        {
+            if (NPC.downedBoss1)
             {
                 if (Main.CurrentPlayer.ZoneSnow)
                 {
@@ -170,26 +195,126 @@ namespace CrabsSkyblockChallenge
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.HeartLantern);
                     nextSlot++;
+
+                    if (Main.netMode != NetmodeID.SinglePlayer)
+                    {
+                        shop.item[nextSlot].SetDefaults(ItemID.LifeCrystal);
+                        nextSlot++;
+                    }
                 }
             }
-            else if (type == NPCID.Dryad)
+
+            if (NPC.downedBoss3)
             {
-                shop.item[nextSlot].SetDefaults(ItemID.HerbBag);
+                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.WoodenCrateHard : ItemID.WoodenCrate);
                 shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.IronCrateHard : ItemID.IronCrate);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 2, silver: 50);
+                nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 10);
                 nextSlot++;
 
                 if (Main.CurrentPlayer.ZoneJungle)
                 {
-                    shop.item[nextSlot].SetDefaults(ItemID.JungleGrassSeeds);
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.JungleFishingCrateHard : ItemID.JungleFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneSkyHeight)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.FloatingIslandFishingCrateHard : ItemID.FloatingIslandFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneCorrupt)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.CorruptFishingCrateHard : ItemID.CorruptFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneCrimson)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.CrimsonFishingCrateHard : ItemID.CrimsonFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneHallow)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.HallowedFishingCrateHard : ItemID.HallowedFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneDungeon)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.DungeonFishingCrateHard : ItemID.DungeonFishingCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneSnow)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.FrozenCrateHard : ItemID.FrozenCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.OasisCrateHard : ItemID.OasisCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneUnderworldHeight)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.LavaCrateHard : ItemID.LavaCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
+                    nextSlot++;
+                }
+
+                if (Main.CurrentPlayer.ZoneBeach)
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.OceanCrateHard : ItemID.OceanCrate);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(gold: 5);
                     nextSlot++;
                 }
             }
-            else if (type == NPCID.Demolitionist && Main.hardMode)
+        }
+
+        private static void SetupDryadShop(Chest shop, ref int nextSlot)
+        {
+            shop.item[nextSlot].SetDefaults(ItemID.HerbBag);
+            shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
+            nextSlot++;
+
+            if (Main.CurrentPlayer.ZoneJungle)
+            {
+                shop.item[nextSlot].SetDefaults(ItemID.JungleGrassSeeds);
+                nextSlot++;
+            }
+        }
+
+        private static void SetupDemolitionistShop(Chest shop, ref int nextSlot)
+        {
+            if (Main.hardMode)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.DirtBomb);
                 nextSlot++;
             }
-            else if (type == NPCID.Clothier && Main.CurrentPlayer.ZoneGlowshroom)
+        }
+
+        private static void SetupClothierShop(Chest shop, ref int nextSlot)
+        {
+            if (Main.CurrentPlayer.ZoneGlowshroom)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.MushroomHat);
                 nextSlot++;
