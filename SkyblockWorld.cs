@@ -48,6 +48,8 @@ namespace CrabsSkyblockChallenge
                 Main.spawnTileX = Utils.Clamp((int)(Main.maxTilesX * (0.5 - dungeonDirection * 0.45)), 100, Main.maxTilesX - 100);
             }
 
+            #region Setup Dungeon and Jungle Temple
+
             var dungeonX = (int)(Main.maxTilesX * (0.5 + dungeonDirection * 0.3));
             var dungeonY = (int)((Main.spawnTileY + Main.rockLayer) / 2.0) + Main.rand.Next(-200, 200);
             if (WorldGen.drunkWorldGen)
@@ -61,114 +63,180 @@ namespace CrabsSkyblockChallenge
             WorldGen.makeTemple(templeX, templeY);
             WorldGen.templePart2();
 
-            var spawn = new SpawnIsland(
-                x: Main.spawnTileX,
-                y: Main.spawnTileY
-            );
+            #endregion
+
+            #region Setup island locations
+
+            // TODO: detect collision
+
+            var spawn = new SpawnIsland
+            {
+                X = Main.spawnTileX,
+                Y = Main.spawnTileY
+            };
             spawn.PlaceTiles();
+
+            var jungle = new JungleIsland
+            {
+                X = (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(250, 350)),
+                Y = Main.spawnTileY
+            };
+            jungle.PlaceTiles();
+
+            var snow = new SnowIsland
+            {
+                X = (int)(Main.maxTilesX * 0.5 + dungeonDirection * Main.rand.Next(250, 350)),
+                Y = Main.spawnTileY
+            };
+            snow.PlaceTiles();
+
+            var sandstone = new SandstoneIsland
+            {
+                X = (Main.rand.Next(2) == 0 ? jungle.X : snow.X) + Main.rand.Next(-50, 50),
+                Y = (int)Main.rockLayer - Main.rand.Next(50, 150)
+            };
+            sandstone.PlaceTiles();
+
+            var ocean = new OceanIsland
+            {
+                X = Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200),
+                Y = Main.spawnTileY
+            };
+            ocean.PlaceTiles();
+
+            var cavern = new CavernIsland
+            {
+                X = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100),
+                Y = Main.UnderworldLayer - Main.rand.Next(50, 150)
+            };
+            cavern.PlaceTiles();
+
+            var granite = new GraniteIsland
+            {
+                X = (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450),
+                Y = (int)(Main.rockLayer + Main.rand.Next(150, 200))
+            };
+            granite.PlaceTiles();
+
+            var marble = new MarbleIsland
+            {
+                X = (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450),
+                Y = (int)(Main.rockLayer + Main.rand.Next(150, 200))
+            };
+            marble.PlaceTiles();
+
+            var sky = new SkyIsland
+            {
+                X = (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100),
+                Y = (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50)
+            };
+            sky.PlaceTiles();
+
+            var altar = new AltarIsland
+            {
+                X = templeX + Main.rand.Next(-100, 100),
+                Y = Main.spawnTileY
+            };
+            altar.PlaceTiles();
+
+            #endregion
+
+            #region Setup chest loots
+
             spawn.AddChestItem(WorldGen.crimson ? ItemID.FleshBlock : ItemID.LesionBlock, stack: 25);
             spawn.AddChestItem(WorldGen.SavedOreTiers.Iron == TileID.Lead ? ItemID.LeadOre : ItemID.IronOre, stack: 9);
 
-            var jungle = new JungleIsland(
-                x: (int)(Main.maxTilesX * 0.5 - dungeonDirection * Main.rand.Next(250, 350)),
-                y: Main.spawnTileY
-            );
-            jungle.PlaceTiles();
             jungle.AddChestItem(ItemID.StaffofRegrowth);
             jungle.AddChestItem(ItemID.HiveWand);
             jungle.AddChestItem(ItemID.BugNet);
 
-            var snow = new SnowIsland(
-                x: (int)(Main.maxTilesX * 0.5 + dungeonDirection * Main.rand.Next(250, 350)),
-                y: Main.spawnTileY
-            );
-            snow.PlaceTiles();
             snow.AddChestItem(ItemID.IceSkates);
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
 
-            var sandstone = new SandstoneIsland(
-                x: (Main.rand.Next(2) == 0 ? jungle.X : snow.X) + Main.rand.Next(-50, 50),
-                y: (int)Main.rockLayer - Main.rand.Next(50, 150)
-            );
-            sandstone.PlaceTiles();
-            sandstone.AddChestItem(ItemID.HermesBoots);
-            sandstone.AddChestItem(ItemID.CloudinaBottle);
-            sandstone.AddChestItem(ItemID.LuckyHorseshoe);
+            sandstone.AddChestItem(ItemID.MagicConch);
+            sandstone.AddChestItem(ItemID.CatBast);
 
-            var ocean = new OceanIsland(
-                x: Main.rand.Next(2) == 0 ? Main.rand.Next(150, 250) : Main.maxTilesX - Main.rand.Next(150, 200),
-                y: Main.spawnTileY
-            );
-            ocean.PlaceTiles();
             ocean.AddChestItem(ItemID.WaterWalkingBoots);
             ocean.AddChestItem(ItemID.GoldenFishingRod);
             ocean.AddChestItem(ItemID.JourneymanBait, stack: 20);
 
-            var cavern = new CavernIsland(
-                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(-100, 100),
-                y: Main.UnderworldLayer - Main.rand.Next(50, 150)
-            );
-            cavern.PlaceTiles();
             cavern.AddChestItem(ItemID.BandofRegeneration);
-            cavern.AddChestItem(ItemID.MagicMirror);
             cavern.AddChestItem(ItemID.SuspiciousLookingEye, stack: 10);
 
-            var granite = new GraniteIsland(
-                x: (int)(Main.maxTilesX * 0.5) - Main.rand.Next(350, 450),
-                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            );
-            granite.PlaceTiles();
             granite.AddChestItem(ItemID.FlareGun);
             granite.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
+            granite.AddChestItem(ItemID.LuckyHorseshoe);
 
-            var marble = new MarbleIsland(
-                x: (int)(Main.maxTilesX * 0.5) + Main.rand.Next(350, 450),
-                y: (int)(Main.rockLayer + Main.rand.Next(150, 200))
-            );
-            marble.PlaceTiles();
             marble.AddChestItem(ItemID.ShoeSpikes);
             marble.AddChestItem(ItemID.Mace);
             marble.AddChestItem(ItemID.BloodMoonStarter, stack: 10);
 
-            var sky = new SkyIsland(
-                x: (int)(Main.maxTilesX * (Main.rand.Next(2) == 0 ? 0.2 : 0.8)) + Main.rand.Next(-100, 100),
-                y: (int)(Main.worldSurface * 0.5) + Main.rand.Next(-50, 50)
-            );
-            sky.PlaceTiles();
             sky.AddChestItem(ItemID.CreativeWings);
             sky.AddChestItem(ItemID.ShinyRedBalloon);
             sky.AddChestItem(ItemID.Starfury);
 
-            var altar = new AltarIsland(
-                x: templeX + Main.rand.Next(-100, 100),
-                y: Main.spawnTileY
-            );
-            altar.PlaceTiles();
+            // Boots and double-jump accessory
+            switch (Main.rand.Next(3))
+            {
+                case 0:
+                    cavern.AddChestItem(ItemID.HermesBoots);
+                    cavern.AddChestItem(ItemID.CloudinaBottle);
+                    break;
 
-            #region Place Life Crystals
-            var lifeCrystalIslands = new List<FloatingIsland> { jungle, snow, sandstone, ocean, cavern, granite, marble, sky };
+                case 1:
+                    snow.AddChestItem(ItemID.FlurryBoots);
+                    snow.AddChestItem(ItemID.BlizzardinaBottle);
+                    break;
+
+                case 2:
+                    sandstone.AddChestItem(ItemID.SandBoots);
+                    sandstone.AddChestItem(ItemID.SandstorminaBottle);
+                    break;
+
+                default:
+                    break;
+            }
+
+            // Magic mirror
+            switch (Main.rand.Next(2))
+            {
+                case 0:
+                    cavern.AddChestItem(ItemID.MagicMirror);
+                    break;
+
+                case 1:
+                    snow.AddChestItem(ItemID.IceMirror);
+                    break;
+
+                default:
+                    break;
+            }
+
+            // Life crystals
+            var lifeCrystalIslands = new List<FloatingIsland> { jungle, snow, sandstone, cavern, granite, marble, sky };
             for (int i = 0; i < 5; i++)
             {
                 var num = Main.rand.Next(0, lifeCrystalIslands.Count);
                 lifeCrystalIslands[num].AddChestItem(ItemID.LifeCrystal, stack: 3);
                 lifeCrystalIslands.RemoveAt(num);
             }
+
             #endregion
         }
     }
 
     abstract class FloatingIsland
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        public int X { get; set; }
+        public int Y { get; set; }
 
         private int chestIndex = -1;
         private int chestNextSlot = -1;
 
-        protected FloatingIsland(int x, int y)
+        protected FloatingIsland()
         {
-            X = x;
-            Y = y;
+            X = 0;
+            Y = 0;
         }
 
         protected void PlaceTile(int xoffset, int yoffset, int type, int style = 0, byte paintColor = 0) => PlaceTile(new[] { xoffset }, new[] { yoffset }, type, style, paintColor);
@@ -237,10 +305,6 @@ namespace CrabsSkyblockChallenge
         //             x x t
         //
         //             - 0 +
-
-        public SpawnIsland(int x, int y) : base(x, y)
-        {
-        }
 
         public void PlaceTiles()
         {
@@ -388,10 +452,6 @@ namespace CrabsSkyblockChallenge
         //               x x x x x x x x   x
         //                   0
 
-        public JungleIsland(int x, int y) : base(x, y)
-        {
-        }
-
         public void PlaceTiles()
         {
             PlaceTile(new[] {         -6, -5, -4,                                  7, 8        }, -1, TileID.Mud);
@@ -432,10 +492,6 @@ namespace CrabsSkyblockChallenge
         //           x x x x x
         //             - 0 +
 
-        public SnowIsland(int x, int y) : base(x, y)
-        {
-        }
-
         public void PlaceTiles()
         {
             PlaceTile(new[] {     -5, -4, -3,                        5, 6        }, -1, TileID.SnowBlock);
@@ -466,10 +522,6 @@ namespace CrabsSkyblockChallenge
         //           x
         //         - 0 +
 
-        public AltarIsland(int x, int y) : base(x, y)
-        {
-        }
-
         public void PlaceTiles()
         {
             var type = WorldGen.crimson ? TileID.Crimstone : TileID.Ebonstone;
@@ -498,10 +550,6 @@ namespace CrabsSkyblockChallenge
         //           x x x
         //           x   x
         //           - 0 +
-
-        public SandstoneIsland(int x, int y) : base(x, y)
-        {
-        }
 
         public void PlaceTiles()
         {
@@ -533,10 +581,6 @@ namespace CrabsSkyblockChallenge
         //     h h h h x x x x x h h h
         //           h h h h h h h
         //             - 0 +
-
-        public OceanIsland(int x, int y) : base(x, y)
-        {
-        }
 
         public void PlaceTiles()
         {
@@ -570,10 +614,6 @@ namespace CrabsSkyblockChallenge
         //   g x x x x       x x x
         //   x x x               x
         //             - 0 +
-
-        public CavernIsland(int x, int y) : base(x, y)
-        {
-        }
 
         public void PlaceTiles()
         {
@@ -611,10 +651,6 @@ namespace CrabsSkyblockChallenge
         //           x x x x
         //           - 0 +
 
-        public GraniteIsland(int x, int y) : base(x, y)
-        {
-        }
-
         public void PlaceTiles()
         {
             PlaceTile(new[] { -5, -4,                            5, 6 }, -1, TileID.Granite);
@@ -643,10 +679,6 @@ namespace CrabsSkyblockChallenge
         // +     x x x x x x x x
         //           x x x x
         //           - 0 +
-
-        public MarbleIsland(int x, int y) : base(x, y)
-        {
-        }
 
         public void PlaceTiles()
         {
@@ -680,10 +712,6 @@ namespace CrabsSkyblockChallenge
         //                   d d d d d d d d d d d d d d d d
         //                             d d d d d d d d d 
         //                                 - 0 +
-
-        public SkyIsland(int x, int y) : base(x, y)
-        {
-        }
         
         public void PlaceTiles()
         {
