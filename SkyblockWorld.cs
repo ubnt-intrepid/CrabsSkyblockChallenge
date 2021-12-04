@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Events;
+using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.Localization;
@@ -20,22 +21,14 @@ namespace CrabsSkyblockChallenge
 
             tasks.Clear();
             tasks.Add(resetTask);
-            tasks.Add(new SkyblockWorldGenPass());
-        }
-    }
-
-    class SkyblockWorldGenPass : GenPass
-    {
-        readonly int dungeonDirection;
-
-        public SkyblockWorldGenPass() : base("Skyblock World Generation", 0f)
-        {
-            dungeonDirection = Main.rand.NextBool() ? 1 : -1;
+            tasks.Add(new PassLegacy("Skyblock World Generation", GenerateSkyblockWorld));
         }
 
-        protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration)
+        private static void GenerateSkyblockWorld(GenerationProgress progress, GameConfiguration config)
         {
             progress.Message = "Generate Skyblock World";
+
+            var dungeonDirection = Main.rand.NextBool() ? 1 : -1;
 
             Main.worldSurface = Main.maxTilesY * 0.3;
             Main.rockLayer = Main.maxTilesY * 0.5;
@@ -167,8 +160,8 @@ namespace CrabsSkyblockChallenge
             switch (Main.rand.Next(3))
             {
                 case 0:
-                    cavern.AddChestItem(ItemID.HermesBoots);
-                    cavern.AddChestItem(ItemID.CloudinaBottle);
+                    jungle.AddChestItem(ItemID.HermesBoots);
+                    jungle.AddChestItem(ItemID.CloudinaBottle);
                     break;
 
                 case 1:
