@@ -296,6 +296,9 @@ namespace CrabsSkyblockChallenge
             shop.item[nextSlot].shopCustomPrice = Item.buyPrice(silver: 50);
             nextSlot++;
 
+            shop.item[nextSlot].SetDefaults(ItemID.BottledWater);
+            nextSlot++;
+
             if (Main.CurrentPlayer.ZoneJungle)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.JungleGrassSeeds);
