@@ -127,20 +127,17 @@ namespace CrabsSkyblockChallenge
             jungle.AddChestItem(ItemID.StaffofRegrowth);
             jungle.AddChestItem(ItemID.HiveWand);
             jungle.AddChestItem(ItemID.BugNet);
-            jungle.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             snow.AddChestItem(ItemID.IceSkates);
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
-            snow.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             sandstone.AddChestItem(ItemID.MagicConch);
             sandstone.AddChestItem(ItemID.CatBast);
-            sandstone.AddChestItem(ItemID.LifeCrystal, stack: 3);
 
             ocean.AddChestItem(ItemID.WaterWalkingBoots);
             ocean.AddChestItem(ItemID.GoldenFishingRod);
             ocean.AddChestItem(ItemID.JourneymanBait, stack: 20);
-            ocean.AddChestItem(ItemID.LifeCrystal, stack: 3);
+            ocean.AddChestItem(ItemID.LifeCrystal, stack: 5);
 
             cavern.AddChestItem(ItemID.BandofRegeneration);
             cavern.AddChestItem(ItemID.LuckyHorseshoe);
@@ -149,12 +146,12 @@ namespace CrabsSkyblockChallenge
             cavern.AddChestItem(ItemID.FlareGun);
             cavern.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
             cavern.AddChestItem(ItemID.SuspiciousLookingEye, stack: 10);
-            cavern.AddChestItem(ItemID.LifeCrystal, stack: 3);
+            cavern.AddChestItem(ItemID.LifeCrystal, stack: 5);
 
             sky.AddChestItem(ItemID.CreativeWings);
             sky.AddChestItem(ItemID.ShinyRedBalloon);
             sky.AddChestItem(ItemID.Starfury);
-            sky.AddChestItem(ItemID.LifeCrystal, stack: 3);
+            sky.AddChestItem(ItemID.LifeCrystal, stack: 5);
 
             // Boots and double-jump accessory
             switch (Main.rand.Next(3))
