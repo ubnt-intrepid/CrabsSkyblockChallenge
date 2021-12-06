@@ -208,20 +208,16 @@ namespace CrabsSkyblockChallenge
             Y = 0;
         }
 
-        protected void PlaceTile(int xoffset, int yoffset, int type, int style = 0, byte paintColor = 0) => PlaceTile(new[] { xoffset }, new[] { yoffset }, type, style, paintColor);
-        protected void PlaceTile(int[] xoffsets, int yoffset, int type, int style = 0, byte paintColor = 0) => PlaceTile(xoffsets, new[] { yoffset }, type, style, paintColor);
-        protected void PlaceTile(int xoffset, int[] yoffsets, int type, int style = 0, byte paintColor = 0) => PlaceTile(new[] { xoffset }, yoffsets, type, style, paintColor);
-        protected void PlaceTile(int[] xoffsets, int[] yoffsets, int type, int style = 0, byte paintColor = 0)
+        protected void PlaceTile(int xoffset, int yoffset, int type, int style = 0) => PlaceTile(new[] { xoffset }, new[] { yoffset }, type, style);
+        protected void PlaceTile(int[] xoffsets, int yoffset, int type, int style = 0) => PlaceTile(xoffsets, new[] { yoffset }, type, style);
+        protected void PlaceTile(int xoffset, int[] yoffsets, int type, int style = 0) => PlaceTile(new[] { xoffset }, yoffsets, type, style);
+        protected void PlaceTile(int[] xoffsets, int[] yoffsets, int type, int style = 0)
         {
             foreach (var i in xoffsets)
             {
                 foreach (var j in yoffsets)
                 {
                     WorldGen.PlaceTile(X + i, Y + j, Type: type, style: style);
-                    if (paintColor != 0)
-                    {
-                        WorldGen.paintTile(X + i, Y + j, paintColor);
-                    }
                 }
             }
         }
@@ -280,12 +276,10 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            var paintColor = WorldGen.tenthAnniversaryWorldGen ? PaintID.DeepPinkPaint : (byte)0;
-
-            PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3       },  1, TileID.Dirt, paintColor: paintColor);
-            PlaceTile(new[] {                 -1, 0                },  2, TileID.Dirt, paintColor: paintColor);
+            PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -1, TileID.Dirt);
+            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt);
+            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3       },  1, TileID.Dirt);
+            PlaceTile(new[] {                 -1, 0                },  2, TileID.Dirt);
 
             var baseBlockType = WorldGen.crimson ? TileID.FleshBlock : TileID.LesionBlock;
             PlaceTile(new[] { -5,                                   6, 7 }, 0, baseBlockType);
@@ -299,14 +293,11 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] { 0, 1, 2, 3 }, 3, WorldGen.SavedOreTiers.Iron);
             PlaceTile(new[] {    1, 2    }, 4, WorldGen.SavedOreTiers.Iron);
 
-
             PlaceTile(-2, -1, TileID.Solidifier);
-            PlaceTile(5, -2, TileID.Torches, style: TorchID.Torch);
+            PlaceTile( 3, -2, TileID.CookingPots);
+            PlaceTile( 5, -2, TileID.Torches, style: TorchID.Torch);
 
-            if (WorldGen.dontStarveWorldGen)
-            {
-                PlaceTile(3, -2, TileID.CookingPots);
-            }
+            #region Place chest
 
             ushort chestType = TileID.Containers;
             int chestStyle = 0;
@@ -346,6 +337,13 @@ namespace CrabsSkyblockChallenge
             }
 
             PlaceChest(0, -2, chestType, chestStyle);
+
+            if (WorldGen.dontStarveWorldGen)
+            {
+                AddChestItem(ItemID.Teacup, stack: 5);
+            }
+
+            #endregion
 
             if (Main.tenthAnniversaryWorld)
             {
