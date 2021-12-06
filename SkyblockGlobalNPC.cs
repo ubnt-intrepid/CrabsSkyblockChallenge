@@ -303,6 +303,9 @@ namespace CrabsSkyblockChallenge
             {
                 shop.item[nextSlot].SetDefaults(ItemID.JungleGrassSeeds);
                 nextSlot++;
+
+                shop.item[nextSlot].SetDefaults(ItemID.BottledHoney);
+                nextSlot++;
             }
         }
 
