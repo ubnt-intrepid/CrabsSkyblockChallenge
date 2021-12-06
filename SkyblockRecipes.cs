@@ -21,12 +21,6 @@ namespace CrabsSkyblockChallenge
                 .AddIngredient(ItemID.Obsidian, stack: 30)
                 .AddTile(TileID.Anvils)
                 .Register();
-
-            CreateRecipe(ItemID.DartTrap)
-                .AddIngredient(ItemID.StoneBlock)
-                .AddIngredient(ItemID.PoisonDart, stack: 100)
-                .AddTile(TileID.Anvils)
-                .Register();
         }
     }
 }
