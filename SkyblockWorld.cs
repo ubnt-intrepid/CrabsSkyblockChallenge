@@ -124,9 +124,14 @@ namespace CrabsSkyblockChallenge
 
             #region Setup chest loots
 
+            if (WorldGen.dontStarveWorldGen)
+            {
+                spawn.AddChestItem(ItemID.Teacup, stack: 5);
+                spawn.AddChestItem(ItemID.BugNet);
+            }
+
             jungle.AddChestItem(ItemID.StaffofRegrowth);
             jungle.AddChestItem(ItemID.HiveWand);
-            jungle.AddChestItem(ItemID.BugNet);
 
             snow.AddChestItem(ItemID.IceSkates);
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
@@ -337,11 +342,6 @@ namespace CrabsSkyblockChallenge
             }
 
             PlaceChest(0, -2, chestType, chestStyle);
-
-            if (WorldGen.dontStarveWorldGen)
-            {
-                AddChestItem(ItemID.Teacup, stack: 5);
-            }
 
             #endregion
 
