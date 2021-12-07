@@ -545,12 +545,14 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {                 -1, 0, 1                   },  5, TileID.Sandstone);
             PlaceTile(new[] {                 -1,    1                   },  6, TileID.Sandstone);
 
-            PlaceTile(-2, -1, TileID.Lamps, style: 38); // Sandstone Lamp
-            PlaceTile(4, -1, TileID.Lamps, style: 38);
+            // Sandstone Lamp
+            PlaceTile(-2, -1, TileID.Lamps, style: 38);
+            PlaceTile( 4, -1, TileID.Lamps, style: 38);
 
             PlaceTile(2, 0, TileID.Extractinator);
 
-            PlaceChest(-1, 0, type: TileID.Containers2, style: 10); // Sandstone Chest
+            // Sandstone Chest
+            PlaceChest(-1, 0, type: TileID.Containers2, style: 10);
         }
     }
 
@@ -577,12 +579,15 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {     -5, -4, -3, -2,                 4, 5, 6       }, 2, TileID.HardenedSand);
             PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4             }, 3, TileID.HardenedSand);
 
-            PlaceTile(-1, -1, TileID.Statues, style: 5); // Goblin Statue
+            // Shark Statue
+            PlaceTile(-1, -1, TileID.Statues, style: 50);
 
-            PlaceTile(-5, -2, TileID.Torches, style: 17); // Coral Torch
+            // Coral Torch
+            PlaceTile(-5, -2, TileID.Torches, style: 17);
             PlaceTile(7, -2, TileID.Torches, style: 17);
 
-            PlaceChest(1, -1, type: TileID.Containers, style: 17); // Water Chest
+            // Water Chest
+            PlaceChest(1, -1, type: TileID.Containers, style: 17);
         }
     }
 
@@ -625,8 +630,8 @@ namespace CrabsSkyblockChallenge
             PlaceTile(-6, 2, TileID.Mud);
             PlaceTile(-6, 2, TileID.MushroomGrass);
 
-            // Heart Statue
-            PlaceTile(-2, 0, TileID.Statues, style: 37);
+            // Wall Creeper Statue
+            PlaceTile(-2, 0, TileID.Statues, style: 63);
 
             // Spider Lamp
             PlaceTile(-4, 1, TileID.Lamps, style: 32);
