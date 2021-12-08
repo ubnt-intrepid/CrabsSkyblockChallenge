@@ -1,6 +1,6 @@
 ﻿# Crab's Skyblock Challenge
 
-![spawn island](icon.png "spawn island")
+![spawn island](top.png "spawn island")
 
 Crab's Skyblock Challenge is the one of tModLoader mod that introduces Minecraft's Skyblock challenge mode in Terraria.
 
