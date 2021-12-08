@@ -131,6 +131,7 @@ namespace CrabsSkyblockChallenge
             }
 
             jungle.AddChestItem(ItemID.StaffofRegrowth);
+            jungle.AddChestItem(ItemID.FlowerBoots);
             jungle.AddChestItem(ItemID.HiveWand);
 
             snow.AddChestItem(ItemID.IceSkates);
