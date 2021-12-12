@@ -260,20 +260,19 @@ namespace CrabsSkyblockChallenge
             if (NPC.downedBoss1)
             {
                 var siltPrice = Main.hardMode ? Item.buyPrice(silver: 20) : Item.buyPrice(silver: 2);
-
-                if (Main.CurrentPlayer.ZoneSnow)
+                if (Main.CurrentPlayer.ZoneSnow && Main.CurrentPlayer.ZoneRockLayerHeight)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.SlushBlock);
                     shop.item[nextSlot].shopCustomPrice = siltPrice;
                     nextSlot++;
                 }
-                else if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
+                else if (Main.CurrentPlayer.ZoneUndergroundDesert)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.DesertFossil);
                     shop.item[nextSlot].shopCustomPrice = siltPrice;
                     nextSlot++;
                 }
-                else
+                else if (Main.CurrentPlayer.ZonePurity && Main.CurrentPlayer.ZoneRockLayerHeight)
                 {
                     shop.item[nextSlot].SetDefaults(ItemID.SiltBlock);
                     shop.item[nextSlot].shopCustomPrice = siltPrice;
