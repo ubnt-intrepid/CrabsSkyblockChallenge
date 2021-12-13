@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -172,84 +173,95 @@ namespace CrabsSkyblockChallenge
         {
             if (NPC.AnyNPCs(NPCID.Angler))
             {
+                var player = Main.CurrentPlayer;
+                var crateCounts = player.GetModPlayer<SkyblockPlayer>().CrateFishingCounts;
                 var priceMultiplier = Main.hardMode ? 20 : 10;
 
-                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.WoodenCrateHard : ItemID.WoodenCrate);
-                shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(silver: 10);
-                nextSlot++;
+                if (AvailableInMerchantShop(crateCounts, new[] { ItemID.WoodenCrate, ItemID.WoodenCrateHard }, minCount: 10))
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.WoodenCrateHard : ItemID.WoodenCrate);
+                    shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(silver: 10);
+                    nextSlot++;
+                }
 
-                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.IronCrateHard : ItemID.IronCrate);
-                shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(silver: 50);
-                nextSlot++;
+                if (AvailableInMerchantShop(crateCounts, new[] { ItemID.IronCrate, ItemID.IronCrateHard }, minCount: 10))
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.IronCrateHard : ItemID.IronCrate);
+                    shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(silver: 50);
+                    nextSlot++;
+                }
 
-                shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
-                shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 2);
-                nextSlot++;
+                if (AvailableInMerchantShop(crateCounts, new[] { ItemID.GoldenCrate, ItemID.GoldenCrateHard }))
+                {
+                    shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.GoldenCrateHard : ItemID.GoldenCrate);
+                    shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 2);
+                    nextSlot++;
+                }
 
-                if (Main.CurrentPlayer.ZoneJungle)
+                if (player.ZoneJungle && AvailableInMerchantShop(crateCounts, new[] { ItemID.JungleFishingCrate, ItemID.JungleFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.JungleFishingCrateHard : ItemID.JungleFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneSkyHeight)
+                if (player.ZoneSkyHeight && AvailableInMerchantShop(crateCounts, new[] { ItemID.FloatingIslandFishingCrate, ItemID.FloatingIslandFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.FloatingIslandFishingCrateHard : ItemID.FloatingIslandFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneCorrupt)
+                if (player.ZoneCorrupt && AvailableInMerchantShop(crateCounts, new[] { ItemID.CorruptFishingCrate, ItemID.CorruptFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.CorruptFishingCrateHard : ItemID.CorruptFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneCrimson)
+                if (player.ZoneCrimson && AvailableInMerchantShop(crateCounts, new[] { ItemID.CrimsonFishingCrate, ItemID.CrimsonFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.CrimsonFishingCrateHard : ItemID.CrimsonFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneHallow)
+                if (player.ZoneHallow && AvailableInMerchantShop(crateCounts, new[] { ItemID.HallowedFishingCrate, ItemID.HallowedFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.HallowedFishingCrateHard : ItemID.HallowedFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneDungeon)
+                if (player.ZoneDungeon && AvailableInMerchantShop(crateCounts, new[] { ItemID.DungeonFishingCrate, ItemID.DungeonFishingCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.DungeonFishingCrateHard : ItemID.DungeonFishingCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneSnow)
+                if (player.ZoneSnow && AvailableInMerchantShop(crateCounts, new[] { ItemID.FrozenCrate, ItemID.FrozenCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.FrozenCrateHard : ItemID.FrozenCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneDesert || Main.CurrentPlayer.ZoneUndergroundDesert)
+                if ((player.ZoneDesert || player.ZoneUndergroundDesert) && AvailableInMerchantShop(crateCounts, new[] { ItemID.OasisCrate, ItemID.OasisCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.OasisCrateHard : ItemID.OasisCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneUnderworldHeight)
+                if (player.ZoneUnderworldHeight && AvailableInMerchantShop(crateCounts, new[] { ItemID.LavaCrate, ItemID.LavaCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.LavaCrateHard : ItemID.LavaCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
                     nextSlot++;
                 }
 
-                if (Main.CurrentPlayer.ZoneBeach)
+                if (player.ZoneBeach && AvailableInMerchantShop(crateCounts, new[] { ItemID.OceanCrate, ItemID.OceanCrateHard }))
                 {
                     shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.OceanCrateHard : ItemID.OceanCrate);
                     shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(gold: 1);
@@ -301,6 +313,17 @@ namespace CrabsSkyblockChallenge
                 nextSlot++;
             }
 
+        }
+
+        private static bool AvailableInMerchantShop(Dictionary<short, int> crateCounts, short[] crateTypes, int minCount = 5)
+        {
+            var totalCount = 0;
+            foreach (var type in crateTypes)
+            {
+                crateCounts.TryGetValue(type, out int count);
+                totalCount += count;
+            }
+            return totalCount >= minCount;
         }
 
         private static void SetupDryadShop(Chest shop, ref int nextSlot)
