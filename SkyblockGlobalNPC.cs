@@ -172,7 +172,7 @@ namespace CrabsSkyblockChallenge
         {
             if (NPC.AnyNPCs(NPCID.Angler))
             {
-                var priceMultiplier = Main.hardMode ? 10 : 5;
+                var priceMultiplier = Main.hardMode ? 20 : 10;
 
                 shop.item[nextSlot].SetDefaults(Main.hardMode ? ItemID.WoodenCrateHard : ItemID.WoodenCrate);
                 shop.item[nextSlot].shopCustomPrice = priceMultiplier * Item.buyPrice(silver: 10);
