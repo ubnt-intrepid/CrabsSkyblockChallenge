@@ -124,39 +124,20 @@ namespace CrabsSkyblockChallenge
 
             #region Setup chest loots
 
-            if (WorldGen.dontStarveWorldGen)
-            {
-                spawn.AddChestItem(ItemID.Teacup, stack: 5);
-                spawn.AddChestItem(ItemID.BugNet);
-            }
-
-            jungle.AddChestItem(ItemID.StaffofRegrowth);
-            jungle.AddChestItem(ItemID.FlowerBoots);
+            // Required for placing Hive blocks and then acquiring honey.
             jungle.AddChestItem(ItemID.HiveWand);
 
-            snow.AddChestItem(ItemID.IceSkates);
+            // Required for acquiring Snow Blocks and building artificial Snow biomes before entering hardmode.
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
 
-            sandstone.AddChestItem(ItemID.MagicConch);
-            sandstone.AddChestItem(ItemID.CatBast);
+            // In Don't Starve world, the first goal is to get enough foods and to keep the player from Hunger debuffs.
+            // The player is given time to avoid Starving debuffs for up to 85 minutes from the start of the game.
+            spawn.AddChestItem(ItemID.Teacup, stack: 5);
+            spawn.AddChestItem(ItemID.BugNet);
 
-            ocean.AddChestItem(ItemID.WaterWalkingBoots);
-            ocean.AddChestItem(ItemID.GoldenFishingRod);
-            ocean.AddChestItem(ItemID.JourneymanBait, stack: 20);
-            ocean.AddChestItem(ItemID.LifeCrystal, stack: 5);
-
-            cavern.AddChestItem(ItemID.BandofRegeneration);
-            cavern.AddChestItem(ItemID.LuckyHorseshoe);
-            cavern.AddChestItem(ItemID.ShoeSpikes);
-            cavern.AddChestItem(ItemID.Mace);
-            cavern.AddChestItem(ItemID.FlareGun);
-            cavern.AddChestItem(ItemID.Flare, stack: Main.rand.Next(25, 50));
-            cavern.AddChestItem(ItemID.SuspiciousLookingEye, stack: 10);
+            // Life Crystals are placed on three islands far from the initial spawn point.
             cavern.AddChestItem(ItemID.LifeCrystal, stack: 5);
-
-            sky.AddChestItem(ItemID.CreativeWings);
-            sky.AddChestItem(ItemID.ShinyRedBalloon);
-            sky.AddChestItem(ItemID.Starfury);
+            ocean.AddChestItem(ItemID.LifeCrystal, stack: 5);
             sky.AddChestItem(ItemID.LifeCrystal, stack: 5);
 
             // Boots and double-jump accessory
@@ -194,6 +175,36 @@ namespace CrabsSkyblockChallenge
 
                 default:
                     break;
+            }
+
+            // Fall negating accessory
+            switch (Main.rand.Next(2))
+            {
+                case 0:
+                    sky.AddChestItem(ItemID.CreativeWings);
+                    break;
+
+                default:
+                    cavern.AddChestItem(ItemID.LuckyHorseshoe);
+                    break;
+            }
+
+            // Fishing Rod
+            if (Main.rand.Next(5) == 0) // 20%
+            {
+                var num = Main.rand.Next(100);
+                if (num < 50) // 50%
+                {
+                    sandstone.AddChestItem(ItemID.ScarabFishingRod);
+                }
+                else if (num >= 50 && num < 80) // 30%
+                {
+                    jungle.AddChestItem(ItemID.FiberglassFishingPole);
+                }
+                else // 20%
+                {
+                    ocean.AddChestItem(ItemID.GoldenFishingRod);
+                }
             }
 
             #endregion
