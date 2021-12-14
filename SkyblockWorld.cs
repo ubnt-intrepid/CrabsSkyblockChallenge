@@ -268,6 +268,23 @@ namespace CrabsSkyblockChallenge
             }
         }
 
+        protected int PlaceNPC(int i, int j, int type, bool homeless = true, string name = null, int direction = 1)
+        {
+            int num = NPC.NewNPC((X + i) * 16, (Y + j) * 16, type);
+
+            var npc = Main.npc[num];
+            npc.homeTileX = X;
+            npc.homeTileY = Y;
+            npc.homeless = homeless;
+            npc.direction = direction;
+            if (name != null)
+            {
+                npc.GivenName = name;
+            }
+
+            return num;
+        }
+
         public void AddChestItem(int type, int stack = 1, int prefix = 0)
         {
             var chest = Main.chest[chestIndex];
@@ -281,11 +298,11 @@ namespace CrabsSkyblockChallenge
         //
         //         s s s c c p p
         //         s s s c c p p   t
-        // -   x x s s s x x x x   x
-        // 0   * x x x x x x x x x x * *
-        // +   * * x x x x x x x * * *
-        //       * * * x x i i i * *
-        //         * * * i i i i *
+        //     x x s s s x x x x   g
+        //     * x x x x x x x x * * * *
+        // -   * * x x x x x x x x * *
+        // 0     * * * x x i i i * *
+        // +       * * * i i i i *
         //           * * * i i * *
         //               * * *
         //
@@ -293,26 +310,28 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -1, TileID.Dirt);
-            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3, 4, 5 },  0, TileID.Dirt);
-            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3       },  1, TileID.Dirt);
-            PlaceTile(new[] {                 -1, 0                },  2, TileID.Dirt);
+            PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -3, TileID.Dirt);
+            PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3       }, -2, TileID.Dirt);
+            PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4    }, -1, TileID.Dirt);
+            PlaceTile(new[] {                 -1, 0                },  0, TileID.Dirt);
+
+            PlaceTile(5, -3, TileID.Grass);
 
             var baseBlockType = WorldGen.crimson ? TileID.FleshBlock : TileID.LesionBlock;
-            PlaceTile(new[] { -5,                                   6, 7 }, 0, baseBlockType);
-            PlaceTile(new[] { -5, -4,                         4, 5, 6    }, 1, baseBlockType);
-            PlaceTile(new[] {     -4, -3, -2,                 4, 5       }, 2, baseBlockType);
-            PlaceTile(new[] {         -3, -2, -1,             4          }, 3, baseBlockType);
-            PlaceTile(new[] {             -2, -1, 0,       3, 4          }, 4, baseBlockType);
-            PlaceTile(new[] {                     0, 1, 2                }, 5, baseBlockType);
+            PlaceTile(new[] { -5,                             4, 5, 6, 7 }, -2, baseBlockType);
+            PlaceTile(new[] { -5, -4,                            5, 6    }, -1, baseBlockType);
+            PlaceTile(new[] {     -4, -3, -2,                 4, 5       },  0, baseBlockType);
+            PlaceTile(new[] {             -2, -1,             4          },  1, baseBlockType);
+            PlaceTile(new[] {                 -1, 0,       3, 4          },  2, baseBlockType);
+            PlaceTile(new[] {                     0, 1, 2, 3             },  3, baseBlockType);
 
-            PlaceTile(new[] {    1, 2, 3 }, 2, WorldGen.SavedOreTiers.Iron);
-            PlaceTile(new[] { 0, 1, 2, 3 }, 3, WorldGen.SavedOreTiers.Iron);
-            PlaceTile(new[] {    1, 2    }, 4, WorldGen.SavedOreTiers.Iron);
+            PlaceTile(new[] {    1, 2, 3 }, 0, WorldGen.SavedOreTiers.Iron);
+            PlaceTile(new[] { 0, 1, 2, 3 }, 1, WorldGen.SavedOreTiers.Iron);
+            PlaceTile(new[] {    1, 2    }, 2, WorldGen.SavedOreTiers.Iron);
 
-            PlaceTile(-2, -1, TileID.Solidifier);
-            PlaceTile( 3, -2, TileID.CookingPots);
-            PlaceTile( 5, -2, TileID.Torches, style: TorchID.Torch);
+            PlaceTile(-2, -3, TileID.Solidifier);
+            PlaceTile( 3, -4, TileID.CookingPots);
+            PlaceTile( 5, -4, TileID.Torches, style: TorchID.Torch);
 
             #region Place chest
 
@@ -353,7 +372,7 @@ namespace CrabsSkyblockChallenge
                 chestStyle = 29;
             }
 
-            PlaceChest(0, -2, chestType, chestStyle);
+            PlaceChest(0, -4, chestType, chestStyle);
 
             #endregion
 
@@ -362,76 +381,37 @@ namespace CrabsSkyblockChallenge
                 BirthdayParty.GenuineParty = true;
                 BirthdayParty.PartyDaysOnCooldown = 5;
 
-                var andrew = NPC.NewNPC(X * 16, Y * 16, NPCID.Guide);
-                Main.npc[andrew].GivenName = Language.GetTextValue("GuideNames.Andrew");
-                Main.npc[andrew].homeless = true;
-                Main.npc[andrew].homeTileX = X;
-                Main.npc[andrew].homeTileY = Y;
-                Main.npc[andrew].direction = 1;
+                var andrew = PlaceNPC(0, -4, NPCID.Guide, name: Language.GetTextValue("GuideNames.Andrew"));
                 BirthdayParty.CelebratingNPCs.Add(andrew);
 
-                var whitney = NPC.NewNPC(X * 16, Y * 16, NPCID.Steampunker);
-                Main.npc[whitney].GivenName = Language.GetTextValue("SteampunkerNames.Whitney");
-                Main.npc[whitney].homeless = true;
-                Main.npc[whitney].homeTileX = X;
-                Main.npc[whitney].homeTileY = Y;
-                Main.npc[whitney].direction = 1;
+                var whitney = PlaceNPC(0, -4, NPCID.Steampunker, name: Language.GetTextValue("SteampunkerNames.Whitney"));
                 BirthdayParty.CelebratingNPCs.Add(whitney);
 
-                var yorai = NPC.NewNPC(X * 16, Y * 16, NPCID.Princess);
-                Main.npc[yorai].GivenName = Language.GetTextValue("PrincessNames.Yorai");
-                Main.npc[yorai].homeless = true;
-                Main.npc[yorai].homeTileX = X;
-                Main.npc[yorai].homeTileY = Y;
-                Main.npc[yorai].direction = 1;
+                var yorai = PlaceNPC(0, -4, NPCID.Princess, name: Language.GetTextValue("PrincessNames.Yorai"));
                 BirthdayParty.CelebratingNPCs.Add(yorai);
 
-                var organizer = NPC.NewNPC(X * 16, Y * 16, NPCID.PartyGirl);
-                Main.npc[organizer].homeless = true;
-                Main.npc[organizer].homeTileX = X;
-                Main.npc[organizer].homeTileY = Y;
-                Main.npc[organizer].direction = 1;
+                var organizer = PlaceNPC(0, -4, NPCID.PartyGirl);
                 BirthdayParty.CelebratingNPCs.Add(organizer);
 
-                var bunny = NPC.NewNPC(X * 16, Y * 16, NPCID.TownBunny);
-                Main.npc[bunny].homeless = true;
-                Main.npc[bunny].homeTileX = X;
-                Main.npc[bunny].homeTileY = Y;
-                Main.npc[bunny].direction = 1;
+                var bunny = PlaceNPC(0, -4, NPCID.TownBunny);
                 Main.npc[bunny].townNpcVariationIndex = 1;
                 NPC.boughtBunny = true;
             }
             else if (Main.getGoodWorld)
             {
-                var guide = NPC.NewNPC(X * 16, Y * 16, NPCID.Demolitionist);
-                Main.npc[guide].homeless = true;
-                Main.npc[guide].homeTileX = X;
-                Main.npc[guide].homeTileY = Y;
-                Main.npc[guide].direction = 1;
+                PlaceNPC(0, -4, NPCID.Demolitionist);
             }
             else if (Main.drunkWorld)
             {
-                var guide = NPC.NewNPC(X * 16, Y * 16, NPCID.PartyGirl);
-                Main.npc[guide].homeless = true;
-                Main.npc[guide].homeTileX = X;
-                Main.npc[guide].homeTileY = Y;
-                Main.npc[guide].direction = 1;
+                PlaceNPC(0, -4, NPCID.PartyGirl);
             }
             else if (Main.notTheBeesWorld)
             {
-                var guide = NPC.NewNPC(X * 16, Y * 16, NPCID.Merchant);
-                Main.npc[guide].homeless = true;
-                Main.npc[guide].homeTileX = X;
-                Main.npc[guide].homeTileY = Y;
-                Main.npc[guide].direction = 1;
+                PlaceNPC(0, -4, NPCID.Merchant);
             }
             else
             {
-                var guide = NPC.NewNPC(X * 16, Y * 16, NPCID.Guide);
-                Main.npc[guide].homeless = true;
-                Main.npc[guide].homeTileX = X;
-                Main.npc[guide].homeTileY = Y;
-                Main.npc[guide].direction = 1;
+                PlaceNPC(0, -4, NPCID.Guide);
             }
         }
     }
