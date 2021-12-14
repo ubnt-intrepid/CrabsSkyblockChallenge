@@ -455,10 +455,10 @@ namespace CrabsSkyblockChallenge
 
     sealed class SnowIsland : FloatingIsland
     {
-        //         l               l
-        //         l               l
-        //         l   s s         l
-        // -   x x x   s s c c     x x
+        //   : :   l               l
+        //   T T   l               l
+        //   T T   l   s s         l
+        // - x x x x   s s c c     x x
         // 0 x x x x x s s c c x x x x x x
         // +     x x x x x x x x x x x x
         //           x x x x x x x x
@@ -467,11 +467,15 @@ namespace CrabsSkyblockChallenge
 
         public void PlaceTiles()
         {
-            PlaceTile(new[] {     -5, -4, -3,                        5, 6        }, -1, TileID.SnowBlock);
+            PlaceTile(new[] { -6, -5, -4, -3,                        5, 6        }, -1, TileID.SnowBlock);
             PlaceTile(new[] { -6, -5, -4, -3, -2,              3, 4, 5, 6, 7, 8  },  0, TileID.SnowBlock);
             PlaceTile(new[] {         -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7     },  1, TileID.SnowBlock);
             PlaceTile(new[] {                 -2, -1, 0, 1, 2, 3, 4, 5           },  2, TileID.SnowBlock);
             PlaceTile(new[] {                 -2, -1, 0, 1, 2                    },  3, TileID.SnowBlock);
+
+            // Boreal Tree
+            PlaceTile(-6, -2, TileID.Saplings, style: 1);
+            WorldGen.GrowTree(X - 6, Y - 2);
 
             // Undead Viking Statue
             PlaceTile(-1, 0, TileID.Statues, style:68);
