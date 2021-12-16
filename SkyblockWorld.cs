@@ -301,8 +301,8 @@ namespace CrabsSkyblockChallenge
         //     x x s s s x x x x   g
         //     * x x x x x x x x * * * *
         // -   * * x x x x x x x x * *
-        // 0     * * * x x i i i * *
-        // +       * * * i i i i *
+        // 0     * * * x x i i i x *
+        // +       * * * i i i i * *
         //           * * * i i * *
         //               * * *
         //
@@ -313,15 +313,15 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] { -5, -4,             0, 1, 2, 3,    5 }, -3, TileID.Dirt);
             PlaceTile(new[] {     -4, -3, -2, -1, 0, 1, 2, 3       }, -2, TileID.Dirt);
             PlaceTile(new[] {         -3, -2, -1, 0, 1, 2, 3, 4    }, -1, TileID.Dirt);
-            PlaceTile(new[] {                 -1, 0                },  0, TileID.Dirt);
+            PlaceTile(new[] {                 -1, 0,          4    },  0, TileID.Dirt);
 
             PlaceTile(5, -3, TileID.Grass);
 
             var baseBlockType = WorldGen.crimson ? TileID.FleshBlock : TileID.LesionBlock;
             PlaceTile(new[] { -5,                             4, 5, 6, 7 }, -2, baseBlockType);
             PlaceTile(new[] { -5, -4,                            5, 6    }, -1, baseBlockType);
-            PlaceTile(new[] {     -4, -3, -2,                 4, 5       },  0, baseBlockType);
-            PlaceTile(new[] {             -2, -1,             4          },  1, baseBlockType);
+            PlaceTile(new[] {     -4, -3, -2,                    5       },  0, baseBlockType);
+            PlaceTile(new[] {             -2, -1,             4, 5       },  1, baseBlockType);
             PlaceTile(new[] {                 -1, 0,       3, 4          },  2, baseBlockType);
             PlaceTile(new[] {                     0, 1, 2, 3             },  3, baseBlockType);
 
