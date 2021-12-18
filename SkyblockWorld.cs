@@ -130,11 +130,6 @@ namespace CrabsSkyblockChallenge
             // Required for acquiring Snow Blocks and building artificial Snow biomes before entering hardmode.
             snow.AddChestItem(ItemID.SnowGlobe, stack: 10);
 
-            // In Don't Starve world, the first goal is to get enough foods and to keep the player from Hunger debuffs.
-            // The player is given time to avoid Starving debuffs for up to 85 minutes from the start of the game.
-            spawn.AddChestItem(ItemID.Teacup, stack: 5);
-            spawn.AddChestItem(ItemID.BugNet);
-
             // Life Crystals are placed on three islands far from the initial spawn point.
             cavern.AddChestItem(ItemID.LifeCrystal, stack: 5);
             ocean.AddChestItem(ItemID.LifeCrystal, stack: 5);
@@ -330,51 +325,57 @@ namespace CrabsSkyblockChallenge
             PlaceTile(new[] {    1, 2    }, 2, WorldGen.SavedOreTiers.Iron);
 
             PlaceTile(-2, -3, TileID.Solidifier);
-            PlaceTile( 3, -4, TileID.CookingPots);
             PlaceTile( 5, -4, TileID.Torches, style: TorchID.Torch);
 
+            if (WorldGen.dontStarveWorldGen)
+            {
+                PlaceTile(3, -4, TileID.CookingPots);
+            }
+
             #region Place chest
+            {
+                ushort chestType = TileID.Containers;
+                int chestStyle = 0;
 
-            ushort chestType = TileID.Containers;
-            int chestStyle = 0;
-
-            if (WorldGen.tenthAnniversaryWorldGen)
-            {
-                // Palm Wood Chest
-                chestType = TileID.Containers;
-                chestStyle = 31;
-            }
-            else if (WorldGen.getGoodWorldGen)
-            {
-                // Obsidian Chest
-                chestType = TileID.Containers;
-                chestStyle = 44;
-            }
-            else if (WorldGen.drunkWorldGen)
-            {
-                if (WorldGen.crimson)
+                if (WorldGen.tenthAnniversaryWorldGen)
                 {
-                    // Lesion Chest
-                    chestType = TileID.Containers2;
-                    chestStyle = 3;
-                }
-                else
-                {
-                    // Flesh Chest
+                    // Palm Wood Chest
                     chestType = TileID.Containers;
-                    chestStyle = 43;
+                    chestStyle = 31;
                 }
-            }
-            else if (WorldGen.notTheBees)
-            {
-                // Honey Chest
-                chestType = TileID.Containers;
-                chestStyle = 29;
-            }
+                else if (WorldGen.getGoodWorldGen)
+                {
+                    // Obsidian Chest
+                    chestType = TileID.Containers;
+                    chestStyle = 44;
+                }
+                else if (WorldGen.drunkWorldGen)
+                {
+                    if (WorldGen.crimson)
+                    {
+                        // Lesion Chest
+                        chestType = TileID.Containers2;
+                        chestStyle = 3;
+                    }
+                    else
+                    {
+                        // Flesh Chest
+                        chestType = TileID.Containers;
+                        chestStyle = 43;
+                    }
+                }
+                else if (WorldGen.notTheBees)
+                {
+                    // Honey Chest
+                    chestType = TileID.Containers;
+                    chestStyle = 29;
+                }
 
-            PlaceChest(0, -4, chestType, chestStyle);
-
+                PlaceChest(0, -4, chestType, chestStyle);
+            }
             #endregion
+
+            #region Place NPCs
 
             if (Main.tenthAnniversaryWorld)
             {
@@ -413,6 +414,8 @@ namespace CrabsSkyblockChallenge
             {
                 PlaceNPC(0, -4, NPCID.Guide);
             }
+
+            #endregion
         }
     }
 

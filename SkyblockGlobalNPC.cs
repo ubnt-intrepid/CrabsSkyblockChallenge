@@ -130,17 +130,41 @@ namespace CrabsSkyblockChallenge
         public override void GetChat(NPC npc, ref string chat)
         {
             var me = Main.CurrentPlayer.GetModPlayer<SkyblockPlayer>();
+            var player = me.Player;
 
-            if (!me.ReceiveStarterItems && (Main.expertMode || Main.masterMode))
+            if (!me.ReceiveStarterItems)
             {
-                chat = "Are you expert Terrarian? These are gifts from Santa Claus.";
-                me.ReceiveStarterItems = true;
+                int numReceivedItems = 0;
 
-                var player = me.Player;
-                player.QuickSpawnItem(ItemID.SilverBroadsword);
-                player.QuickSpawnItem(ItemID.SilverPickaxe);
-                player.QuickSpawnItem(ItemID.SilverAxe);
-                player.QuickSpawnItem(ItemID.SilverHammer);
+                if (Main.expertMode || Main.masterMode)
+                {
+                    player.QuickSpawnItem(ItemID.SilverBroadsword);
+                    player.QuickSpawnItem(ItemID.SilverPickaxe);
+                    player.QuickSpawnItem(ItemID.SilverAxe);
+                    player.QuickSpawnItem(ItemID.SilverHammer);
+                    numReceivedItems += 4;
+
+                    if (player.difficulty is PlayerDifficultyID.MediumCore or PlayerDifficultyID.Hardcore)
+                    {
+                        player.QuickSpawnItem(ItemID.LesserHealingPotion, stack: 10);
+                        player.QuickSpawnItem(ItemID.RecallPotion, stack: 10);
+                        numReceivedItems += 2;
+                    }
+                }
+
+                // In Don't Starve world, the first goal is to get enough foods and to keep the player from Hunger debuffs.
+                // The player is given time to avoid Starving debuffs for up to 85 minutes from the start of the game.
+                if (Main.dontStarveWorld)
+                {
+                    player.QuickSpawnItem(ItemID.Teacup, stack: 5);
+                    numReceivedItems += 1;
+                }
+
+                if (numReceivedItems > 0)
+                {
+                    me.ReceiveStarterItems = true;
+                    chat = (numReceivedItems == 1 ? "This is a gift" : "These are gifts") + " from Santa Claus.";
+                }
             }
         }
 
